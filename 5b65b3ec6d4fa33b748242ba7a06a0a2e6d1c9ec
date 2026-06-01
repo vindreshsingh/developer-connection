@@ -1,0 +1,23 @@
+backend/.gitignore
+  8885e539b709cc49 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.5",
+  "base_commit_sha": "5b65b3ec6d4fa33b748242ba7a06a0a2e6d1c9ec",
+  "prompts": {
+    "8885e539b709cc49": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "88414318-8658-47dd-adbc-7c6f24e8425d",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "Vindresh Kumar <vindresh.singh@1mg.com>",
+      "messages": [],
+      "total_additions": 1,
+      "total_deletions": 1,
+      "accepted_lines": 1,
+      "overriden_lines": 0
+    }
+  }
+}
