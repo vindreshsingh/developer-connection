@@ -17,9 +17,11 @@ When a task arrives, identify the development phase and apply the corresponding 
 Task arrives
     │
     ├── Vague idea/need refinement? ──→ idea-refine
+    ├── Need a PRD / RFC / HLD / stack decision? → prd-and-rfc
     ├── New project/feature/change? ──→ spec-driven-development
     ├── Have a spec, need tasks? ──────→ planning-and-task-breakdown
     ├── Implementing code? ────────────→ incremental-implementation
+    │   ├── Have a Figma design to implement? → figma-to-code
     │   ├── UI work? ─────────────────→ frontend-ui-engineering
     │   ├── API work? ────────────────→ api-and-interface-design
     │   ├── Need better context? ─────→ context-engineering
@@ -136,29 +138,35 @@ For a complete feature, the typical skill sequence is:
 
 ```
 1. idea-refine                 → Refine vague ideas
-2. spec-driven-development     → Define what we're building
-3. planning-and-task-breakdown → Break into verifiable chunks
-4. context-engineering         → Load the right context
-5. source-driven-development   → Verify against official docs
-6. incremental-implementation  → Build slice by slice
-7. test-driven-development     → Prove each slice works
-8. code-review-and-quality     → Review before merge
-9. git-workflow-and-versioning → Clean commit history
-10. documentation-and-adrs     → Document decisions
-11. shipping-and-launch        → Deploy safely
+2. prd-and-rfc                 → PRD (what/why) + RFC/HLD with explicit stack decision
+3. spec-driven-development     → Define what we're building
+4. planning-and-task-breakdown → Break into verifiable chunks
+5. context-engineering         → Load the right context
+6. source-driven-development   → Verify against official docs
+7. figma-to-code               → Implement an existing Figma design in the RFC's chosen framework
+8. incremental-implementation  → Build slice by slice
+9. test-driven-development     → Prove each slice works
+10. code-review-and-quality    → Review before merge
+11. git-workflow-and-versioning → Clean commit history
+12. documentation-and-adrs     → Document decisions
+13. shipping-and-launch        → Deploy safely
 ```
 
-Not every task needs every skill. A bug fix might only need: `debugging-and-error-recovery` → `test-driven-development` → `code-review-and-quality`.
+Not every task needs every skill. A bug fix might only need: `debugging-and-error-recovery` → `test-driven-development` → `code-review-and-quality`. A from-scratch feature with an existing Figma design typically runs the full chain: `idea-refine` → `prd-and-rfc` (locks the stack decision) → `figma-to-code` → `incremental-implementation` (frontend + backend, per the RFC contract) → `test-driven-development` → `code-review-and-quality` → `shipping-and-launch`.
+
+**Stage gating — confirm before continuing:** Treat `idea-refine`, `prd-and-rfc`, and the Figma design step as **hard approval gates** — get explicit user sign-off before moving past them, because every later stage (figma-to-code, frontend, backend) depends on the RFC's stack decision and a wrong guess here cascades into rework across all of them. Mid-implementation steps (incremental-implementation slices, test-driven-development cycles) can proceed more autonomously/in batches — pausing after every file would slow things down without reducing risk, since mistakes there are cheap to catch and fix locally via verification steps.
 
 ## Quick Reference
 
 | Phase | Skill | One-Line Summary |
 |-------|-------|-----------------|
 | Define | idea-refine | Refine ideas through structured divergent and convergent thinking |
+| Define | prd-and-rfc | PRD + RFC/HLD with explicit framework/stack decision |
 | Define | spec-driven-development | Requirements and acceptance criteria before code |
 | Plan | planning-and-task-breakdown | Decompose into small, verifiable tasks |
 | Build | incremental-implementation | Thin vertical slices, test each before expanding |
 | Build | source-driven-development | Verify against official docs before implementing |
+| Build | figma-to-code | Implement an existing Figma design in the framework chosen by the RFC |
 | Build | context-engineering | Right context at the right time |
 | Build | frontend-ui-engineering | Production-quality UI with accessibility |
 | Build | api-and-interface-design | Stable interfaces with clear contracts |
