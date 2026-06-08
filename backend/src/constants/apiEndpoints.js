@@ -16,6 +16,8 @@ export const PROFILE = {
   DELETE: '/',      // DELETE own profile via token (no userId needed)
   VIEW_BY_ID: '/:userId', // GET any user's public profile
   FEED: '/feed',
+  PHOTO: '/photo',
+  COVER: '/cover',
 };
 
 // mounted at /request

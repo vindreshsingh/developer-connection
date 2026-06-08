@@ -1,11 +1,50 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import multer from 'multer';
 import User from '../models/user.js';
 import ConnectionRequest from '../models/connectionRequest.js';
 import userAuth from '../middlewares/auth.js';
 import { PROFILE } from '../constants/apiEndpoints.js';
+import { uploadImageBuffer } from '../utils/cloudinary.js';
 
 const router = express.Router();
+
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
+
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: MAX_IMAGE_SIZE },
+  fileFilter: (req, file, cb) => {
+    if (!file.mimetype.startsWith('image/')) return cb(new Error('Only image files are allowed'));
+    cb(null, true);
+  },
+});
+
+const handleImageUpload = (field, folder) => [
+  userAuth,
+  (req, res, next) => {
+    upload.single('image')(req, res, (err) => {
+      if (err) return res.status(400).json({ error: err.message });
+      next();
+    });
+  },
+  async (req, res) => {
+    try {
+      if (!req.file) return res.status(400).json({ error: 'No image file provided' });
+
+      const result = await uploadImageBuffer(req.file.buffer, folder);
+      const user = await User.findByIdAndUpdate(
+        req.user._id,
+        { [field]: result.secure_url },
+        { new: true, runValidators: true }
+      );
+
+      res.status(200).json({ message: 'Image uploaded successfully', user });
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
+  },
+];
 
 const ALLOWED_UPDATES = [
   'firstName',
@@ -49,6 +88,9 @@ router.delete(PROFILE.DELETE, userAuth, async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+router.post(PROFILE.PHOTO, ...handleImageUpload('photoUrl', 'profile-photos'));
+router.post(PROFILE.COVER, ...handleImageUpload('coverImageUrl', 'cover-images'));
 
 const FEED_PAGE_SIZE = 20;
 const PUBLIC_PROFILE_FIELDS = 'firstName lastName photoUrl bio skills githubUrl linkedinUrl age gender';
