@@ -7,7 +7,21 @@ import { PROFILE } from '../constants/apiEndpoints.js';
 
 const router = express.Router();
 
-const ALLOWED_UPDATES = ['firstName', 'lastName', 'password', 'photoUrl', 'bio', 'skills', 'githubUrl', 'linkedinUrl', 'age', 'gender'];
+const ALLOWED_UPDATES = [
+  'firstName',
+  'lastName',
+  'password',
+  'photoUrl',
+  'coverImageUrl',
+  'bio',
+  'skills',
+  'techStack',
+  'experience',
+  'githubUrl',
+  'linkedinUrl',
+  'age',
+  'gender',
+];
 
 router.get(PROFILE.VIEW, userAuth, (req, res) => {
   res.status(200).json(req.user);
