@@ -1,0 +1,74 @@
+frontend/README.md
+  5dea48bc8e4d1291 1,3,5,7-11,13,15-17,19,21-38
+frontend/src/pages/Requests.jsx
+  5dea48bc8e4d1291 7-32,36,40,43-113
+frontend/src/pages/Login.jsx
+  5dea48bc8e4d1291 1-2,4-8,10-14,19,21-50,52-53,55-66
+backend/src/routes/profile.js
+  5dea48bc8e4d1291 42-55
+frontend/vite.config.js
+  5dea48bc8e4d1291 3,6-9
+backend/src/server.js
+  5dea48bc8e4d1291 4,13-18
+frontend/.env
+  5dea48bc8e4d1291 1
+frontend/src/pages/Profile.jsx
+  5dea48bc8e4d1291 1,3-4,7-35,37-46,51,53-123
+frontend/src/index.css
+  5dea48bc8e4d1291 1,5
+frontend/src/App.jsx
+  5dea48bc8e4d1291 1,3-9,11,14-15,18,21-22,25-40
+frontend/src/store/api.js
+  5dea48bc8e4d1291 1-83
+.claude/launch.json
+  5dea48bc8e4d1291 1-17
+frontend/src/main.jsx
+  5dea48bc8e4d1291 3,11,13,15
+frontend/src/components/SwipeCard.jsx
+  5dea48bc8e4d1291 1-65
+frontend/src/store/baseQuery.js
+  5dea48bc8e4d1291 1-6
+frontend/src/store/index.js
+  5dea48bc8e4d1291 1-9
+frontend/src/pages/Feed.jsx
+  5dea48bc8e4d1291 2,4-7,18,21,27-33,35-37,39-75
+frontend/src/pages/Connections.jsx
+  5dea48bc8e4d1291 2-3,7-48
+frontend/src/components/NavBar.jsx
+  5dea48bc8e4d1291 1,3-11,14-52
+frontend/src/pages/Signup.jsx
+  5dea48bc8e4d1291 1-2,4-7,9-15,20,22-72,74-75,77-88
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.5",
+  "base_commit_sha": "31d370c82b2ff8742e70eb7eb86b32b5f2283445",
+  "prompts": {
+    "5dea48bc8e4d1291": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ca983a8e-f481-4230-8262-44ead3a9e9be",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "Vindresh Kumar <vindresh.singh@1mg.com>",
+      "messages": [],
+      "total_additions": 1054,
+      "total_deletions": 385,
+      "accepted_lines": 911,
+      "overriden_lines": 58
+    },
+    "8885e539b709cc49": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "88414318-8658-47dd-adbc-7c6f24e8425d",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "Vindresh Kumar <vindresh.singh@1mg.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 2,
+      "overriden_lines": 0
+    }
+  }
+}
