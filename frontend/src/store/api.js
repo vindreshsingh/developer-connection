@@ -14,6 +14,12 @@ export const api = createApi({
     signup: builder.mutation({
       query: (data) => ({ url: '/auth/signup', method: 'POST', body: data }),
     }),
+    verifyEmail: builder.mutation({
+      query: (token) => ({ url: `/auth/verify-email/${token}`, method: 'GET' }),
+    }),
+    resendVerification: builder.mutation({
+      query: (email) => ({ url: '/auth/resend-verification', method: 'POST', body: { email } }),
+    }),
     logout: builder.mutation({
       query: () => ({ url: '/auth/logout', method: 'POST' }),
       invalidatesTags: ['Profile', 'Feed', 'Requests', 'Connections'],
@@ -70,6 +76,8 @@ export const api = createApi({
 export const {
   useLoginMutation,
   useSignupMutation,
+  useVerifyEmailMutation,
+  useResendVerificationMutation,
   useLogoutMutation,
   useGetMyProfileQuery,
   useUpdateProfileMutation,

@@ -3,6 +3,7 @@ import { useGetMyProfileQuery } from './store/api';
 import NavBar from './components/NavBar';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import VerifyEmail from './pages/VerifyEmail';
 import Feed from './pages/Feed';
 import Requests from './pages/Requests';
 import Connections from './pages/Connections';
@@ -29,6 +30,7 @@ export default function App() {
       <Routes>
         <Route path="/login" element={<PublicOnlyRoute><Login /></PublicOnlyRoute>} />
         <Route path="/signup" element={<PublicOnlyRoute><Signup /></PublicOnlyRoute>} />
+        <Route path="/verify-email/:token" element={<VerifyEmail />} />
         <Route path="/" element={<ProtectedRoute><Feed /></ProtectedRoute>} />
         <Route path="/requests" element={<ProtectedRoute><Requests /></ProtectedRoute>} />
         <Route path="/connections" element={<ProtectedRoute><Connections /></ProtectedRoute>} />

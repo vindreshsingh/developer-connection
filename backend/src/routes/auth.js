@@ -8,6 +8,37 @@ import { AUTH } from '../constants/apiEndpoints.js';
 
 const router = express.Router();
 
+// Generates a fresh hashed verification token for the user, saves it, and emails the link.
+// Shared by signup (new account) and resend-verification (existing unverified account).
+const sendVerificationEmail = async (user) => {
+  const plainToken = crypto.randomBytes(32).toString('hex');
+  user.emailVerifyToken = crypto.createHash('sha256').update(plainToken).digest('hex');
+  user.emailVerifyExpiry = Date.now() + 24 * 60 * 60 * 1000; // 24 hours
+  await user.save();
+
+  const verifyUrl = `${process.env.FRONTEND_URL}/verify-email/${plainToken}`;
+
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS, // use Gmail App Password, not your actual password
+    },
+  });
+
+  await transporter.sendMail({
+    from: `"Developer Connection" <${process.env.EMAIL_USER}>`,
+    to: user.email,
+    subject: 'Verify your email',
+    html: `
+      <p>Welcome to Developer Connection!</p>
+      <p>Please verify your email address by clicking the link below (valid for 24 hours):</p>
+      <a href="${verifyUrl}">${verifyUrl}</a>
+      <p>If you did not create this account, ignore this email.</p>
+    `,
+  });
+};
+
 router.post(AUTH.SIGNUP, async (req, res) => {
   try {
     validateSignupData(req.body);
@@ -16,40 +47,33 @@ router.post(AUTH.SIGNUP, async (req, res) => {
     data.email = data.email.toLowerCase();
     data.password = await hashPassword(data.password);
 
-    // Generate a random verification token (plain) and hash it before saving to DB
-    // Plain token goes in the email link, hashed token stays in DB (security best practice)
-    const plainToken = crypto.randomBytes(32).toString('hex');
-    data.emailVerifyToken = crypto.createHash('sha256').update(plainToken).digest('hex');
-    data.emailVerifyExpiry = Date.now() + 24 * 60 * 60 * 1000; // 24 hours
-
     const user = new User(data);
     await user.save();
-
-    const verifyUrl = `${process.env.FRONTEND_URL}/verify-email/${plainToken}`;
-
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS, // use Gmail App Password, not your actual password
-      },
-    });
-
-    await transporter.sendMail({
-      from: `"Developer Connection" <${process.env.EMAIL_USER}>`,
-      to: user.email,
-      subject: 'Verify your email',
-      html: `
-        <p>Welcome to Developer Connection!</p>
-        <p>Please verify your email address by clicking the link below (valid for 24 hours):</p>
-        <a href="${verifyUrl}">${verifyUrl}</a>
-        <p>If you did not create this account, ignore this email.</p>
-      `,
-    });
+    await sendVerificationEmail(user);
 
     res.status(201).json({ message: 'User created successfully. Please check your email to verify your account.', user });
   } catch (err) {
     res.status(400).json({ error: err.message });
+  }
+});
+
+router.post(AUTH.RESEND_VERIFICATION, async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email || !validator.isEmail(email))
+      return res.status(400).json({ error: 'Valid email is required' });
+
+    const user = await User.findOne({ email: email.toLowerCase() });
+    if (!user) return res.status(404).json({ error: 'No account found with this email' });
+
+    if (user.isEmailVerified)
+      return res.status(400).json({ error: 'This account is already verified' });
+
+    await sendVerificationEmail(user);
+
+    res.status(200).json({ message: 'Verification email resent. Please check your inbox.' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 
