@@ -113,8 +113,29 @@ router.get(PROFILE.FEED, userAuth, async (req, res) => {
       excludedIds.add(r.toUserId.toString());
     }
 
-    const total = await User.countDocuments({ _id: { $nin: [...excludedIds] } });
-    const users = await User.find({ _id: { $nin: [...excludedIds] } })
+    // Exclude users the logged-in user has blocked, and users who have
+    // blocked the logged-in user — block is bidirectional in the feed.
+    for (const id of req.user.blockedUsers) excludedIds.add(id.toString());
+    const blockedByOthers = await User.find({ blockedUsers: loggedInUserId }).select('_id');
+    for (const u of blockedByOthers) excludedIds.add(u._id.toString());
+
+    const filter = { _id: { $nin: [...excludedIds] } };
+
+    // Optional skills filter: ?skills=react,node — matches any user whose
+    // skills array contains at least one of the requested skills (case-insensitive).
+    const { skills } = req.query;
+    if (skills) {
+      const skillList = skills
+        .split(',')
+        .map((s) => s.trim())
+        .filter(Boolean);
+      if (skillList.length > 0) {
+        filter.skills = { $in: skillList.map((s) => new RegExp(`^${s}$`, 'i')) };
+      }
+    }
+
+    const total = await User.countDocuments(filter);
+    const users = await User.find(filter)
       .select(PUBLIC_PROFILE_FIELDS)
       .skip((page - 1) * FEED_PAGE_SIZE)
       .limit(FEED_PAGE_SIZE);

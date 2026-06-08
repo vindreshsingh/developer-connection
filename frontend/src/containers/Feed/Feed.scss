@@ -17,6 +17,17 @@
   margin-bottom: 1.5rem;
 }
 
+.dc-feed-filter {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  margin-bottom: 1.25rem;
+}
+
+.dc-feed-filter-input {
+  flex: 1;
+}
+
 .dc-feed-error {
   color: #ef4444;
   font-size: 0.875rem;

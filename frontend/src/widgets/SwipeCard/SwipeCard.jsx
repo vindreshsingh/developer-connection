@@ -2,7 +2,7 @@ import { motion, useMotionValue, useTransform } from 'framer-motion';
 import Tag from '@/components/Tag/Tag';
 import './SwipeCard.scss';
 
-export default function SwipeCard({ profile, onSwipe, isTop }) {
+export default function SwipeCard({ profile, onSwipe, onBlock, onReport, isTop }) {
   const x = useMotionValue(0);
   const rotate = useTransform(x, [-200, 200], [-15, 15]);
   const likeOpacity = useTransform(x, [20, 120], [0, 1]);
@@ -24,6 +24,34 @@ export default function SwipeCard({ profile, onSwipe, isTop }) {
       animate={{ scale: 1, opacity: 1 }}
       exit={{ x: x.get() > 0 ? 400 : -400, opacity: 0, transition: { duration: 0.3 } }}
     >
+      {(onBlock || onReport) && (
+        <div className="dc-swipe-card-moderation">
+          {onReport && (
+            <button
+              type="button"
+              className="dc-swipe-card-moderation-action"
+              onClick={(e) => {
+                e.stopPropagation();
+                onReport();
+              }}
+            >
+              Report
+            </button>
+          )}
+          {onBlock && (
+            <button
+              type="button"
+              className="dc-swipe-card-moderation-action"
+              onClick={(e) => {
+                e.stopPropagation();
+                onBlock();
+              }}
+            >
+              Block
+            </button>
+          )}
+        </div>
+      )}
       <div className="dc-swipe-card-photo">
         {profile.photoUrl ? (
           <img src={profile.photoUrl} alt={profile.firstName} className="w-full h-full object-cover" />

@@ -3,16 +3,19 @@ import { api } from '@/store/api';
 const feedApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getFeed: builder.query({
-      query: (page = 1) => `/profile/feed?page=${page}`,
+      query: ({ page = 1, skills = '' } = {}) =>
+        `/profile/feed?page=${page}${skills ? `&skills=${encodeURIComponent(skills)}` : ''}`,
       providesTags: ['Feed'],
-      // Merge subsequent pages into one cached list, keyed by endpoint name
-      // (ignoring the page arg) so the cache accumulates across pagination.
-      serializeQueryArgs: ({ endpointName }) => endpointName,
+      // Merge subsequent pages into one cached list, keyed by the active
+      // skills filter (changing the filter starts a fresh cached list;
+      // paginating within the same filter accumulates into it).
+      serializeQueryArgs: ({ endpointName, queryArgs }) => `${endpointName}-${queryArgs?.skills || ''}`,
       merge: (currentCache, newItems, { arg }) => {
-        if (arg === 1) return newItems;
+        if (!arg || arg.page <= 1) return newItems;
         return { ...newItems, data: [...currentCache.data, ...newItems.data] };
       },
-      forceRefetch: ({ currentArg, previousArg }) => currentArg !== previousArg,
+      forceRefetch: ({ currentArg, previousArg }) =>
+        currentArg?.page !== previousArg?.page || currentArg?.skills !== previousArg?.skills,
     }),
   }),
 });
