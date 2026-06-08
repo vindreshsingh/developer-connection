@@ -5,6 +5,7 @@ import validator from 'validator';
 import User from '../models/user.js';
 import { validateSignupData, sanitizeSignupData, hashPassword } from '../utils/sanitization.js';
 import { AUTH } from '../constants/apiEndpoints.js';
+import { authRateLimiter } from '../middlewares/rateLimiter.js';
 
 const router = express.Router();
 
@@ -39,7 +40,7 @@ const sendVerificationEmail = async (user) => {
   });
 };
 
-router.post(AUTH.SIGNUP, async (req, res) => {
+router.post(AUTH.SIGNUP, authRateLimiter, async (req, res) => {
   try {
     validateSignupData(req.body);
 
@@ -77,7 +78,7 @@ router.post(AUTH.RESEND_VERIFICATION, async (req, res) => {
   }
 });
 
-router.post(AUTH.LOGIN, async (req, res) => {
+router.post(AUTH.LOGIN, authRateLimiter, async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password)
@@ -134,7 +135,7 @@ router.post(AUTH.LOGOUT, (req, res) => {
   res.status(200).json({ message: 'Logged out successfully' });
 });
 
-router.post(AUTH.FORGOT_PASSWORD, async (req, res) => {
+router.post(AUTH.FORGOT_PASSWORD, authRateLimiter, async (req, res) => {
   try {
     const { email } = req.body;
 
@@ -186,7 +187,7 @@ router.post(AUTH.FORGOT_PASSWORD, async (req, res) => {
   }
 });
 
-router.post(AUTH.RESET_PASSWORD, async (req, res) => {
+router.post(AUTH.RESET_PASSWORD, authRateLimiter, async (req, res) => {
   try {
     const { token } = req.params;
     const { newPassword } = req.body;
