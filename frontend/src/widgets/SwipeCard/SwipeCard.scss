@@ -1,0 +1,67 @@
+.dc-swipe-card {
+  position: absolute;
+  inset: 0;
+  background-color: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  cursor: grab;
+  user-select: none;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.dc-swipe-card-photo {
+  position: relative;
+  height: 75%;
+  background-color: #e5e7eb;
+}
+
+.dc-swipe-card-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3.75rem;
+  font-weight: 700;
+  color: #9ca3af;
+  background: linear-gradient(to bottom right, #fce7f3, #f3e8ff);
+}
+
+.dc-swipe-card-badge {
+  position: absolute;
+  top: 1.5rem;
+  font-weight: 800;
+  font-size: 1.5rem;
+  border: 4px solid;
+  border-radius: 0.5rem;
+  padding: 0.25rem 0.75rem;
+}
+
+.dc-swipe-card-badge--like {
+  left: 1.5rem;
+  border-color: #22c55e;
+  color: #22c55e;
+  transform: rotate(-15deg);
+}
+
+.dc-swipe-card-badge--nope {
+  right: 1.5rem;
+  border-color: #ef4444;
+  color: #ef4444;
+  transform: rotate(15deg);
+}
+
+.dc-swipe-card-body {
+  padding: 1rem;
+  text-align: left;
+}
+
+.dc-swipe-card-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #111827;
+}
