@@ -128,6 +128,10 @@ const userSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
+    tokenVersion: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );
@@ -141,7 +145,7 @@ userSchema.methods.validatePassword = async function (inputPassword) {
 };
 
 userSchema.methods.getJWT = function () {
-  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+  return jwt.sign({ id: this._id, tokenVersion: this.tokenVersion }, process.env.JWT_SECRET, { expiresIn: '1d' });
 };
 
 const User = mongoose.model('User', userSchema);
