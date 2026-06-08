@@ -1,0 +1,42 @@
+ai-agents/skills/prd-and-rfc/SKILL.md
+  5dea48bc8e4d1291 1-50
+ai-agents/skills/figma-to-code/SKILL.md
+  5dea48bc8e4d1291 1-42
+ai-agents/skills/using-agent-skills/SKILL.md
+  5dea48bc8e4d1291 20,24,141-152,155-157,164,169
+README.md
+  5dea48bc8e4d1291 1-50
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.5",
+  "base_commit_sha": "d7493da5ad108473b62a767ad28f54fb66406291",
+  "prompts": {
+    "5dea48bc8e4d1291": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ca983a8e-f481-4230-8262-44ead3a9e9be",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "Vindresh Kumar <vindresh.singh@1mg.com>",
+      "messages": [],
+      "total_additions": 214,
+      "total_deletions": 11,
+      "accepted_lines": 214,
+      "overriden_lines": 0
+    },
+    "8885e539b709cc49": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "88414318-8658-47dd-adbc-7c6f24e8425d",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "Vindresh Kumar <vindresh.singh@1mg.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 2,
+      "overriden_lines": 0
+    }
+  }
+}
