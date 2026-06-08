@@ -1,0 +1,69 @@
+backend/src/models/connectionRequest.js
+  7ada547ab53fa403 1-38
+backend/src/routes/profile.js
+  9a442818c311e8e7 4,43-45,47-79
+  7ada547ab53fa403 1-3,5-42,80-82
+backend/src/constants/apiEndpoints.js
+  7ada547ab53fa403 1-26
+backend/src/routes/connection.js
+  7ada547ab53fa403 1-88,90-96,98-102,106-133
+backend/src/server.js
+  8885e539b709cc49 1,10
+  7ada547ab53fa403 3,5-7,13,21-22
+backend/.gitignore
+  8885e539b709cc49 2
+backend/src/models/user.js
+  7ada547ab53fa403 1-16,18-65,67-114
+backend/src/utils/sanitization.js
+  7ada547ab53fa403 1-38
+backend/src/middlewares/auth.js
+  7ada547ab53fa403 1-20
+backend/src/routes/auth.js
+  7ada547ab53fa403 1-138
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.5",
+  "base_commit_sha": "8de5d0aa01fc0d3597916fad0214508e69abaa82",
+  "prompts": {
+    "7ada547ab53fa403": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "60a210ce-6e29-438c-bde3-dcd04e171c5d",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "Vindresh Kumar <vindresh.singh@1mg.com>",
+      "messages": [],
+      "total_additions": 775,
+      "total_deletions": 218,
+      "accepted_lines": 552,
+      "overriden_lines": 2
+    },
+    "8885e539b709cc49": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "88414318-8658-47dd-adbc-7c6f24e8425d",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "Vindresh Kumar <vindresh.singh@1mg.com>",
+      "messages": [],
+      "total_additions": 22,
+      "total_deletions": 2,
+      "accepted_lines": 19,
+      "overriden_lines": 1
+    },
+    "9a442818c311e8e7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f31e2c14-bd68-485c-9084-f2bc09273e2b",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "Vindresh Kumar <vindresh.singh@1mg.com>",
+      "messages": [],
+      "total_additions": 37,
+      "total_deletions": 1,
+      "accepted_lines": 37,
+      "overriden_lines": 0
+    }
+  }
+}
