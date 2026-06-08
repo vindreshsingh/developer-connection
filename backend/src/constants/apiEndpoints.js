@@ -1,0 +1,26 @@
+// mounted at /auth
+export const AUTH = {
+  SIGNUP: '/signup',
+  LOGIN: '/login',
+  LOGOUT: '/logout',
+  FORGOT_PASSWORD: '/forgot-password',
+  RESET_PASSWORD: '/reset-password/:token',
+};
+
+// mounted at /profile
+export const PROFILE = {
+  VIEW: '/',        // GET own profile via token (no userId needed)
+  EDIT: '/',        // PATCH own profile via token (no userId needed)
+  DELETE: '/',      // DELETE own profile via token (no userId needed)
+  VIEW_BY_ID: '/:userId', // GET any user's public profile
+  FEED: '/feed',
+};
+
+// mounted at /request
+export const REQUEST = {
+  SEND: '/send/:status/:toUserId',      // status: interested | ignored
+  REVIEW: '/review/:status/:requestId', // status: accepted | rejected
+  PENDING: '/pending',                  // requests received, awaiting review
+  SENT: '/sent',                        // requests sent by logged-in user
+  CONNECTIONS: '/connections',          // accepted matches
+};
