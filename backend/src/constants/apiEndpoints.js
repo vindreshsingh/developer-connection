@@ -5,6 +5,7 @@ export const AUTH = {
   LOGOUT: '/logout',
   FORGOT_PASSWORD: '/forgot-password',
   RESET_PASSWORD: '/reset-password/:token',
+  VERIFY_EMAIL: '/verify-email/:token',
 };
 
 // mounted at /profile

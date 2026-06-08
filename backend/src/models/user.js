@@ -92,13 +92,24 @@ const userSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
+    isEmailVerified: {
+      type: Boolean,
+      default: false,
+    },
+    emailVerifyToken: {
+      type: String,
+      default: null,
+    },
+    emailVerifyExpiry: {
+      type: Date,
+      default: null,
+    },
   },
   { timestamps: true }
 );
 
-userSchema.pre(/^find/, function (next) {
+userSchema.pre(/^find/, function () {
   this.where({ isActive: true });
-  next();
 });
 
 userSchema.methods.validatePassword = async function (inputPassword) {

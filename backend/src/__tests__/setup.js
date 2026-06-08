@@ -2,6 +2,9 @@ import mongoose from 'mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 
 process.env.JWT_SECRET = process.env.JWT_SECRET || 'test-jwt-secret';
+process.env.FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
+process.env.EMAIL_USER = process.env.EMAIL_USER || 'test@example.com';
+process.env.EMAIL_PASS = process.env.EMAIL_PASS || 'test-pass';
 
 let mongoServer;
 
