@@ -2,7 +2,7 @@ import { AnimatePresence } from 'framer-motion';
 import SwipeCard from '@/widgets/SwipeCard/SwipeCard';
 import './SwipeDeck.scss';
 
-export default function SwipeDeck({ profiles, isFetching, onSwipe }) {
+export default function SwipeDeck({ profiles, isFetching, onSwipe, onBlock, onReport }) {
   const topProfile = profiles[0];
 
   return (
@@ -21,6 +21,8 @@ export default function SwipeDeck({ profiles, isFetching, onSwipe }) {
               profile={profile}
               isTop={i === 0}
               onSwipe={(status) => onSwipe(status, profile._id)}
+              onBlock={onBlock && (() => onBlock(profile._id))}
+              onReport={onReport && (() => onReport(profile._id))}
             />
           ))}
         </AnimatePresence>
