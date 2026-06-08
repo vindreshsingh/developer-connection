@@ -34,6 +34,22 @@ export const api = createApi({
       query: (body) => ({ url: '/profile', method: 'PATCH', body }),
       invalidatesTags: ['Profile'],
     }),
+    uploadProfilePhoto: builder.mutation({
+      query: (file) => {
+        const formData = new FormData();
+        formData.append('image', file);
+        return { url: '/profile/photo', method: 'POST', body: formData };
+      },
+      invalidatesTags: ['Profile'],
+    }),
+    uploadCoverImage: builder.mutation({
+      query: (file) => {
+        const formData = new FormData();
+        formData.append('image', file);
+        return { url: '/profile/cover', method: 'POST', body: formData };
+      },
+      invalidatesTags: ['Profile'],
+    }),
     getUserProfile: builder.query({
       query: (userId) => `/profile/${userId}`,
     }),
@@ -81,6 +97,8 @@ export const {
   useLogoutMutation,
   useGetMyProfileQuery,
   useUpdateProfileMutation,
+  useUploadProfilePhotoMutation,
+  useUploadCoverImageMutation,
   useGetUserProfileQuery,
   useGetFeedQuery,
   useSendRequestMutation,
