@@ -92,6 +92,30 @@ const userSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
+    coverImageUrl: {
+      type: String,
+      default: null,
+      validate: {
+        validator: (v) => v === null || validator.isURL(v),
+        message: (props) => `${props.value} is not a valid URL`,
+      },
+    },
+    techStack: {
+      type: [String],
+      default: [],
+    },
+    experience: {
+      type: [
+        {
+          title: { type: String, required: true, trim: true },
+          company: { type: String, required: true, trim: true },
+          startDate: { type: Date, required: true },
+          endDate: { type: Date, default: null },
+          description: { type: String, default: '', maxlength: 1000 },
+        },
+      ],
+      default: [],
+    },
     isEmailVerified: {
       type: Boolean,
       default: false,
