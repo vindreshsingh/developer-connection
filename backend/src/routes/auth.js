@@ -206,10 +206,11 @@ router.post(AUTH.RESET_PASSWORD, authRateLimiter, async (req, res) => {
 
     if (!user) return res.status(400).json({ error: 'Invalid or expired reset token' });
 
-    // 3. Hash new password and save, then clear the reset token fields
+    // 3. Hash new password, bump tokenVersion to invalidate existing sessions, and clear the reset token fields
     user.password = await hashPassword(newPassword);
     user.passwordResetToken = null;
     user.passwordResetExpiry = null;
+    user.tokenVersion += 1;
     await user.save();
 
     res.status(200).json({ message: 'Password reset successful. Please login.' });

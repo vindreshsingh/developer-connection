@@ -1,5 +1,4 @@
 import { jest } from '@jest/globals';
-import jwt from 'jsonwebtoken';
 
 const uploadImageBuffer = jest.fn();
 
@@ -24,8 +23,7 @@ const createAuthenticatedUser = async () => {
     isEmailVerified: true,
   }).save();
 
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
-  return `token=${token}`;
+  return `token=${user.getJWT()}`;
 };
 
 describe('POST /profile/photo and /profile/cover', () => {

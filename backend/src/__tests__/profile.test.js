@@ -1,4 +1,3 @@
-import jwt from 'jsonwebtoken';
 import request from 'supertest';
 import app from '../app.js';
 import User from '../models/user.js';
@@ -15,8 +14,7 @@ const createAuthenticatedUser = async () => {
     isEmailVerified: true,
   }).save();
 
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
-  return { user, cookie: `token=${token}` };
+  return { user, cookie: `token=${user.getJWT()}` };
 };
 
 describe('PATCH /profile', () => {
