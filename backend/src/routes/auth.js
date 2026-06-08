@@ -68,9 +68,38 @@ router.post(AUTH.LOGIN, async (req, res) => {
     const isMatch = await user.validatePassword(password);
     if (!isMatch) return res.status(401).json({ error: 'Invalid credentials' });
 
+    if (!user.isEmailVerified)
+      return res.status(403).json({ error: 'Please verify your email before logging in' });
+
     const token = user.getJWT();
     res.cookie('token', token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
     res.status(200).json({ message: 'Login successful', user: { ...user.toObject(), password: undefined } });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.get(AUTH.VERIFY_EMAIL, async (req, res) => {
+  try {
+    const { token } = req.params;
+
+    // Hash the incoming plain token to compare against the stored hashed token
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+
+    // Find user with matching token that hasn't expired yet
+    const user = await User.findOne({
+      emailVerifyToken: hashedToken,
+      emailVerifyExpiry: { $gt: Date.now() },
+    });
+
+    if (!user) return res.status(400).json({ error: 'Invalid or expired verification link' });
+
+    user.isEmailVerified = true;
+    user.emailVerifyToken = null;
+    user.emailVerifyExpiry = null;
+    await user.save();
+
+    res.status(200).json({ message: 'Email verified successfully. You can now log in.' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

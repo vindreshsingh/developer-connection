@@ -12,6 +12,7 @@ describe('POST /auth/login', () => {
       lastName: 'Dev',
       email: credentials.email,
       password: await hashPassword(credentials.password),
+      isEmailVerified: true,
     }).save();
   });
 
