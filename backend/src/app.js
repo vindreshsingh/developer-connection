@@ -8,6 +8,7 @@ import profileRouter from './routes/profile.js';
 import connectionRouter from './routes/connection.js';
 import chatRouter from './routes/chat.js';
 import groupsRouter from './routes/groups.js';
+import callsRouter from './routes/calls.js';
 import { configurePassport } from './middlewares/passport.js';
 
 // Register Passport strategies once at startup (reads env vars at call time,
@@ -32,5 +33,6 @@ app.use('/profile', profileRouter);
 app.use('/request', connectionRouter);
 app.use('/chat', chatRouter);
 app.use('/groups', groupsRouter);
+app.use('/calls', callsRouter);
 
 export default app;
