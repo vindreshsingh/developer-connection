@@ -7,6 +7,7 @@ const FeedPage = lazy(() => import('@/pages/Feed/Feed'));
 const RequestsPage = lazy(() => import('@/pages/Requests/Requests'));
 const ConnectionsPage = lazy(() => import('@/pages/Connections/Connections'));
 const ProfilePage = lazy(() => import('@/pages/Profile/Profile'));
+const MessagesPage = lazy(() => import('@/pages/Messages/Messages'));
 
 // guard: 'protected'   — redirect to /login if not authenticated
 // guard: 'public-only' — redirect to / if already authenticated
@@ -18,5 +19,6 @@ export const routes = [
   { path: '/', Page: FeedPage, guard: 'protected' },
   { path: '/requests', Page: RequestsPage, guard: 'protected' },
   { path: '/connections', Page: ConnectionsPage, guard: 'protected' },
+  { path: '/messages', Page: MessagesPage, guard: 'protected' },
   { path: '/profile', Page: ProfilePage, guard: 'protected' },
 ];

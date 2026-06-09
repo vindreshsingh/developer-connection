@@ -8,6 +8,7 @@ const LINKS = [
   { to: '/', label: 'Discover', end: true },
   { to: '/requests', label: 'Requests' },
   { to: '/connections', label: 'Connections' },
+  { to: '/messages', label: 'Messages' },
   { to: '/profile', label: 'Profile' },
 ];
 
