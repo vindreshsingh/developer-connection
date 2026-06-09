@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { useCurrentUser } from '@/hooks/auth/useCurrentUser';
 import NavBar from '@/widgets/NavBar/NavBar';
+import CallProvider from '@/context/CallProvider';
 import { routes } from '@/routes';
 
 const LoadingScreen = () => (
@@ -44,14 +45,16 @@ function GuardedPage({ Page, guard }) {
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <NavBar />
-      <Routes>
-        {routes.map(({ path, Page, guard }) => (
-          <Route key={path} path={path} element={<GuardedPage Page={Page} guard={guard} />} />
-        ))}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </div>
+    <CallProvider>
+      <div className="min-h-screen bg-gray-50">
+        <NavBar />
+        <Routes>
+          {routes.map(({ path, Page, guard }) => (
+            <Route key={path} path={path} element={<GuardedPage Page={Page} guard={guard} />} />
+          ))}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </div>
+    </CallProvider>
   );
 }

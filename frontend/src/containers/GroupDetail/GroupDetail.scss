@@ -180,3 +180,79 @@
   color: #dc2626;
   padding: 3rem 1rem;
 }
+
+/* ── Group call button (header) ─────────────────────────────────────────────── */
+
+.dc-group-detail-call-btn {
+  background: none;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 0.35rem 0.6rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:hover:not(:disabled) {
+    background: #f3f4f6;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+/* ── Incoming group call banner ─────────────────────────────────────────────── */
+
+.dc-group-detail-call-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #1e1b4b;
+  color: #fff;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  animation: dc-gc-banner-in 0.2s ease-out;
+}
+
+@keyframes dc-gc-banner-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.dc-group-detail-call-banner-text {
+  flex: 1;
+  font-weight: 500;
+}
+
+.dc-group-detail-call-banner-btn {
+  border: none;
+  border-radius: 9999px;
+  padding: 0.35rem 0.9rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: filter 0.15s;
+
+  &:hover {
+    filter: brightness(1.15);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &--join {
+    background: #16a34a;
+    color: #fff;
+  }
+
+  &--dismiss {
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    padding: 0.35rem 0.6rem;
+  }
+}

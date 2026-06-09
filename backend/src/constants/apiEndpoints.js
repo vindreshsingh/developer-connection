@@ -58,6 +58,17 @@ export const GROUPS = {
   MESSAGES:     '/:groupId/messages',       // GET  — paginated group messages
 };
 
+// mounted at /calls
+export const CALLS = {
+  INITIATE:     '/',                  // POST  — start a 1:1 or group call
+  HISTORY:      '/',                  // GET   — paginated call history
+  GET:          '/:callId',           // GET   — single call metadata
+  ACCEPT:       '/:callId/accept',    // POST  — callee accepts
+  DECLINE:      '/:callId/decline',   // POST  — callee declines
+  END:          '/:callId/end',       // POST  — either participant ends
+  GROUP_TOKEN:  '/group-token',       // POST  — get LiveKit room token (Phase 5 B1)
+};
+
 // mounted at /chat
 export const CHAT = {
   CONVERSATIONS: '/conversations',                       // GET: list logged-in user's conversations

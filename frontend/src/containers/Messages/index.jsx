@@ -4,6 +4,8 @@ import { useGetConversationsQuery } from '@/hooks/chat/chatApi';
 import { useChat } from '@/hooks/chat/useChat';
 import { usePresence } from '@/hooks/chat/usePresence';
 import { useSocket } from '@/hooks/chat/useSocket';
+import { useCall } from '@/context/CallProvider';
+import { useInitiateCallMutation } from '@/hooks/call/callApi';
 import { getApiErrorMessage } from '@/commonUtils/apiError';
 import ConversationList from '@/widgets/ConversationList/ConversationList';
 import MessageBubble from '@/widgets/MessageBubble/MessageBubble';
@@ -14,6 +16,8 @@ import './Messages.scss';
 export default function MessagesContainer() {
   const { user } = useCurrentUser();
   const socket = useSocket();
+  const { initiateCall, activeCall } = useCall() ?? {};
+  const [initiateCallMutation, { isLoading: isCallInitiating }] = useInitiateCallMutation();
   const { isOnline } = usePresence(socket);
   const { data, isFetching, error } = useGetConversationsQuery();
   const [activeConversationId, setActiveConversationId] = useState(null);
@@ -98,6 +102,29 @@ export default function MessagesContainer() {
                   {isOnline(activeConversation.otherUser?._id) && (
                     <span className="dc-messages-thread-online">● Online</span>
                   )}
+                  <button
+                    type="button"
+                    className="dc-messages-call-btn"
+                    disabled={!!activeCall || isCallInitiating}
+                    title="Start video call"
+                    aria-label="Start video call"
+                    onClick={async () => {
+                      try {
+                        const result = await initiateCallMutation({
+                          type: '1:1',
+                          targetUserId: activeConversation.otherUser._id,
+                        }).unwrap();
+                        initiateCall?.({
+                          callId:         result.callId,
+                          remoteUserName: [activeConversation.otherUser?.firstName, activeConversation.otherUser?.lastName].filter(Boolean).join(' '),
+                        });
+                      } catch {
+                        // error handled by RTK Query
+                      }
+                    }}
+                  >
+                    📹
+                  </button>
                 </header>
               )}
 

@@ -1,6 +1,7 @@
 import { classNames } from '@/commonUtils/classNames';
 import { formatTime } from '@/commonUtils/formatDate';
 import SnippetBlock from '@/widgets/SnippetBlock/SnippetBlock';
+import CallSummaryCard from '@/widgets/CallSummaryCard/CallSummaryCard';
 import './GroupMessageBubble.scss';
 
 /**
@@ -11,6 +12,11 @@ import './GroupMessageBubble.scss';
  * @param {{ message: object, isOwn: boolean, members: Array }} props
  */
 export default function GroupMessageBubble({ message, isOwn, members = [] }) {
+  // Call summary messages are system events — render as a centred pill, not a bubble
+  if (message.type === 'call_summary') {
+    return <CallSummaryCard message={message} />;
+  }
+
   const senderName = (() => {
     if (isOwn) return 'You';
     const senderId =

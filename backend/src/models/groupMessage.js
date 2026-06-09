@@ -29,14 +29,16 @@ const groupMessageSchema = new mongoose.Schema(
     type: {
       type:     String,
       required: true,
-      enum:     { values: ['text', 'snippet'], message: '{VALUE} is not a valid message type' },
+      enum:     { values: ['text', 'snippet', 'call_summary'], message: '{VALUE} is not a valid message type' },
       default:  'text',
     },
     body: {
       type:      String,
-      required:  true,
+      // Required for text/snippet; optional for call_summary (system-generated)
+      required:  function () { return this.type !== 'call_summary'; },
       trim:      true,
       maxlength: 10000,
+      default:   null,
     },
     language: {
       type:      String,
@@ -48,11 +50,20 @@ const groupMessageSchema = new mongoose.Schema(
       type:    [reactionSchema],
       default: [],
     },
+    // Set only when type === 'call_summary' (Phase 5 C2)
+    callSummary: {
+      callId:   { type: ObjectId, ref: 'CallSession', default: null },
+      duration: { type: Number,  default: 0 },
+      status:   { type: String,  default: 'ended' },
+      callType: { type: String,  default: 'group' },
+    },
   },
   { timestamps: true },
 );
 
 groupMessageSchema.index({ groupId: 1, createdAt: -1, _id: -1 });
+// Sparse index for idempotent upsert
+groupMessageSchema.index({ 'callSummary.callId': 1 }, { sparse: true });
 
 groupMessageSchema.pre('validate', function () {
   if (this.type !== 'snippet') this.language = null;
