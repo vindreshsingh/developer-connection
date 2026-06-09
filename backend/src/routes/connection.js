@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import userAuth from '../middlewares/auth.js';
 import { REQUEST } from '../constants/apiEndpoints.js';
 import ConnectionRequest from '../models/connectionRequest.js';
+import Report from '../models/report.js';
 import User from '../models/user.js';
 
 const router = express.Router();
@@ -125,6 +126,79 @@ router.get(REQUEST.CONNECTIONS, userAuth, async (req, res) => {
     });
 
     res.status(200).json({ count: data.length, data });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.post(REQUEST.BLOCK, userAuth, async (req, res) => {
+  try {
+    const loggedInUser = req.user;
+    const { userId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(userId))
+      return res.status(400).json({ error: 'Invalid user id' });
+    if (loggedInUser._id.equals(userId))
+      return res.status(400).json({ error: 'Cannot block yourself' });
+
+    const targetUser = await User.findById(userId);
+    if (!targetUser) return res.status(404).json({ error: 'User not found' });
+
+    if (!loggedInUser.blockedUsers.some((id) => id.equals(userId))) {
+      loggedInUser.blockedUsers.push(userId);
+      await loggedInUser.save();
+    }
+
+    // Blocking ends any existing connection/request between the two users so
+    // a blocked user disappears from connections, requests, and the feed.
+    await ConnectionRequest.deleteMany({
+      $or: [
+        { fromUserId: loggedInUser._id, toUserId: userId },
+        { fromUserId: userId, toUserId: loggedInUser._id },
+      ],
+    });
+
+    res.status(200).json({ message: `${targetUser.firstName} has been blocked` });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.delete(REQUEST.BLOCK, userAuth, async (req, res) => {
+  try {
+    const loggedInUser = req.user;
+    const { userId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(userId))
+      return res.status(400).json({ error: 'Invalid user id' });
+
+    loggedInUser.blockedUsers = loggedInUser.blockedUsers.filter((id) => !id.equals(userId));
+    await loggedInUser.save();
+
+    res.status(200).json({ message: 'User unblocked' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.post(REQUEST.REPORT, userAuth, async (req, res) => {
+  try {
+    const loggedInUser = req.user._id;
+    const { userId } = req.params;
+    const { reason } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(userId))
+      return res.status(400).json({ error: 'Invalid user id' });
+    if (!reason || !reason.trim())
+      return res.status(400).json({ error: 'A reason is required to file a report' });
+
+    const targetUser = await User.findById(userId);
+    if (!targetUser) return res.status(404).json({ error: 'User not found' });
+
+    const report = new Report({ reporterId: loggedInUser, reportedUserId: userId, reason: reason.trim() });
+    await report.save();
+
+    res.status(201).json({ message: `${targetUser.firstName} has been reported`, report });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

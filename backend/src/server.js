@@ -1,25 +1,18 @@
 import 'dotenv/config';
-import express from 'express';
-import cookieParser from 'cookie-parser';
+import http from 'http';
 import connectDB from './config/database.js';
-import authRouter from './routes/auth.js';
-import profileRouter from './routes/profile.js';
-import connectionRouter from './routes/connection.js';
+import app from './app.js';
+import { initSockets } from './sockets/index.js';
 
-const app = express();
 const PORT = process.env.PORT || 3008;
 
-app.use(express.json());
-app.use(cookieParser());
-
-app.use('/auth', authRouter);
-app.use('/profile', profileRouter);
-app.use('/request', connectionRouter);
+const httpServer = http.createServer(app);
+// Socket.IO attaches to the SAME HTTP server — no second server, no second
+// auth system (it reuses the existing JWT-cookie auth). See RFC architecture.
+initSockets(httpServer);
 
 connectDB().then(() => {
-  app.listen(PORT, () => {
+  httpServer.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
 });
-
-export default app;

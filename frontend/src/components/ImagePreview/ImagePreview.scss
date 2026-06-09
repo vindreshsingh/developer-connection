@@ -1,0 +1,12 @@
+.dc-image-preview {
+  object-fit: cover;
+  margin-bottom: 0.5rem;
+}
+
+.dc-image-preview--circle {
+  border-radius: 9999px;
+}
+
+.dc-image-preview--banner {
+  border-radius: 0.5rem;
+}

@@ -1,0 +1,30 @@
+.dc-nav-bar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background-color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.dc-nav-bar-inner {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+  height: 3.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dc-nav-bar-brand {
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: #9333ea;
+}
+
+.dc-nav-bar-links {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}

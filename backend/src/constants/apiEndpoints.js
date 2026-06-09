@@ -5,6 +5,8 @@ export const AUTH = {
   LOGOUT: '/logout',
   FORGOT_PASSWORD: '/forgot-password',
   RESET_PASSWORD: '/reset-password/:token',
+  VERIFY_EMAIL: '/verify-email/:token',
+  RESEND_VERIFICATION: '/resend-verification',
 };
 
 // mounted at /profile
@@ -14,6 +16,8 @@ export const PROFILE = {
   DELETE: '/',      // DELETE own profile via token (no userId needed)
   VIEW_BY_ID: '/:userId', // GET any user's public profile
   FEED: '/feed',
+  PHOTO: '/photo',
+  COVER: '/cover',
 };
 
 // mounted at /request
@@ -23,4 +27,14 @@ export const REQUEST = {
   PENDING: '/pending',                  // requests received, awaiting review
   SENT: '/sent',                        // requests sent by logged-in user
   CONNECTIONS: '/connections',          // accepted matches
+  BLOCK: '/block/:userId',              // POST: block, DELETE: unblock
+  REPORT: '/report/:userId',            // POST: file a report with a reason
+};
+
+// mounted at /chat
+export const CHAT = {
+  CONVERSATIONS: '/conversations',                       // GET: list logged-in user's conversations
+  GET_OR_CREATE: '/conversations/:userId',               // POST: get-or-create conversation with an accepted connection
+  MESSAGES: '/conversations/:conversationId/messages',   // GET: paginated message history
+  READ: '/conversations/:conversationId/read',           // POST: mark conversation as read
 };
