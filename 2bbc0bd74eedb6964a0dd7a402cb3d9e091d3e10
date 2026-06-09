@@ -1,0 +1,126 @@
+backend/src/models/user.js
+  0f3d1fe77565029c 23-25,27-28,30,34,39-40,42,44,147-190
+docs/specs/phase4-rfc.md
+  0f3d1fe77565029c 1-288
+backend/src/routes/oauth.js
+  0f3d1fe77565029c 1-112
+frontend/src/widgets/LinkedAccounts/LinkedAccounts.jsx
+  0f3d1fe77565029c 1-111
+backend/src/models/group.js
+  0f3d1fe77565029c 1-90
+backend/src/sockets/index.js
+  0f3d1fe77565029c 5,32
+frontend/src/hooks/groups/useGroupChat.js
+  0f3d1fe77565029c 1-135
+backend/src/routes/profile.js
+  0f3d1fe77565029c 9-11,100-102,164-283
+backend/src/utils/encryption.js
+  0f3d1fe77565029c 1-109
+frontend/src/containers/Profile/index.jsx
+  0f3d1fe77565029c 8,111-113
+frontend/src/containers/Groups/Groups.scss
+  0f3d1fe77565029c 1-158
+frontend/src/widgets/GroupMessageBubble/GroupMessageBubble.scss
+  0f3d1fe77565029c 1-63
+frontend/src/containers/GroupDetail/index.jsx
+  0f3d1fe77565029c 1-212
+frontend/src/containers/GroupDetail/GroupDetail.scss
+  0f3d1fe77565029c 1-182
+frontend/src/pages/GroupDetail/GroupDetail.jsx
+  0f3d1fe77565029c 1-5
+frontend/src/routes/index.js
+  0f3d1fe77565029c 11-12,25-26
+backend/src/__tests__/setup.js
+  0f3d1fe77565029c 8-17
+frontend/src/widgets/LinkedAccounts/LinkedAccounts.scss
+  0f3d1fe77565029c 1-115
+backend/src/__tests__/groups.test.js
+  0f3d1fe77565029c 1-519
+frontend/src/widgets/GitHubCard/GitHubCard.jsx
+  0f3d1fe77565029c 1-130
+frontend/src/containers/Groups/index.jsx
+  0f3d1fe77565029c 1-209
+frontend/src/widgets/GroupMessageBubble/GroupMessageBubble.jsx
+  0f3d1fe77565029c 1-58
+docs/specs/phase4-plan.md
+  0f3d1fe77565029c 1-167
+backend/src/services/LinkedInEnrichmentService.js
+  0f3d1fe77565029c 1-107
+frontend/src/widgets/GitHubCard/GitHubCard.scss
+  0f3d1fe77565029c 1-128
+backend/src/constants/apiEndpoints.js
+  0f3d1fe77565029c 21-27,41-60
+frontend/src/pages/Groups/Groups.jsx
+  0f3d1fe77565029c 1-5
+backend/src/utils/groupAuthorization.js
+  0f3d1fe77565029c 1-33
+backend/src/sockets/groupChatHandlers.js
+  0f3d1fe77565029c 1-138
+frontend/src/widgets/NavBar/NavBar.jsx
+  0f3d1fe77565029c 12
+backend/src/app.js
+  0f3d1fe77565029c 4,6,10-11,13-15,27,30,34
+backend/src/__tests__/encryption.test.js
+  0f3d1fe77565029c 1-179
+frontend/src/store/api.js
+  0f3d1fe77565029c 11
+frontend/src/hooks/groups/groupApi.js
+  0f3d1fe77565029c 1-64
+backend/src/utils/apiRequest.js
+  0f3d1fe77565029c 1-43
+backend/src/__tests__/oauth.test.js
+  0f3d1fe77565029c 1-284
+backend/src/__tests__/enrichment.test.js
+  0f3d1fe77565029c 1-494
+docs/specs/phase4-prd.md
+  0f3d1fe77565029c 1-197
+backend/src/services/oauthService.js
+  0f3d1fe77565029c 1-88
+backend/src/__tests__/groupSockets.test.js
+  0f3d1fe77565029c 1-394
+backend/src/middlewares/passport.js
+  0f3d1fe77565029c 1-155
+frontend/src/widgets/ConnectionCard/ConnectionCard.jsx
+  0f3d1fe77565029c 3,27-29
+backend/src/services/GitHubEnrichmentService.js
+  0f3d1fe77565029c 1-149
+backend/src/models/groupMessage.js
+  0f3d1fe77565029c 1-63
+backend/src/routes/groups.js
+  0f3d1fe77565029c 1-310
+frontend/src/hooks/auth/oauthApi.js
+  0f3d1fe77565029c 1-70
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.5",
+  "base_commit_sha": "2bbc0bd74eedb6964a0dd7a402cb3d9e091d3e10",
+  "prompts": {
+    "0f3d1fe77565029c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d3b6c483-b90b-49e3-8e63-de6fde1c1281",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "Vindresh Kumar <vindresh.singh@1mg.com>",
+      "messages": [],
+      "total_additions": 5842,
+      "total_deletions": 37,
+      "accepted_lines": 5854,
+      "overriden_lines": 0
+    },
+    "a6532e677b401520": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "541ea062-4f4d-46ba-9fe2-07789a3be87b",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "Vindresh Kumar <vindresh.singh@1mg.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 32,
+      "overriden_lines": 0
+    }
+  }
+}
