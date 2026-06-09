@@ -1,0 +1,124 @@
+frontend/src/containers/GroupDetail/GroupDetail.scss
+  0f3d1fe77565029c 183-258
+docker-compose.livekit.yml
+  0f3d1fe77565029c 1-29
+backend/src/models/callSession.js
+  0f3d1fe77565029c 1-97
+backend/src/server.js
+  0f3d1fe77565029c 12-15
+backend/src/__tests__/calls.test.js
+  0f3d1fe77565029c 1-539
+backend/src/routes/calls.js
+  0f3d1fe77565029c 1-366
+frontend/src/store/api.js
+  0f3d1fe77565029c 11
+frontend/src/context/CallProvider.scss
+  0f3d1fe77565029c 1-102
+backend/src/services/LiveKitService.js
+  0f3d1fe77565029c 1-50
+backend/src/sockets/callHandlers.js
+  0f3d1fe77565029c 1-216
+frontend/src/widgets/CallControls/CallControls.scss
+  0f3d1fe77565029c 1-57
+frontend/src/context/CallProvider.jsx
+  0f3d1fe77565029c 1-186
+backend/src/__tests__/callService.test.js
+  0f3d1fe77565029c 1-286
+backend/src/__tests__/callGroupSockets.test.js
+  0f3d1fe77565029c 1-400
+backend/src/sockets/groupCallHandlers.js
+  0f3d1fe77565029c 1-245
+backend/src/models/groupMessage.js
+  0f3d1fe77565029c 32,37-38,41,53-58,65-66
+backend/src/utils/callSummaryUtils.js
+  0f3d1fe77565029c 1-106
+frontend/src/widgets/CallSummaryCard/CallSummaryCard.jsx
+  0f3d1fe77565029c 1-58
+frontend/src/widgets/CallSummaryCard/CallSummaryCard.scss
+  0f3d1fe77565029c 1-50
+backend/src/sockets/index.js
+  0f3d1fe77565029c 6-7,28-32,40-41
+frontend/src/hooks/call/useGroupCall.js
+  0f3d1fe77565029c 1-242
+docs/specs/phase5-plan.md
+  0f3d1fe77565029c 1-320
+backend/src/app.js
+  0f3d1fe77565029c 11,36
+frontend/src/widgets/CallOverlay/CallOverlay.scss
+  0f3d1fe77565029c 1-138
+frontend/src/widgets/GroupCallOverlay/GroupCallOverlay.jsx
+  0f3d1fe77565029c 1-143
+backend/src/models/message.js
+  0f3d1fe77565029c 27,34-35,38,51-56,63-64
+frontend/src/widgets/GroupMessageBubble/GroupMessageBubble.jsx
+  0f3d1fe77565029c 4,15-19
+backend/src/__tests__/callSignaling.test.js
+  0f3d1fe77565029c 1-392
+frontend/src/containers/GroupDetail/index.jsx
+  0f3d1fe77565029c 1,11,16,22-28,43,53,58,65,68-136,161-162,178,182-197,203-217,219-239,241-247,249-251,271-282,284-294,296-297,299-300,313,320-323,326-327,329-340
+frontend/src/widgets/MessageBubble/MessageBubble.jsx
+  0f3d1fe77565029c 5,16-20
+frontend/src/widgets/GroupCallOverlay/GroupCallOverlay.scss
+  0f3d1fe77565029c 1-160
+docs/specs/phase5-prd.md
+  0f3d1fe77565029c 1-145
+frontend/src/hooks/call/useWebRTC.js
+  0f3d1fe77565029c 1-290
+frontend/src/App.jsx
+  0f3d1fe77565029c 5,48-49,57-58
+docs/specs/phase5-rfc.md
+  0f3d1fe77565029c 1-350
+frontend/src/widgets/ParticipantTile/ParticipantTile.scss
+  0f3d1fe77565029c 1-75
+backend/src/__tests__/callSummary.test.js
+  0f3d1fe77565029c 1-237
+frontend/src/containers/Messages/Messages.scss
+  0f3d1fe77565029c 47-70
+frontend/src/containers/Messages/index.jsx
+  0f3d1fe77565029c 7-8,19-20,105-127
+frontend/src/widgets/CallControls/CallControls.jsx
+  0f3d1fe77565029c 1-83
+frontend/src/widgets/CallOverlay/CallOverlay.jsx
+  0f3d1fe77565029c 1-168
+backend/src/constants/apiEndpoints.js
+  0f3d1fe77565029c 61-71
+livekit.dev.yaml
+  0f3d1fe77565029c 1-21
+frontend/src/hooks/call/callApi.js
+  0f3d1fe77565029c 1-56
+frontend/src/widgets/ParticipantTile/ParticipantTile.jsx
+  0f3d1fe77565029c 1-81
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.5",
+  "base_commit_sha": "84a7cb11c2457c253fa57a4598d7216b91d19286",
+  "prompts": {
+    "0f3d1fe77565029c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d3b6c483-b90b-49e3-8e63-de6fde1c1281",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "Vindresh Kumar <vindresh.singh@1mg.com>",
+      "messages": [],
+      "total_additions": 6266,
+      "total_deletions": 259,
+      "accepted_lines": 6129,
+      "overriden_lines": 0
+    },
+    "a6532e677b401520": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "541ea062-4f4d-46ba-9fe2-07789a3be87b",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "Vindresh Kumar <vindresh.singh@1mg.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 32,
+      "overriden_lines": 0
+    }
+  }
+}
