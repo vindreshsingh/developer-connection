@@ -30,3 +30,11 @@ export const REQUEST = {
   BLOCK: '/block/:userId',              // POST: block, DELETE: unblock
   REPORT: '/report/:userId',            // POST: file a report with a reason
 };
+
+// mounted at /chat
+export const CHAT = {
+  CONVERSATIONS: '/conversations',                       // GET: list logged-in user's conversations
+  GET_OR_CREATE: '/conversations/:userId',               // POST: get-or-create conversation with an accepted connection
+  MESSAGES: '/conversations/:conversationId/messages',   // GET: paginated message history
+  READ: '/conversations/:conversationId/read',           // POST: mark conversation as read
+};
