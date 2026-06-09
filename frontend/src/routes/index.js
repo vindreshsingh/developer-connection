@@ -8,6 +8,8 @@ const RequestsPage = lazy(() => import('@/pages/Requests/Requests'));
 const ConnectionsPage = lazy(() => import('@/pages/Connections/Connections'));
 const ProfilePage = lazy(() => import('@/pages/Profile/Profile'));
 const MessagesPage = lazy(() => import('@/pages/Messages/Messages'));
+const GroupsPage = lazy(() => import('@/pages/Groups/Groups'));
+const GroupDetailPage = lazy(() => import('@/pages/GroupDetail/GroupDetail'));
 
 // guard: 'protected'   — redirect to /login if not authenticated
 // guard: 'public-only' — redirect to / if already authenticated
@@ -20,5 +22,7 @@ export const routes = [
   { path: '/requests', Page: RequestsPage, guard: 'protected' },
   { path: '/connections', Page: ConnectionsPage, guard: 'protected' },
   { path: '/messages', Page: MessagesPage, guard: 'protected' },
+  { path: '/groups', Page: GroupsPage, guard: 'protected' },
+  { path: '/groups/:groupId', Page: GroupDetailPage, guard: 'protected' },
   { path: '/profile', Page: ProfilePage, guard: 'protected' },
 ];

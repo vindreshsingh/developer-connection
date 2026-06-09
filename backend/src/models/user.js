@@ -20,20 +20,28 @@ const userSchema = new mongoose.Schema(
       maxlength: 50,
     },
     email: {
+      // Required for email/password accounts; optional for OAuth-only accounts
+      // that didn't return an email (e.g. GitHub private-email users).
+      // Application layer enforces email presence for email/password sign-up.
       type: String,
-      required: true,
+      required: false,
+      default: null,
       unique: true,
+      sparse: true, // allows multiple null values in the unique index
       lowercase: true,
       trim: true,
       validate: {
-        validator: (v) => validator.isEmail(v),
+        validator: (v) => v === null || v === undefined || validator.isEmail(v),
         message: (props) => `${props.value} is not a valid email address`,
       },
     },
     password: {
+      // Optional for OAuth-only accounts; required enforced at application layer
+      // (at least one of password or oauthProviders must be present).
       type: String,
-      required: true,
+      required: false,
       minlength: 8,
+      default: null,
     },
     photoUrl: {
       type: String,
@@ -135,6 +143,50 @@ const userSchema = new mongoose.Schema(
     tokenVersion: {
       type: Number,
       default: 0,
+    },
+
+    // ── Phase 4: OAuth ────────────────────────────────────────────────────────
+    oauthProviders: {
+      type: [
+        {
+          provider:   { type: String, enum: ['github', 'google', 'linkedin'], required: true },
+          providerId: { type: String, required: true },
+          // AES-256-GCM encrypted JSON: { iv, tag, ciphertext }. Never returned to client.
+          accessToken: { type: String, default: null },
+          linkedAt:   { type: Date, default: Date.now },
+        },
+      ],
+      default: [],
+    },
+
+    // ── Phase 4: GitHub enrichment ────────────────────────────────────────────
+    github: {
+      username:    { type: String, default: null },
+      avatarUrl:   { type: String, default: null },
+      profileUrl:  { type: String, default: null },
+      topRepos: {
+        type: [
+          {
+            name:     { type: String, required: true },
+            url:      { type: String, required: true },
+            stars:    { type: Number, default: 0 },
+            language: { type: String, default: null },
+          },
+        ],
+        default: [],
+      },
+      topLanguages:          { type: [String], default: [] },
+      contributionsLastYear: { type: Number, default: null },
+      syncedAt:              { type: Date, default: null },
+    },
+
+    // ── Phase 4: LinkedIn enrichment ──────────────────────────────────────────
+    linkedin: {
+      headline:   { type: String, default: null },
+      company:    { type: String, default: null },
+      jobTitle:   { type: String, default: null },
+      profileUrl: { type: String, default: null },
+      syncedAt:   { type: Date, default: null },
     },
   },
   { timestamps: true }
