@@ -1,0 +1,158 @@
+.dc-groups {
+  max-width: 860px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.dc-groups-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.dc-groups-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+/* ── Create form ─────────────────────────────────────────────────────────── */
+
+.dc-groups-create-form {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.dc-groups-create-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+/* ── Filter bar ──────────────────────────────────────────────────────────── */
+
+.dc-groups-filter {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.dc-groups-filter-input {
+  flex: 1;
+}
+
+/* ── List ────────────────────────────────────────────────────────────────── */
+
+.dc-groups-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.dc-groups-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  cursor: pointer;
+  transition: box-shadow 0.15s;
+
+  &:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+}
+
+.dc-groups-card-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.dc-groups-card-name {
+  font-weight: 600;
+  color: #111827;
+  font-size: 1rem;
+}
+
+.dc-groups-card-desc {
+  font-size: 0.875rem;
+  color: #6b7280;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dc-groups-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.25rem;
+}
+
+.dc-groups-tag {
+  font-size: 0.75rem;
+  background: #ede9fe;
+  color: #5b21b6;
+  border-radius: 9999px;
+  padding: 0.1rem 0.55rem;
+}
+
+.dc-groups-card-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.dc-groups-card-count {
+  font-size: 0.8rem;
+  color: #6b7280;
+  white-space: nowrap;
+}
+
+/* ── States ──────────────────────────────────────────────────────────────── */
+
+.dc-groups-loading,
+.dc-groups-empty {
+  text-align: center;
+  color: #6b7280;
+  padding: 3rem 0;
+}
+
+.dc-groups-error {
+  color: #dc2626;
+  margin-bottom: 1rem;
+}
+
+/* ── Pagination ──────────────────────────────────────────────────────────── */
+
+.dc-groups-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.dc-groups-pagination-info {
+  font-size: 0.875rem;
+  color: #6b7280;
+}

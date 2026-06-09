@@ -1,5 +1,6 @@
 import Avatar from '@/components/Avatar/Avatar';
 import Tag from '@/components/Tag/Tag';
+import GitHubCard from '@/widgets/GitHubCard/GitHubCard';
 import './ConnectionCard.scss';
 
 export default function ConnectionCard({ connection }) {
@@ -23,6 +24,9 @@ export default function ConnectionCard({ connection }) {
           ))}
         </div>
       )}
+
+      {/* Phase 4: GitHub / LinkedIn enrichment if synced */}
+      <GitHubCard github={connection.github} linkedin={connection.linkedin} />
     </div>
   );
 }

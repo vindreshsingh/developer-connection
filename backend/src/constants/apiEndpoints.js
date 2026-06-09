@@ -18,6 +18,13 @@ export const PROFILE = {
   FEED: '/feed',
   PHOTO: '/photo',
   COVER: '/cover',
+  // Phase 4 — linked accounts & enrichment
+  // IMPORTANT: all must be registered before /:userId to avoid misrouting.
+  LINKED_ACCOUNTS:     '/linked-accounts',
+  GITHUB_SYNC:         '/github/sync',
+  GITHUB_DISCONNECT:   '/github/disconnect',
+  LINKEDIN_SYNC:       '/linkedin/sync',
+  LINKEDIN_DISCONNECT: '/linkedin/disconnect',
 };
 
 // mounted at /request
@@ -29,6 +36,26 @@ export const REQUEST = {
   CONNECTIONS: '/connections',          // accepted matches
   BLOCK: '/block/:userId',              // POST: block, DELETE: unblock
   REPORT: '/report/:userId',            // POST: file a report with a reason
+};
+
+// mounted at /auth  (OAuth sub-routes under /auth/oauth)
+export const OAUTH = {
+  INITIATE: '/oauth/:provider',           // GET  — redirect to provider
+  CALLBACK: '/oauth/:provider/callback',  // GET  — provider redirects back here
+};
+
+// mounted at /groups
+export const GROUPS = {
+  LIST:         '/',                        // GET  — paginated public groups
+  CREATE:       '/',                        // POST — create a group
+  GET:          '/:groupId',                // GET  — group detail + member list
+  UPDATE:       '/:groupId',                // PATCH — admin: update name/desc/tags
+  DELETE:       '/:groupId',                // DELETE — admin: soft-delete
+  JOIN:         '/:groupId/join',           // POST — join a public group
+  LEAVE:        '/:groupId/leave',          // DELETE — leave a group
+  ADD_MEMBER:   '/:groupId/members/:userId',// POST — admin: invite member
+  REMOVE_MEMBER:'/:groupId/members/:userId',// DELETE — admin: remove member
+  MESSAGES:     '/:groupId/messages',       // GET  — paginated group messages
 };
 
 // mounted at /chat

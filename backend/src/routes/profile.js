@@ -6,6 +6,9 @@ import ConnectionRequest from '../models/connectionRequest.js';
 import userAuth from '../middlewares/auth.js';
 import { PROFILE } from '../constants/apiEndpoints.js';
 import { uploadImageBuffer } from '../utils/cloudinary.js';
+import { GitHubEnrichmentService }   from '../services/GitHubEnrichmentService.js';
+import { LinkedInEnrichmentService } from '../services/LinkedInEnrichmentService.js';
+import { decryptToken } from '../utils/encryption.js';
 
 const router = express.Router();
 
@@ -93,7 +96,10 @@ router.post(PROFILE.PHOTO, ...handleImageUpload('photoUrl', 'profile-photos'));
 router.post(PROFILE.COVER, ...handleImageUpload('coverImageUrl', 'cover-images'));
 
 const FEED_PAGE_SIZE = 20;
-const PUBLIC_PROFILE_FIELDS = 'firstName lastName photoUrl bio skills githubUrl linkedinUrl age gender';
+const PUBLIC_PROFILE_FIELDS =
+  'firstName lastName photoUrl bio skills githubUrl linkedinUrl age gender ' +
+  'github.username github.profileUrl github.topRepos github.topLanguages ' +
+  'linkedin.headline linkedin.company linkedin.jobTitle linkedin.profileUrl';
 
 // NOTE: FEED ('/feed') must be registered before VIEW_BY_ID ('/:userId') —
 // otherwise Express matches "/profile/feed" as VIEW_BY_ID with userId="feed"
@@ -155,6 +161,126 @@ router.get(PROFILE.FEED, userAuth, async (req, res) => {
   }
 });
 
+// ── Phase 4: Linked accounts + enrichment ─────────────────────────────────────
+// These must all be registered BEFORE /:userId to avoid Express treating the
+// path segment (e.g. "linked-accounts") as a userId parameter.
+
+// GET /profile/linked-accounts — which providers are connected (no tokens)
+router.get(PROFILE.LINKED_ACCOUNTS, userAuth, (req, res) => {
+  const linked = (req.user.oauthProviders || []).map((p) => ({
+    provider: p.provider,
+    linkedAt: p.linkedAt,
+  }));
+  res.status(200).json({ linkedAccounts: linked });
+});
+
+// ── GitHub ────────────────────────────────────────────────────────────────────
+
+// POST /profile/github/sync — refresh GitHub enrichment data
+router.post(PROFILE.GITHUB_SYNC, userAuth, async (req, res) => {
+  try {
+    const user     = req.user;
+    const provider = user.oauthProviders?.find((p) => p.provider === 'github');
+
+    if (!provider) {
+      return res.status(400).json({ error: 'GitHub account is not linked to your profile.' });
+    }
+
+    const plainToken = decryptToken(provider.accessToken);
+    const svc        = new GitHubEnrichmentService(plainToken);
+    const data       = await svc.sync();
+
+    user.github = data;
+    await user.save();
+
+    res.status(200).json({ message: 'GitHub profile synced.', github: user.github });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// DELETE /profile/github/disconnect — unlink GitHub and clear enrichment data
+router.delete(PROFILE.GITHUB_DISCONNECT, userAuth, async (req, res) => {
+  try {
+    const user = req.user;
+
+    if (!user.oauthProviders?.some((p) => p.provider === 'github')) {
+      return res.status(400).json({ error: 'GitHub account is not linked to your profile.' });
+    }
+
+    // Prevent locking the user out — must have another login method.
+    // userAuth selects -password so we must query DB to check if a password exists.
+    const otherProviders = user.oauthProviders.filter((p) => p.provider !== 'github');
+    const hasPassword    = await User.exists({ _id: user._id, password: { $ne: null } });
+    if (!hasPassword && otherProviders.length === 0) {
+      return res.status(400).json({
+        error: 'Cannot disconnect your only login method. Set a password first.',
+      });
+    }
+
+    user.oauthProviders = otherProviders;
+    user.github = undefined; // clear enrichment data
+    await user.save();
+
+    res.status(200).json({ message: 'GitHub account disconnected.' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── LinkedIn ──────────────────────────────────────────────────────────────────
+
+// POST /profile/linkedin/sync — refresh LinkedIn enrichment data
+router.post(PROFILE.LINKEDIN_SYNC, userAuth, async (req, res) => {
+  try {
+    const user     = req.user;
+    const provider = user.oauthProviders?.find((p) => p.provider === 'linkedin');
+
+    if (!provider) {
+      return res.status(400).json({ error: 'LinkedIn account is not linked to your profile.' });
+    }
+
+    const plainToken = decryptToken(provider.accessToken);
+    const svc        = new LinkedInEnrichmentService(plainToken);
+    const data       = await svc.sync();
+
+    user.linkedin = data;
+    await user.save();
+
+    res.status(200).json({ message: 'LinkedIn profile synced.', linkedin: user.linkedin });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// DELETE /profile/linkedin/disconnect — unlink LinkedIn and clear enrichment data
+router.delete(PROFILE.LINKEDIN_DISCONNECT, userAuth, async (req, res) => {
+  try {
+    const user = req.user;
+
+    if (!user.oauthProviders?.some((p) => p.provider === 'linkedin')) {
+      return res.status(400).json({ error: 'LinkedIn account is not linked to your profile.' });
+    }
+
+    const otherProviders = user.oauthProviders.filter((p) => p.provider !== 'linkedin');
+    const hasPassword    = await User.exists({ _id: user._id, password: { $ne: null } });
+    if (!hasPassword && otherProviders.length === 0) {
+      return res.status(400).json({
+        error: 'Cannot disconnect your only login method. Set a password first.',
+      });
+    }
+
+    user.oauthProviders = otherProviders;
+    user.linkedin = undefined; // clear enrichment data
+    await user.save();
+
+    res.status(200).json({ message: 'LinkedIn account disconnected.' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── Public profile by ID ──────────────────────────────────────────────────────
 router.get(PROFILE.VIEW_BY_ID, userAuth, async (req, res) => {
   try {
     const { userId } = req.params;

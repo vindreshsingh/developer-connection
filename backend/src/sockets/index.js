@@ -2,6 +2,7 @@ import { Server } from 'socket.io';
 import socketAuthMiddleware from './authMiddleware.js';
 import PresenceService from './presenceService.js';
 import { registerChatHandlers } from './chatHandlers.js';
+import { registerGroupChatHandlers } from './groupChatHandlers.js';
 
 /**
  * Attaches Socket.IO to the existing Express HTTP server (no second server,
@@ -28,6 +29,7 @@ export const initSockets = (httpServer) => {
     // DB-touching presence registration first would create a race where the
     // first message from a fast client gets silently dropped.
     registerChatHandlers(io, socket);
+    registerGroupChatHandlers(io, socket);
 
     // Presence registration touches the DB — run it without blocking listener
     // setup. `_broadcastPresence` already swallows errors defensively.
