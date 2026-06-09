@@ -1,0 +1,112 @@
+backend/src/routes/chat.js
+  0f3d1fe77565029c 1-151
+backend/src/sockets/index.js
+  0f3d1fe77565029c 1-46
+backend/src/models/message.js
+  0f3d1fe77565029c 1-61
+docs/specs/phase3-realtime-chat-rfc.md
+  0f3d1fe77565029c 1-96
+frontend/src/widgets/SnippetBlock/SnippetBlock.jsx
+  0f3d1fe77565029c 1-53
+backend/src/utils/chatAuthorization.js
+  0f3d1fe77565029c 1-46
+backend/src/sockets/chatHandlers.js
+  0f3d1fe77565029c 1-23,25-32,34-42,44-63,65-169,171-173,175-205,207-211
+frontend/src/containers/Messages/parser.js
+  0f3d1fe77565029c 1-5
+frontend/src/widgets/MessageComposer/MessageComposer.jsx
+  0f3d1fe77565029c 1-92
+frontend/src/routes/index.js
+  0f3d1fe77565029c 10,22
+frontend/src/hooks/chat/chatApi.js
+  0f3d1fe77565029c 1-36
+docs/specs/phase3-realtime-chat-spec.md
+  0f3d1fe77565029c 1-112
+backend/src/models/conversation.js
+  0f3d1fe77565029c 1-41
+docs/specs/phase3-realtime-chat-plan.md
+  0f3d1fe77565029c 1-180
+docs/specs/phase3-realtime-chat-prd.md
+  0f3d1fe77565029c 1-44
+backend/src/constants/apiEndpoints.js
+  0f3d1fe77565029c 33-40
+frontend/src/hooks/chat/useChat.js
+  0f3d1fe77565029c 1-121
+frontend/src/widgets/NavBar/NavBar.jsx
+  0f3d1fe77565029c 11
+frontend/src/containers/Messages/Messages.scss
+  0f3d1fe77565029c 1-88
+frontend/src/hooks/chat/useTyping.js
+  0f3d1fe77565029c 1-85
+backend/src/sockets/authMiddleware.js
+  0f3d1fe77565029c 1-37
+frontend/src/widgets/MessageBubble/MessageBubble.jsx
+  0f3d1fe77565029c 1-101
+backend/src/__tests__/chatSockets.test.js
+  0f3d1fe77565029c 1-43,45-163,165-169,171-321,323-330,332
+frontend/src/pages/Messages/Messages.jsx
+  0f3d1fe77565029c 1-5
+backend/src/app.js
+  0f3d1fe77565029c 7,23
+frontend/src/hooks/chat/usePresence.js
+  0f3d1fe77565029c 1-37
+frontend/src/widgets/MessageBubble/MessageBubble.scss
+  0f3d1fe77565029c 1-152
+backend/src/__tests__/chat.test.js
+  0f3d1fe77565029c 1-262
+frontend/src/store/api.js
+  0f3d1fe77565029c 11
+frontend/src/commonUtils/formatDate.js
+  0f3d1fe77565029c 2-11
+frontend/src/containers/Messages/index.jsx
+  0f3d1fe77565029c 1-144
+backend/src/sockets/presenceService.js
+  0f3d1fe77565029c 1-83
+backend/src/server.js
+  0f3d1fe77565029c 2,5,9-13,15
+frontend/src/widgets/ConversationList/ConversationList.scss
+  0f3d1fe77565029c 1-56
+frontend/src/widgets/ConversationList/ConversationList.jsx
+  0f3d1fe77565029c 1-42
+frontend/src/hooks/chat/useSocket.js
+  0f3d1fe77565029c 1-40
+frontend/src/widgets/MessageComposer/MessageComposer.scss
+  0f3d1fe77565029c 1-90
+frontend/src/widgets/SnippetBlock/SnippetBlock.scss
+  0f3d1fe77565029c 1-55
+frontend/src/widgets/SnippetBlock/snippetLanguages.js
+  0f3d1fe77565029c 1-20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.5",
+  "base_commit_sha": "52165b03de0638f7a3566114676e8e51fa95ef6e",
+  "prompts": {
+    "0f3d1fe77565029c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d3b6c483-b90b-49e3-8e63-de6fde1c1281",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "Vindresh Kumar <vindresh.singh@1mg.com>",
+      "messages": [],
+      "total_additions": 3392,
+      "total_deletions": 168,
+      "accepted_lines": 3214,
+      "overriden_lines": 12
+    },
+    "a6532e677b401520": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "541ea062-4f4d-46ba-9fe2-07789a3be87b",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "Vindresh Kumar <vindresh.singh@1mg.com>",
+      "messages": [],
+      "total_additions": 32,
+      "total_deletions": 0,
+      "accepted_lines": 32,
+      "overriden_lines": 0
+    }
+  }
+}
