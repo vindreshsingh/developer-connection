@@ -1,0 +1,21 @@
+.dc-nav-link {
+  padding: 0.375rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  color: #4b5563;
+
+  &:hover {
+    background-color: #f3f4f6;
+  }
+}
+
+.dc-nav-link--active {
+  background-color: #9333ea;
+  color: #ffffff;
+
+  &:hover {
+    background-color: #9333ea;
+  }
+}

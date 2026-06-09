@@ -1,0 +1,44 @@
+.dc-auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1rem;
+  background: linear-gradient(to bottom right, #faf5ff, #fdf2f8);
+}
+
+.dc-auth-card {
+  background-color: #ffffff;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  border-radius: 1rem;
+  padding: 2rem;
+  width: 100%;
+  max-width: 24rem;
+}
+
+.dc-auth-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #9333ea;
+  text-align: center;
+  margin-bottom: 0.25rem;
+}
+
+.dc-auth-subtitle {
+  text-align: center;
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin-bottom: 1.5rem;
+}
+
+.dc-auth-footer {
+  text-align: center;
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-top: 1rem;
+}
+
+.dc-auth-link {
+  color: #9333ea;
+  font-weight: 500;
+}
