@@ -46,7 +46,7 @@ function GuardedPage({ Page, guard }) {
 export default function App() {
   return (
     <CallProvider>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen">
         <NavBar />
         <Routes>
           {routes.map(({ path, Page, guard }) => (

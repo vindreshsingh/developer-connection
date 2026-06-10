@@ -1,10 +1,20 @@
 .dc-button {
   border-radius: 0.5rem;
   font-weight: 600;
-  transition: opacity 0.15s ease, background-color 0.15s ease;
+  transition: opacity 0.15s ease, background-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+
+  &:active:not(:disabled) {
+    transform: scale(0.97);
+  }
 
   &:disabled {
     opacity: 0.6;
     cursor: not-allowed;
+  }
+}
+
+.dc-button--primary {
+  &:hover:not(:disabled) {
+    box-shadow: 0 8px 16px -8px rgba(147, 51, 234, 0.5);
   }
 }

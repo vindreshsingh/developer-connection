@@ -1,7 +1,13 @@
+@use '../../styles/tokens' as *;
+
 .dc-profile {
   max-width: 36rem;
   margin: 0 auto;
   padding: 2rem 1rem;
+
+  @include mobile {
+    padding: 1.25rem 0.75rem;
+  }
 }
 
 .dc-profile-heading {
@@ -9,6 +15,7 @@
   font-weight: 700;
   color: #111827;
   margin-bottom: 0.25rem;
+  @include fade-in-up;
 }
 
 .dc-profile-subheading {

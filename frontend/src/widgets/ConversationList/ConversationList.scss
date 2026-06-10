@@ -17,6 +17,7 @@
   border-radius: 0.5rem;
   cursor: pointer;
   text-align: left;
+  transition: background-color 0.15s ease;
 
   &:hover {
     background: #f3f4f6;
@@ -25,6 +26,10 @@
 
 .dc-conversation-list-item--active {
   background: #ede9fe;
+
+  &:hover {
+    background: #ede9fe;
+  }
 }
 
 .dc-conversation-list-item-name {
