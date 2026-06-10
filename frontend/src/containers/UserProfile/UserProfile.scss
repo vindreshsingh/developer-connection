@@ -1,7 +1,14 @@
+@use '../../styles/tokens' as *;
+
 .dc-user-profile {
   max-width: 36rem;
   margin: 0 auto;
   padding: 2rem 1rem;
+  @include fade-in-up;
+
+  @include mobile {
+    padding: 1.25rem 0.75rem;
+  }
 }
 
 .dc-user-profile-back {
@@ -33,6 +40,11 @@
   align-items: center;
   gap: 1rem;
   margin-bottom: 1rem;
+
+  @include mobile {
+    flex-direction: column;
+    text-align: center;
+  }
 }
 
 .dc-user-profile-name {

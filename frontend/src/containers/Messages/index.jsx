@@ -83,7 +83,7 @@ export default function MessagesContainer() {
 
       {conversationsError && <p className="dc-messages-error">{conversationsError}</p>}
 
-      <div className="dc-messages-layout">
+      <div className={`dc-messages-layout ${activeConversationId ? 'dc-messages-layout--thread-active' : ''}`}>
         <aside className="dc-messages-sidebar">
           {isFetching ? (
             <p className="dc-messages-loading">Loading conversations…</p>
@@ -104,6 +104,14 @@ export default function MessagesContainer() {
             <>
               {activeConversation && (
                 <header className="dc-messages-thread-header">
+                  <button
+                    type="button"
+                    className="dc-messages-back-btn"
+                    aria-label="Back to conversations"
+                    onClick={() => setActiveConversationId(null)}
+                  >
+                    ←
+                  </button>
                   <span>{activeConversation.otherUser?.firstName} {activeConversation.otherUser?.lastName}</span>
                   {isOnline(activeConversation.otherUser?._id) && (
                     <span className="dc-messages-thread-online">● Online</span>

@@ -1,7 +1,13 @@
+@use '../../styles/tokens' as *;
+
 .dc-call-history {
   max-width: 36rem;
   margin: 0 auto;
   padding: 2rem 1rem;
+
+  @include mobile {
+    padding: 1.25rem 0.75rem;
+  }
 }
 
 .dc-call-history-heading {
@@ -9,6 +15,7 @@
   font-weight: 700;
   color: #111827;
   margin-bottom: 1rem;
+  @include fade-in-up;
 }
 
 .dc-call-history-error {
@@ -40,6 +47,7 @@
   border-radius: 0.5rem;
   border: 1px solid #e5e7eb;
   background: #fff;
+  @include hover-lift;
 }
 
 .dc-call-history-icon {

@@ -1,9 +1,12 @@
+@use '../../styles/tokens' as *;
+
 .dc-github-card {
   margin-top: 1rem;
   border: 1px solid #e5e7eb;
   border-radius: 0.625rem;
   overflow: hidden;
   background: #fff;
+  @include fade-in-up(0.45s, 0.1s);
 }
 
 .dc-github-card-section {

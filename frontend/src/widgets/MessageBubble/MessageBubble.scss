@@ -1,3 +1,5 @@
+@use '../../styles/tokens' as *;
+
 .dc-message-bubble {
   position: relative;
   max-width: 75%;
@@ -6,10 +8,15 @@
   background: #f3f4f6;
   align-self: flex-start;
   margin-bottom: 0.75rem;
+  animation: dc-fade-in-up 0.25s ease both;
 
   &:hover .dc-message-bubble-emoji-trigger {
     opacity: 1;
     pointer-events: auto;
+  }
+
+  @include mobile {
+    max-width: 88%;
   }
 }
 
