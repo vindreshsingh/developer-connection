@@ -7,6 +7,7 @@ import connectionRouter from './routes/connection.js';
 import chatRouter from './routes/chat.js';
 import billingRouter from './routes/billing.js';
 import billingWebhookRouter from './routes/billingWebhook.js';
+import aiRouter from './routes/ai.js';
 
 const app = express();
 
@@ -29,5 +30,6 @@ app.use('/profile', profileRouter);
 app.use('/request', connectionRouter);
 app.use('/chat', chatRouter);
 app.use('/billing', billingRouter);
+app.use('/ai', aiRouter);
 
 export default app;
