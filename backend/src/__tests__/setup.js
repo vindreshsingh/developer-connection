@@ -5,6 +5,10 @@ process.env.JWT_SECRET = process.env.JWT_SECRET || 'test-jwt-secret';
 process.env.FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
 process.env.EMAIL_USER = process.env.EMAIL_USER || 'test@example.com';
 process.env.EMAIL_PASS = process.env.EMAIL_PASS || 'test-pass';
+process.env.RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || 'rzp_test_key';
+process.env.RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || 'test-razorpay-secret';
+process.env.RAZORPAY_WEBHOOK_SECRET = process.env.RAZORPAY_WEBHOOK_SECRET || 'test-webhook-secret';
+process.env.RAZORPAY_PLAN_ID = process.env.RAZORPAY_PLAN_ID || 'plan_test_premium';
 
 let mongoServer;
 
