@@ -1,7 +1,13 @@
+@use '../../styles/tokens' as *;
+
 .dc-connections {
   max-width: 42rem;
   margin: 0 auto;
   padding: 2rem 1rem;
+
+  @include mobile {
+    padding: 1.25rem 0.75rem;
+  }
 }
 
 .dc-connections-heading {
@@ -9,6 +15,7 @@
   font-weight: 700;
   color: #111827;
   margin-bottom: 1rem;
+  @include fade-in-up;
 }
 
 .dc-connections-error {

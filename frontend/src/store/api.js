@@ -8,6 +8,6 @@ import { baseQuery } from './baseQuery';
 export const api = createApi({
   reducerPath: 'api',
   baseQuery,
-  tagTypes: ['Profile', 'Feed', 'Requests', 'Connections', 'Conversations', 'Messages', 'Billing', 'InterviewPrep'],
+  tagTypes: ['Profile', 'Feed', 'Requests', 'Connections', 'Conversations', 'Messages', 'Billing', 'InterviewPrep', 'LinkedAccounts', 'Groups', 'GroupMessages', 'Calls', 'BlockedUsers'],
   endpoints: () => ({}),
 });

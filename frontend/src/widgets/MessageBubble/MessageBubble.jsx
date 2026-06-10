@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { classNames } from '@/commonUtils/classNames';
 import { formatTime } from '@/commonUtils/formatDate';
 import SnippetBlock from '@/widgets/SnippetBlock/SnippetBlock';
+import CallSummaryCard from '@/widgets/CallSummaryCard/CallSummaryCard';
 import './MessageBubble.scss';
 
 const QUICK_EMOJI = ['👍', '❤️', '😂', '😮', '😢', '🎉'];
@@ -12,6 +13,11 @@ const QUICK_EMOJI = ['👍', '❤️', '😂', '😮', '😢', '🎉'];
  *   A "Seen" badge appears on own messages whose createdAt ≤ seenAt.
  */
 export default function MessageBubble({ message, isOwn, onReact, seenAt, senderName }) {
+  // Call summary messages are system events — render as a centred pill, not a bubble
+  if (message.type === 'call_summary') {
+    return <CallSummaryCard message={message} />;
+  }
+
   const [pickerOpen, setPickerOpen] = useState(false);
 
   // Group reactions: emoji → { count, hasMe }
