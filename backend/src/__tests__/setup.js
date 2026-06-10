@@ -5,6 +5,7 @@ process.env.JWT_SECRET = process.env.JWT_SECRET || 'test-jwt-secret';
 process.env.FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
 process.env.EMAIL_USER = process.env.EMAIL_USER || 'test@example.com';
 process.env.EMAIL_PASS = process.env.EMAIL_PASS || 'test-pass';
+process.env.SKIP_EMAIL_VERIFICATION = 'false';
 // 64-char hex key required by AES-256-GCM encryption util
 process.env.ENCRYPTION_KEY = process.env.ENCRYPTION_KEY || 'a'.repeat(64);
 // OAuth provider test credentials
