@@ -1,5 +1,6 @@
 import { motion, useMotionValue, useTransform } from 'framer-motion';
 import Tag from '@/components/Tag/Tag';
+import MatchInsight from '@/widgets/MatchInsight/MatchInsight';
 import './SwipeCard.scss';
 
 export default function SwipeCard({ profile, onSwipe, onBlock, onReport, isTop }) {
@@ -80,6 +81,7 @@ export default function SwipeCard({ profile, onSwipe, onBlock, onReport, isTop }
             ))}
           </div>
         )}
+        {isTop && <MatchInsight userId={profile._id} />}
       </div>
     </motion.div>
   );

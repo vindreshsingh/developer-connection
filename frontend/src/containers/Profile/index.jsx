@@ -5,6 +5,7 @@ import { useProfile } from '@/hooks/profile/useProfile';
 import { useImageUpload } from '@/hooks/profile/useImageUpload';
 import ImageUploadPanel from '@/widgets/ImageUploadPanel/ImageUploadPanel';
 import ProfileForm from '@/widgets/ProfileForm/ProfileForm';
+import AiFeedbackPanel from '@/widgets/AiFeedbackPanel/AiFeedbackPanel';
 import reducer, {
   saveStarted,
   saveSucceeded,
@@ -85,6 +86,8 @@ export default function ProfileContainer() {
       {message && <p className="dc-profile-message">{message}</p>}
       {error && <p className="dc-profile-error">{error}</p>}
       {imageError && <p className="dc-profile-error">{imageError}</p>}
+
+      <AiFeedbackPanel />
 
       <ImageUploadPanel
         photoUrl={form.photoUrl}
