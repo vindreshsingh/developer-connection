@@ -51,6 +51,8 @@ export const BILLING_WEBHOOK = '/';
 
 // mounted at /ai
 export const AI = {
-  PROFILE_FEEDBACK: '/profile-feedback',  // POST: AI feedback on the caller's own profile
-  MATCH_INSIGHT: '/match-insight/:userId', // POST: "why connect" insight for caller + target user
+  PROFILE_FEEDBACK: '/profile-feedback',         // POST: AI feedback on the caller's own profile
+  MATCH_INSIGHT: '/match-insight/:userId',       // POST: "why connect" insight for caller + target user
+  INTERVIEW_PREP: '/interview-prep',             // POST: send a chat message, streams the reply via SSE
+  INTERVIEW_PREP_HISTORY: '/interview-prep/history', // GET: paginated interview-prep chat history
 };
