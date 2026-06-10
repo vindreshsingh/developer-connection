@@ -9,6 +9,7 @@ const LINKS = [
   { to: '/requests', label: 'Requests' },
   { to: '/connections', label: 'Connections' },
   { to: '/messages', label: 'Messages' },
+  { to: '/interview-prep', label: 'Interview Prep' },
   { to: '/profile', label: 'Profile' },
   { to: '/billing', label: 'Billing' },
 ];

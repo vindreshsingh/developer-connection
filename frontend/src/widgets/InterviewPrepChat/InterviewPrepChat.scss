@@ -1,0 +1,61 @@
+.dc-interview-prep-chat {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.dc-interview-prep-chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  margin-bottom: 1rem;
+  min-height: 20rem;
+}
+
+.dc-interview-prep-chat-empty {
+  color: #9ca3af;
+  font-size: 0.875rem;
+  margin: auto;
+  text-align: center;
+}
+
+.dc-interview-prep-chat-message {
+  max-width: 80%;
+  padding: 0.625rem 0.875rem;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+
+  &--user {
+    align-self: flex-end;
+    background-color: #9333ea;
+    color: #ffffff;
+  }
+
+  &--assistant {
+    align-self: flex-start;
+    background-color: #f3f4f6;
+    color: #111827;
+  }
+}
+
+.dc-interview-prep-chat-error {
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin-bottom: 0.75rem;
+}
+
+.dc-interview-prep-chat-form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.dc-interview-prep-chat-input {
+  flex: 1;
+}
