@@ -38,3 +38,13 @@ export const CHAT = {
   MESSAGES: '/conversations/:conversationId/messages',   // GET: paginated message history
   READ: '/conversations/:conversationId/read',           // POST: mark conversation as read
 };
+
+// mounted at /billing
+export const BILLING = {
+  STATUS: '/status',     // GET: current plan/status/renewal date
+  CHECKOUT: '/checkout', // POST: create a Razorpay subscription, return Checkout.js params
+  CANCEL: '/cancel',     // POST: cancel at period end
+};
+
+// mounted at /billing/webhook (separate router, raw body for signature verification)
+export const BILLING_WEBHOOK = '/';
