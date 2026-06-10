@@ -10,6 +10,7 @@ const LINKS = [
   { to: '/connections', label: 'Connections' },
   { to: '/messages', label: 'Messages' },
   { to: '/profile', label: 'Profile' },
+  { to: '/billing', label: 'Billing' },
 ];
 
 export default function NavBar() {
