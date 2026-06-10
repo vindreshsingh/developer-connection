@@ -52,10 +52,6 @@ const userSchema = new mongoose.Schema(
       type: [String],
       default: [],
     },
-    blockedUsers: {
-      type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-      default: [],
-    },
     githubUrl: {
       type: String,
       default: null,
@@ -96,52 +92,13 @@ const userSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
-    coverImageUrl: {
-      type: String,
-      default: null,
-      validate: {
-        validator: (v) => v === null || validator.isURL(v),
-        message: (props) => `${props.value} is not a valid URL`,
-      },
-    },
-    techStack: {
-      type: [String],
-      default: [],
-    },
-    experience: {
-      type: [
-        {
-          title: { type: String, required: true, trim: true },
-          company: { type: String, required: true, trim: true },
-          startDate: { type: Date, required: true },
-          endDate: { type: Date, default: null },
-          description: { type: String, default: '', maxlength: 1000 },
-        },
-      ],
-      default: [],
-    },
-    isEmailVerified: {
-      type: Boolean,
-      default: false,
-    },
-    emailVerifyToken: {
-      type: String,
-      default: null,
-    },
-    emailVerifyExpiry: {
-      type: Date,
-      default: null,
-    },
-    tokenVersion: {
-      type: Number,
-      default: 0,
-    },
   },
   { timestamps: true }
 );
 
-userSchema.pre(/^find/, function () {
+userSchema.pre(/^find/, function (next) {
   this.where({ isActive: true });
+  next();
 });
 
 userSchema.methods.validatePassword = async function (inputPassword) {
@@ -149,7 +106,7 @@ userSchema.methods.validatePassword = async function (inputPassword) {
 };
 
 userSchema.methods.getJWT = function () {
-  return jwt.sign({ id: this._id, tokenVersion: this.tokenVersion }, process.env.JWT_SECRET, { expiresIn: '1d' });
+  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
 };
 
 const User = mongoose.model('User', userSchema);
