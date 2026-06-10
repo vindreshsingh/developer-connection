@@ -51,5 +51,6 @@ export const BILLING_WEBHOOK = '/';
 
 // mounted at /ai
 export const AI = {
-  PROFILE_FEEDBACK: '/profile-feedback', // POST: AI feedback on the caller's own profile
+  PROFILE_FEEDBACK: '/profile-feedback',  // POST: AI feedback on the caller's own profile
+  MATCH_INSIGHT: '/match-insight/:userId', // POST: "why connect" insight for caller + target user
 };

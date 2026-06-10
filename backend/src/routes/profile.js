@@ -5,6 +5,7 @@ import User from '../models/user.js';
 import ConnectionRequest from '../models/connectionRequest.js';
 import userAuth from '../middlewares/auth.js';
 import { PROFILE } from '../constants/apiEndpoints.js';
+import { PUBLIC_PROFILE_SELECT } from '../constants/profileFields.js';
 import { uploadImageBuffer } from '../utils/cloudinary.js';
 
 const router = express.Router();
@@ -93,7 +94,6 @@ router.post(PROFILE.PHOTO, ...handleImageUpload('photoUrl', 'profile-photos'));
 router.post(PROFILE.COVER, ...handleImageUpload('coverImageUrl', 'cover-images'));
 
 const FEED_PAGE_SIZE = 20;
-const PUBLIC_PROFILE_FIELDS = 'firstName lastName photoUrl bio skills githubUrl linkedinUrl age gender';
 
 // NOTE: FEED ('/feed') must be registered before VIEW_BY_ID ('/:userId') —
 // otherwise Express matches "/profile/feed" as VIEW_BY_ID with userId="feed"
@@ -136,7 +136,7 @@ router.get(PROFILE.FEED, userAuth, async (req, res) => {
 
     const total = await User.countDocuments(filter);
     const users = await User.find(filter)
-      .select(PUBLIC_PROFILE_FIELDS)
+      .select(PUBLIC_PROFILE_SELECT)
       .skip((page - 1) * FEED_PAGE_SIZE)
       .limit(FEED_PAGE_SIZE);
 
@@ -161,7 +161,7 @@ router.get(PROFILE.VIEW_BY_ID, userAuth, async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(userId))
       return res.status(400).json({ error: 'Invalid user id' });
 
-    const user = await User.findById(userId).select(PUBLIC_PROFILE_FIELDS);
+    const user = await User.findById(userId).select(PUBLIC_PROFILE_SELECT);
     if (!user) return res.status(404).json({ error: 'User not found' });
 
     res.status(200).json(user);
