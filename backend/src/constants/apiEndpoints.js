@@ -34,6 +34,7 @@ export const REQUEST = {
   PENDING: '/pending',                  // requests received, awaiting review
   SENT: '/sent',                        // requests sent by logged-in user
   CONNECTIONS: '/connections',          // accepted matches
+  BLOCKED: '/blocked',                  // GET: list users the logged-in user has blocked
   BLOCK: '/block/:userId',              // POST: block, DELETE: unblock
   REPORT: '/report/:userId',            // POST: file a report with a reason
 };

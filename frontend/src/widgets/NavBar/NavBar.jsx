@@ -10,6 +10,7 @@ const LINKS = [
   { to: '/connections', label: 'Connections' },
   { to: '/messages', label: 'Messages' },
   { to: '/groups', label: 'Groups' },
+  { to: '/calls', label: 'Calls' },
   { to: '/profile', label: 'Profile' },
 ];
 
