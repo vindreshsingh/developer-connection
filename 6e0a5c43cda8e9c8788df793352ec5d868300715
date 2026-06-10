@@ -1,0 +1,83 @@
+frontend/src/widgets/SwipeDeck/SwipeDeck.scss
+  d952e9d30a309bab 1-2,6-9,23-25,46,49-54
+frontend/src/containers/Login/Login.scss
+  d952e9d30a309bab 1-2,8-10,16,21-25,29,31-34
+frontend/src/containers/Connections/Connections.scss
+  d952e9d30a309bab 1-2,7-10,18
+frontend/src/App.jsx
+  d952e9d30a309bab 49
+frontend/src/widgets/GitHubCard/GitHubCard.scss
+  d952e9d30a309bab 1-2,9
+frontend/src/widgets/MessageBubble/MessageBubble.scss
+  d952e9d30a309bab 1-2,11,17-19
+frontend/vite.config.js
+  d952e9d30a309bab 14-15
+frontend/src/containers/Messages/Messages.scss
+  d952e9d30a309bab 1-2,7-10,18,29-37,46-50,58-96
+.claude/launch.json
+  d952e9d30a309bab 14-15
+frontend/src/widgets/ConversationList/ConversationList.scss
+  d952e9d30a309bab 20,29-32
+frontend/src/widgets/BlockedUsers/BlockedUsers.scss
+  d952e9d30a309bab 37-41
+frontend/src/styles/_tokens.scss
+  d952e9d30a309bab 1-30
+frontend/src/index.css
+  d952e9d30a309bab 3-12,16-17,23-49
+frontend/src/containers/Feed/Feed.scss
+  d952e9d30a309bab 1-2,7-10,18,25,33-41,46
+frontend/src/containers/Groups/Groups.scss
+  d952e9d30a309bab 1-2,7-11,19-24,86,88-91,138-143
+frontend/src/components/Button/Button.scss
+  d952e9d30a309bab 4-8,15-20
+frontend/src/components/Button/Button.jsx
+  d952e9d30a309bab 5
+frontend/src/widgets/NavBar/NavBar.scss
+  d952e9d30a309bab 1-2,7-8,13-14,26-29,37-125
+frontend/src/widgets/RequestCard/RequestCard.scss
+  d952e9d30a309bab 1-2,12-16
+frontend/src/containers/CallHistory/CallHistory.scss
+  d952e9d30a309bab 1-2,7-10,18,50
+frontend/src/widgets/SwipeCard/SwipeCard.scss
+  d952e9d30a309bab 6
+frontend/src/containers/Signup/Signup.scss
+  d952e9d30a309bab 1-2,8-10,16,21-25,29,31-34
+frontend/src/containers/Profile/Profile.scss
+  d952e9d30a309bab 1-2,7-10,18
+frontend/src/widgets/ConnectionCard/ConnectionCard.scss
+  d952e9d30a309bab 1-2,10
+frontend/src/widgets/NavBar/NavBar.jsx
+  d952e9d30a309bab 1,21,25,31-44,46,52-56
+frontend/src/containers/Messages/index.jsx
+  d952e9d30a309bab 86,107-114
+frontend/src/containers/GroupDetail/GroupDetail.scss
+  d952e9d30a309bab 1-2,10-14,28-33,61-65,162-165,176-179
+frontend/src/components/NavLink/NavLink.jsx
+  d952e9d30a309bab 5,10
+frontend/src/containers/Requests/Requests.scss
+  d952e9d30a309bab 1-2,7-10,18,25
+frontend/src/containers/UserProfile/UserProfile.scss
+  d952e9d30a309bab 1-2,7-11,43-47
+frontend/src/containers/VerifyEmail/VerifyEmail.scss
+  d952e9d30a309bab 1-2,8-10,16,22-26,30,32-35
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.5",
+  "base_commit_sha": "6e0a5c43cda8e9c8788df793352ec5d868300715",
+  "prompts": {
+    "d952e9d30a309bab": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "df1c1d14-5df9-4f81-825b-01a90cbd44a5",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "Vindresh Kumar <vindresh.singh@1mg.com>",
+      "messages": [],
+      "total_additions": 506,
+      "total_deletions": 48,
+      "accepted_lines": 491,
+      "overriden_lines": 0
+    }
+  }
+}
