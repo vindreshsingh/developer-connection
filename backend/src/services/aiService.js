@@ -16,6 +16,10 @@ export const PROFILE_FEEDBACK_MODEL = process.env.AI_PROFILE_FEEDBACK_MODEL || '
 // model is sufficient for a short "why connect" blurb (Phase 6 RFC Stack Decision).
 export const MATCH_INSIGHT_MODEL = process.env.AI_MATCH_INSIGHT_MODEL || 'claude-haiku-4-5';
 
+// claude-sonnet-4-6: lower call volume, response quality matters more for
+// career-advice conversations (Phase 6 RFC Stack Decision).
+export const INTERVIEW_PREP_MODEL = process.env.AI_INTERVIEW_PREP_MODEL || 'claude-sonnet-4-6';
+
 const formatExperience = (experience = []) => {
   if (!experience.length) return 'None listed';
   return experience
@@ -44,6 +48,34 @@ export const getProfileFeedback = async (profile) => {
   });
 
   return message.content
+    .filter((block) => block.type === 'text')
+    .map((block) => block.text)
+    .join('\n');
+};
+
+const INTERVIEW_PREP_SYSTEM_PROMPT =
+  'You are an interview-preparation coach for software developers. Help the user practice ' +
+  'technical and behavioral interview questions, give constructive feedback on their answers, ' +
+  'and suggest areas to improve. Keep responses focused and conversational.';
+
+// Cap the conversation history sent to the model so long-running chats don't
+// grow the prompt (and cost) unbounded.
+const MAX_HISTORY_MESSAGES = 20;
+
+// Streams the assistant's reply token-by-token via onToken (for SSE), and
+// resolves with the full reply text once the stream completes.
+export const streamInterviewPrepReply = async (history, onToken) => {
+  const stream = getClient().messages.stream({
+    model: INTERVIEW_PREP_MODEL,
+    max_tokens: 1024,
+    system: INTERVIEW_PREP_SYSTEM_PROMPT,
+    messages: history.slice(-MAX_HISTORY_MESSAGES).map(({ role, content }) => ({ role, content })),
+  });
+
+  stream.on('text', onToken);
+
+  const finalMessage = await stream.finalMessage();
+  return finalMessage.content
     .filter((block) => block.type === 'text')
     .map((block) => block.text)
     .join('\n');
