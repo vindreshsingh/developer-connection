@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useCurrentUser } from '@/hooks/auth/useCurrentUser';
 import { useGetConversationsQuery } from '@/hooks/chat/chatApi';
 import { useChat } from '@/hooks/chat/useChat';
@@ -15,6 +16,7 @@ import './Messages.scss';
 
 export default function MessagesContainer() {
   const { user } = useCurrentUser();
+  const location = useLocation();
   const socket = useSocket();
   const { initiateCall, activeCall } = useCall() ?? {};
   const [initiateCallMutation, { isLoading: isCallInitiating }] = useInitiateCallMutation();
@@ -40,15 +42,19 @@ export default function MessagesContainer() {
 
   const threadEndRef = useRef(null);
 
-  // Default to the most recent conversation once the list loads —
-  // adjusting state in response to async-loaded query data is the
+  // Default to the conversation we navigated here for (e.g. "Message" from a
+  // connection card), falling back to the most recent conversation once the
+  // list loads — adjusting state in response to async-loaded query data is the
   // documented exception (React docs: "Adjusting state when a prop changes").
   useEffect(() => {
-    if (!activeConversationId && conversations.length > 0) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setActiveConversationId(conversations[0]._id);
-    }
-  }, [activeConversationId, conversations]);
+    if (activeConversationId || conversations.length === 0) return;
+
+    const requestedId = location.state?.conversationId;
+    const requested = requestedId && conversations.find((c) => c._id === requestedId);
+
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setActiveConversationId(requested ? requested._id : conversations[0]._id);
+  }, [activeConversationId, conversations, location.state]);
 
   // Mark the active conversation as read whenever it changes or new messages arrive
   useEffect(() => {

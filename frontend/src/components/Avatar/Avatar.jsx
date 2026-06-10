@@ -6,15 +6,16 @@ const SIZE_CLASSES = {
   lg: 'w-20 h-20 text-2xl',
 };
 
-export default function Avatar({ user, size = 'sm', className = '' }) {
+export default function Avatar({ user, photoUrl, initials, size = 'sm', className = '' }) {
   const sizeClass = SIZE_CLASSES[size];
-  const initials = `${user?.firstName?.[0] || ''}${user?.lastName?.[0] || ''}`;
+  const resolvedPhotoUrl = user?.photoUrl ?? photoUrl;
+  const resolvedInitials = initials ?? `${user?.firstName?.[0] || ''}${user?.lastName?.[0] || ''}`;
 
-  if (user?.photoUrl) {
+  if (resolvedPhotoUrl) {
     return (
       <img
-        src={user.photoUrl}
-        alt={user.firstName}
+        src={resolvedPhotoUrl}
+        alt={user?.firstName || resolvedInitials || 'avatar'}
         className={classNames('dc-avatar', sizeClass, className)}
       />
     );
@@ -22,7 +23,7 @@ export default function Avatar({ user, size = 'sm', className = '' }) {
 
   return (
     <div className={classNames('dc-avatar dc-avatar--placeholder', sizeClass, className)}>
-      {initials}
+      {resolvedInitials}
     </div>
   );
 }
