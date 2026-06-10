@@ -1,7 +1,13 @@
+@use '../../styles/tokens' as *;
+
 .dc-feed {
   max-width: 28rem;
   margin: 0 auto;
   padding: 2rem 1rem;
+
+  @include mobile {
+    padding: 1.25rem 0.75rem;
+  }
 }
 
 .dc-feed-heading {
@@ -9,12 +15,14 @@
   font-weight: 700;
   color: #111827;
   margin-bottom: 0.25rem;
+  @include fade-in-up;
 }
 
 .dc-feed-subheading {
   color: #6b7280;
   font-size: 0.875rem;
   margin-bottom: 1.5rem;
+  @include fade-in-up(0.45s, 0.05s);
 }
 
 .dc-feed-filter {
@@ -22,10 +30,20 @@
   gap: 0.5rem;
   align-items: flex-start;
   margin-bottom: 1.25rem;
+  @include fade-in-up(0.45s, 0.1s);
+
+  @include mobile {
+    flex-direction: column;
+
+    .dc-button {
+      width: 100%;
+    }
+  }
 }
 
 .dc-feed-filter-input {
   flex: 1;
+  width: 100%;
 }
 
 .dc-feed-error {

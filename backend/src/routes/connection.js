@@ -132,6 +132,19 @@ router.get(REQUEST.CONNECTIONS, userAuth, async (req, res) => {
   }
 });
 
+router.get(REQUEST.BLOCKED, userAuth, async (req, res) => {
+  try {
+    await req.user.populate('blockedUsers', 'firstName lastName photoUrl bio skills');
+
+    // Soft-deleted users are filtered out by User's pre-find hook, leaving nulls in the populated array
+    const data = req.user.blockedUsers.filter(Boolean);
+
+    res.status(200).json({ count: data.length, data });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 router.post(REQUEST.BLOCK, userAuth, async (req, res) => {
   try {
     const loggedInUser = req.user;

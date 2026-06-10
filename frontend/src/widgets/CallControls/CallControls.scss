@@ -1,0 +1,57 @@
+.dc-call-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 9999px;
+}
+
+.dc-call-ctrl-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.15);
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  flex-shrink: 0;
+
+  &:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.28);
+    transform: scale(1.08);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  // Active state — pressed (muted / camera off / screen sharing)
+  &--active {
+    background: rgba(255, 255, 255, 0.35);
+    outline: 2px solid rgba(255, 255, 255, 0.6);
+    outline-offset: 2px;
+  }
+
+  // End-call button — red tint
+  &--end {
+    background: #dc2626;
+
+    &:hover:not(:disabled) {
+      background: #b91c1c;
+    }
+  }
+
+  // Screen-share hidden on narrow / mobile viewports
+  &--screen {
+    @media (max-width: 480px) {
+      display: none;
+    }
+  }
+}
