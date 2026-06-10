@@ -48,3 +48,8 @@ export const BILLING = {
 
 // mounted at /billing/webhook (separate router, raw body for signature verification)
 export const BILLING_WEBHOOK = '/';
+
+// mounted at /ai
+export const AI = {
+  PROFILE_FEEDBACK: '/profile-feedback', // POST: AI feedback on the caller's own profile
+};
