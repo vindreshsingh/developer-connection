@@ -192,6 +192,8 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+userSchema.index({ skills: 1 });
+
 userSchema.pre(/^find/, function () {
   this.where({ isActive: true });
 });
