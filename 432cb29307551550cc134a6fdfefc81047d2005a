@@ -1,0 +1,36 @@
+ai-agents/hooks/hooks.json
+  a6532e677b401520 12-43
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.5",
+  "base_commit_sha": "432cb29307551550cc134a6fdfefc81047d2005a",
+  "prompts": {
+    "0f3d1fe77565029c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d3b6c483-b90b-49e3-8e63-de6fde1c1281",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "Vindresh Kumar <vindresh.singh@1mg.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 45,
+      "overriden_lines": 0
+    },
+    "a6532e677b401520": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "541ea062-4f4d-46ba-9fe2-07789a3be87b",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "Vindresh Kumar <vindresh.singh@1mg.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 32,
+      "overriden_lines": 0
+    }
+  }
+}
