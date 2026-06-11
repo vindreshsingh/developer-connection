@@ -1,0 +1,169 @@
+frontend/src/widgets/AIPicks/AIPicks.scss
+  30c27b369fc5f734 1-73
+backend/src/models/resumeFeedback.js
+  30c27b369fc5f734 1-38
+frontend/src/containers/AIAssistant/RecommendationsTab.jsx
+  30c27b369fc5f734 1-39
+backend/src/middlewares/aiRateLimit.js
+  30c27b369fc5f734 1-33
+frontend/src/widgets/BillingPanel/BillingPanel.jsx
+  30c27b369fc5f734 1-84
+frontend/src/containers/Feed/index.jsx
+  30c27b369fc5f734 8,13-14,19-25,31-32,37,47,49-52,60-65,86-87,98-110,126-127
+frontend/src/hooks/ai/aiApi.js
+  30c27b369fc5f734 1-77
+frontend/src/containers/Pricing/Pricing.scss
+  30c27b369fc5f734 1-43
+frontend/src/widgets/RecommendationCard/RecommendationCard.scss
+  30c27b369fc5f734 1-77
+backend/src/routes/billing.js
+  30c27b369fc5f734 1-175
+frontend/src/containers/AIAssistant/InterviewPrepTab.jsx
+  30c27b369fc5f734 1-100
+frontend/src/widgets/NavBar/NavBar.jsx
+  30c27b369fc5f734 15,27,52-54
+backend/src/__tests__/interview.test.js
+  30c27b369fc5f734 1-238
+frontend/src/containers/AIAssistant/index.jsx
+  30c27b369fc5f734 1-58
+frontend/src/store/api.js
+  30c27b369fc5f734 11
+backend/src/scripts/seedPlans.js
+  30c27b369fc5f734 1-71
+backend/src/__tests__/premiumGating.test.js
+  30c27b369fc5f734 1-276
+docs/specs/phase6-payments-prd.md
+  30c27b369fc5f734 1-164
+frontend/src/containers/Profile/index.jsx
+  30c27b369fc5f734 10,118-120
+frontend/src/hooks/billing/useRazorpayCheckout.js
+  30c27b369fc5f734 1-46
+frontend/src/containers/AIAssistant/ResumeFeedbackTab.jsx
+  30c27b369fc5f734 1-84
+backend/src/models/paymentEvent.js
+  30c27b369fc5f734 1-52
+frontend/src/hooks/billing/billingApi.js
+  30c27b369fc5f734 1-41
+frontend/src/pages/Pricing/Pricing.jsx
+  30c27b369fc5f734 1-5
+frontend/src/components/NavLink/NavLink.jsx
+  30c27b369fc5f734 5,11
+docs/specs/phase6-ai-assistant-rfc.md
+  30c27b369fc5f734 1-407
+backend/src/models/aiUsageLog.js
+  30c27b369fc5f734 1-32
+frontend/src/widgets/AIChatBubble/AIChatBubble.scss
+  30c27b369fc5f734 1-26
+frontend/src/containers/AIAssistant/AIAssistant.scss
+  30c27b369fc5f734 1-170
+backend/src/models/plan.js
+  30c27b369fc5f734 1-65
+backend/src/services/AIService.js
+  30c27b369fc5f734 1-85,87-105,107-122,124-147,149-157
+backend/src/models/user.js
+  30c27b369fc5f734 191-199
+backend/src/models/callSession.js
+  30c27b369fc5f734 72-78
+docs/specs/phase6-ai-assistant-prd.md
+  30c27b369fc5f734 1-164
+backend/src/__tests__/billing.test.js
+  30c27b369fc5f734 1-382
+backend/src/routes/ai.js
+  30c27b369fc5f734 1-359
+frontend/src/hooks/ai/useInterviewSession.js
+  30c27b369fc5f734 1-66
+frontend/src/widgets/AIChatBubble/AIChatBubble.jsx
+  30c27b369fc5f734 1-9
+backend/src/middlewares/premium.js
+  30c27b369fc5f734 1-35
+docs/specs/phase6-payments-rfc.md
+  30c27b369fc5f734 1-437
+frontend/src/routes/index.js
+  30c27b369fc5f734 15-16,32-33
+frontend/src/widgets/AIPicks/AIPicks.jsx
+  30c27b369fc5f734 1-47
+backend/src/__tests__/plan.test.js
+  30c27b369fc5f734 1-105
+frontend/src/widgets/BillingPanel/BillingPanel.scss
+  30c27b369fc5f734 1-79
+backend/src/constants/apiEndpoints.js
+  30c27b369fc5f734 73-94
+backend/src/services/BillingEventHandler.js
+  30c27b369fc5f734 1-90
+frontend/src/widgets/NavBar/NavBar.scss
+  30c27b369fc5f734 42-52
+backend/src/__tests__/profileImageUpload.test.js
+  30c27b369fc5f734 7
+frontend/src/widgets/RecommendationCard/RecommendationCard.jsx
+  30c27b369fc5f734 1-44
+docs/specs/phase6-plan.md
+  30c27b369fc5f734 1-411
+backend/src/__tests__/recommendations.test.js
+  30c27b369fc5f734 1-138
+frontend/src/pages/AIAssistant/AIAssistant.jsx
+  30c27b369fc5f734 1-5
+backend/src/app.js
+  30c27b369fc5f734 12-13,28-31,43-44
+backend/src/utils/cloudinary.js
+  30c27b369fc5f734 18-27
+frontend/src/widgets/UpsellModal/UpsellModal.jsx
+  30c27b369fc5f734 1-48
+backend/src/models/interviewSession.js
+  30c27b369fc5f734 1-48
+backend/src/__tests__/setup.js
+  30c27b369fc5f734 20-26
+backend/src/models/recommendationCache.js
+  30c27b369fc5f734 1-50
+backend/src/__tests__/resumeFeedback.test.js
+  30c27b369fc5f734 1-178
+frontend/src/widgets/PlanCard/PlanCard.scss
+  30c27b369fc5f734 1-80
+frontend/src/hooks/feed/useFeed.js
+  30c27b369fc5f734 4-6,8-9,12-15,18
+backend/src/models/subscription.js
+  30c27b369fc5f734 1-63
+frontend/src/containers/Pricing/parser.js
+  30c27b369fc5f734 1-7
+backend/src/routes/connection.js
+  30c27b369fc5f734 8,40-60
+frontend/src/widgets/UpsellModal/UpsellModal.scss
+  30c27b369fc5f734 1-58
+backend/src/routes/profile.js
+  30c27b369fc5f734 143-182
+frontend/src/widgets/PlanCard/PlanCard.jsx
+  30c27b369fc5f734 1-49
+frontend/src/containers/Feed/Feed.scss
+  30c27b369fc5f734 49-67
+frontend/src/hooks/feed/feedApi.js
+  30c27b369fc5f734 6-9,12-13,15,22-23
+backend/src/__tests__/aiService.test.js
+  30c27b369fc5f734 1-105
+frontend/src/containers/Pricing/index.jsx
+  30c27b369fc5f734 1-42
+backend/.env.example
+  30c27b369fc5f734 11-22
+backend/src/services/PaymentService.js
+  30c27b369fc5f734 1-75
+backend/src/routes/calls.js
+  30c27b369fc5f734 23,128,358-364
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.5",
+  "base_commit_sha": "44240c24654df5ff0f9ca5181268f2aca67239d3",
+  "prompts": {
+    "30c27b369fc5f734": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c4739615-7907-4224-ac84-534aa9f67185",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "Vindresh Kumar <vksingh5198@gmail.com>",
+      "messages": [],
+      "total_additions": 6108,
+      "total_deletions": 50,
+      "accepted_lines": 6070,
+      "overriden_lines": 4
+    }
+  }
+}
