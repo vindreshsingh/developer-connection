@@ -12,6 +12,7 @@ const LINKS = [
   { to: '/messages', label: 'Messages' },
   { to: '/groups', label: 'Groups' },
   { to: '/calls', label: 'Calls' },
+  { to: '/ai-assistant', label: 'AI Assistant' },
   { to: '/profile', label: 'Profile' },
 ];
 
@@ -23,6 +24,7 @@ export default function NavBar() {
   if (!user) return null;
 
   const closeMenu = () => setIsMenuOpen(false);
+  const pricingLink = { to: '/pricing', label: user.isPremium ? 'Premium' : 'Go Premium' };
 
   return (
     <nav className="dc-nav-bar">
@@ -47,6 +49,9 @@ export default function NavBar() {
               {link.label}
             </NavLink>
           ))}
+          <NavLink to={pricingLink.to} onClick={closeMenu} className="dc-nav-bar-premium-link">
+            {pricingLink.label}
+          </NavLink>
           <Button
             variant="ghost"
             className="dc-nav-bar-logout"

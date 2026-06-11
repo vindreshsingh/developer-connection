@@ -69,6 +69,13 @@ const callSessionSchema = new mongoose.Schema(
       type:    Number, // seconds
       default: null,
     },
+    // Phase 6: set from initiator's isPremium at initiate time for group
+    // calls. Raises the LiveKit room's participant cap (see Plan.features.
+    // groupCallParticipantCap, applied in /calls/group-token).
+    isPriority: {
+      type:    Boolean,
+      default: false,
+    },
   },
   { timestamps: true },
 );

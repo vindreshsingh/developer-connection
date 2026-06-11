@@ -1,0 +1,170 @@
+@use '../../styles/tokens' as *;
+
+.dc-ai-assistant {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+
+  @include mobile {
+    padding: 1.25rem 0.75rem;
+  }
+}
+
+.dc-ai-assistant-heading {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 0.25rem;
+  @include fade-in-up;
+}
+
+.dc-ai-assistant-subheading {
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin-bottom: 1.5rem;
+  @include fade-in-up(0.45s, 0.05s);
+}
+
+.dc-ai-assistant-upsell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background: linear-gradient(180deg, rgba(147, 51, 234, 0.05), #ffffff);
+  border: 1px solid #f3f4f6;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  color: #374151;
+  @include fade-in-up(0.45s, 0.1s);
+}
+
+.dc-ai-assistant-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+  @include fade-in-up(0.45s, 0.1s);
+}
+
+.dc-ai-assistant-tab {
+  padding: 0.375rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  cursor: pointer;
+  border: none;
+
+  &--active {
+    background-color: var(--dc-primary);
+    color: #ffffff;
+  }
+
+  &--inactive {
+    background-color: #f3f4f6;
+    color: #4b5563;
+  }
+}
+
+.dc-ai-assistant-content {
+  @include fade-in-up(0.45s, 0.15s);
+}
+
+.dc-ai-assistant-loading,
+.dc-ai-assistant-empty {
+  color: #6b7280;
+  font-size: 0.875rem;
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.dc-ai-assistant-error {
+  color: #ef4444;
+  font-size: 0.8125rem;
+  margin: 0.75rem 0;
+}
+
+// ── Recommendations ──────────────────────────────────────────────────────────
+
+.dc-ai-assistant-recommendations {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+// ── Resume feedback ───────────────────────────────────────────────────────────
+
+.dc-ai-assistant-resume-intro {
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.dc-ai-assistant-resume-input {
+  display: none;
+}
+
+.dc-ai-assistant-resume-feedback {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.dc-ai-assistant-resume-section-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 0.5rem;
+}
+
+.dc-ai-assistant-resume-section-list {
+  margin: 0;
+  padding-left: 1.25rem;
+  font-size: 0.875rem;
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+.dc-ai-assistant-resume-history {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+// ── Interview prep ────────────────────────────────────────────────────────────
+
+.dc-ai-assistant-interview-start {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.dc-ai-assistant-interview-focus {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: #374151;
+  background: #ffffff;
+}
+
+.dc-ai-assistant-interview-chat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.dc-ai-assistant-interview-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.dc-ai-assistant-interview-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}

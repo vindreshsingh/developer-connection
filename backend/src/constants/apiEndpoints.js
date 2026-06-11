@@ -70,6 +70,28 @@ export const CALLS = {
   GROUP_TOKEN:  '/group-token',       // POST  — get LiveKit room token (Phase 5 B1)
 };
 
+// mounted at /billing
+export const BILLING = {
+  PLANS:        '/plans',        // GET    — public list of active plans
+  CHECKOUT:     '/checkout',      // POST   — create a Razorpay subscription order
+  WEBHOOK:      '/webhook',       // POST   — Razorpay webhook receiver (signature-verified)
+  SUBSCRIPTION: '/subscription',  // GET    — logged-in user's current subscription
+  CANCEL:       '/cancel',        // POST   — cancel at period end
+  HISTORY:      '/history',       // GET    — paginated PaymentEvent history
+};
+
+// mounted at /ai
+export const AI = {
+  RECOMMENDATIONS:         '/recommendations',                // GET  — cached AI match suggestions
+  RECOMMENDATIONS_DISMISS: '/recommendations/:userId/dismiss', // POST — hide a suggestion for 14 days
+  RESUME_FEEDBACK:         '/resume-feedback',                 // POST multipart, GET paginated history
+  INTERVIEW_START:         '/interview/start',                 // POST — { focusArea? } -> { sessionId, question }
+  INTERVIEW_RESPOND:       '/interview/:sessionId/respond',    // POST — { answer } -> { feedback, nextQuestion }
+  INTERVIEW_END:           '/interview/:sessionId/end',        // POST — mark session completed
+  INTERVIEW_LIST:          '/interview',                       // GET  — paginated session summaries
+  INTERVIEW_GET:           '/interview/:sessionId',            // GET  — full transcript
+};
+
 // mounted at /chat
 export const CHAT = {
   CONVERSATIONS: '/conversations',                       // GET: list logged-in user's conversations
