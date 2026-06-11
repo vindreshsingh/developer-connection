@@ -9,6 +9,8 @@ import connectionRouter from './routes/connection.js';
 import chatRouter from './routes/chat.js';
 import groupsRouter from './routes/groups.js';
 import callsRouter from './routes/calls.js';
+import billingRouter from './routes/billing.js';
+import aiRouter from './routes/ai.js';
 import { configurePassport } from './middlewares/passport.js';
 
 // Register Passport strategies once at startup (reads env vars at call time,
@@ -23,6 +25,10 @@ app.use(
     credentials: true,
   })
 );
+// Razorpay webhook signature verification needs the exact raw bytes of the
+// request body, so this path is excluded from express.json() below (body-
+// parser middlewares skip a request whose body has already been parsed).
+app.use('/billing/webhook', express.raw({ type: 'application/json' }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(passport.initialize()); // required for passport; no session middleware needed
@@ -34,5 +40,7 @@ app.use('/request', connectionRouter);
 app.use('/chat', chatRouter);
 app.use('/groups', groupsRouter);
 app.use('/calls', callsRouter);
+app.use('/billing', billingRouter);
+app.use('/ai', aiRouter);
 
 export default app;

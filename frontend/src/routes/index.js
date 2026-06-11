@@ -12,6 +12,8 @@ const MessagesPage = lazy(() => import('@/pages/Messages/Messages'));
 const GroupsPage = lazy(() => import('@/pages/Groups/Groups'));
 const GroupDetailPage = lazy(() => import('@/pages/GroupDetail/GroupDetail'));
 const CallHistoryPage = lazy(() => import('@/pages/CallHistory/CallHistory'));
+const PricingPage = lazy(() => import('@/pages/Pricing/Pricing'));
+const AIAssistantPage = lazy(() => import('@/pages/AIAssistant/AIAssistant'));
 
 // guard: 'protected'   — redirect to /login if not authenticated
 // guard: 'public-only' — redirect to / if already authenticated
@@ -27,6 +29,8 @@ export const routes = [
   { path: '/groups', Page: GroupsPage, guard: 'protected' },
   { path: '/groups/:groupId', Page: GroupDetailPage, guard: 'protected' },
   { path: '/calls', Page: CallHistoryPage, guard: 'protected' },
+  { path: '/pricing', Page: PricingPage, guard: 'protected' },
+  { path: '/ai-assistant', Page: AIAssistantPage, guard: 'protected' },
   { path: '/profile', Page: ProfilePage, guard: 'protected' },
   { path: '/users/:userId', Page: UserProfilePage, guard: 'protected' },
 ];

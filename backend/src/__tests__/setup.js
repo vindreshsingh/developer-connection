@@ -17,6 +17,13 @@ process.env.LINKEDIN_CLIENT_ID     = process.env.LINKEDIN_CLIENT_ID     || 'li-t
 process.env.LINKEDIN_CLIENT_SECRET = process.env.LINKEDIN_CLIENT_SECRET || 'li-test-client-secret';
 process.env.OAUTH_CALLBACK_BASE_URL = process.env.OAUTH_CALLBACK_BASE_URL || 'http://localhost:3008';
 
+// Phase 6 — billing + AI assistant test credentials
+process.env.RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || 'rzp_test_key_id';
+process.env.RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || 'rzp_test_key_secret';
+process.env.RAZORPAY_WEBHOOK_SECRET = process.env.RAZORPAY_WEBHOOK_SECRET || 'whsec_test_secret';
+process.env.ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY || 'anthropic-test-key';
+process.env.AI_DAILY_LIMIT = process.env.AI_DAILY_LIMIT || '20';
+
 let mongoServer;
 
 beforeAll(async () => {
