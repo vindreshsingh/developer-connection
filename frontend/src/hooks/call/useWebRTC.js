@@ -166,6 +166,24 @@ export const useWebRTC = (socket, callId) => {
 
   // ── Screen share ──────────────────────────────────────────────────────────
 
+  const stopScreenShare = useCallback(async () => {
+    if (!pcRef.current || !cameraTrackRef.current) return;
+    try {
+      const sender = pcRef.current.getSenders().find((s) => s.track?.kind === 'video');
+      if (sender) await sender.replaceTrack(cameraTrackRef.current);
+
+      const newStream = new MediaStream([
+        ...( localStreamRef.current?.getAudioTracks() ?? []),
+        cameraTrackRef.current,
+      ]);
+      localStreamRef.current = newStream;
+      setLocalStream(newStream);
+      setIsScreenSharing(false);
+    } catch (err) {
+      setWebRTCError(err.message);
+    }
+  }, []);
+
   const startScreenShare = useCallback(async () => {
     if (!pcRef.current || !localStreamRef.current) return;
     try {
@@ -190,25 +208,7 @@ export const useWebRTC = (socket, callId) => {
     } catch (err) {
       if (err.name !== 'NotAllowedError') setWebRTCError(err.message);
     }
-  }, []);  // stopScreenShare declared below; eslint-disable-next-line avoids circular ref
-
-  const stopScreenShare = useCallback(async () => {
-    if (!pcRef.current || !cameraTrackRef.current) return;
-    try {
-      const sender = pcRef.current.getSenders().find((s) => s.track?.kind === 'video');
-      if (sender) await sender.replaceTrack(cameraTrackRef.current);
-
-      const newStream = new MediaStream([
-        ...( localStreamRef.current?.getAudioTracks() ?? []),
-        cameraTrackRef.current,
-      ]);
-      localStreamRef.current = newStream;
-      setLocalStream(newStream);
-      setIsScreenSharing(false);
-    } catch (err) {
-      setWebRTCError(err.message);
-    }
-  }, []);
+  }, [stopScreenShare]);
 
   // ── endCall ───────────────────────────────────────────────────────────────
 

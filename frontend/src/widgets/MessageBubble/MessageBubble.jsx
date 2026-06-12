@@ -13,12 +13,12 @@ const QUICK_EMOJI = ['👍', '❤️', '😂', '😮', '😢', '🎉'];
  *   A "Seen" badge appears on own messages whose createdAt ≤ seenAt.
  */
 export default function MessageBubble({ message, isOwn, onReact, seenAt, senderName }) {
+  const [pickerOpen, setPickerOpen] = useState(false);
+
   // Call summary messages are system events — render as a centred pill, not a bubble
   if (message.type === 'call_summary') {
     return <CallSummaryCard message={message} />;
   }
-
-  const [pickerOpen, setPickerOpen] = useState(false);
 
   // Group reactions: emoji → { count, hasMe }
   const reactionGroups = (message.reactions || []).reduce((acc, r) => {
