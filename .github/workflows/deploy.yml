@@ -1,0 +1,124 @@
+# Phase 7 — CD workflow → AWS
+#
+# Triggered after CI succeeds on `master`. Builds + pushes the backend image to
+# ECR and rolls out a new ECS task definition revision, then builds the frontend
+# and syncs it to S3 + invalidates CloudFront.
+#
+# Required repo configuration:
+#
+#   Secrets:
+#     AWS_DEPLOY_ROLE_ARN        — IAM role ARN assumed via GitHub OIDC
+#                                   (no long-lived AWS keys are stored)
+#
+#   Variables:
+#     AWS_REGION                 — e.g. ap-south-1
+#     ECR_REPOSITORY             — ECR repo name for the backend image
+#     ECS_CLUSTER                — ECS cluster name
+#     ECS_SERVICE                — ECS service name
+#     ECS_TASK_DEFINITION_FAMILY — ECS task definition family (e.g. dc-backend)
+#     ECS_CONTAINER_NAME         — container name within the task definition
+#     S3_BUCKET_FRONTEND         — S3 bucket serving the frontend static assets
+#     CLOUDFRONT_DISTRIBUTION_ID — CloudFront distribution in front of the bucket
+#
+# Prerequisites (provisioned out-of-band, not by this workflow):
+#   - ECR repository, ECS cluster/service/task definition (with a /health
+#     container health check, see Task B4), S3 bucket, CloudFront distribution,
+#     and an IAM OIDC role trusted for this repo with permissions to push to ECR,
+#     register task definitions, update the ECS service, write to the S3 bucket,
+#     and create CloudFront invalidations.
+
+name: Deploy
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [master]
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy-backend:
+    name: Deploy backend (ECR + ECS)
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion == 'success'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Log in to Amazon ECR
+        id: ecr-login
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push backend image
+        env:
+          REGISTRY: ${{ steps.ecr-login.outputs.registry }}
+          REPOSITORY: ${{ vars.ECR_REPOSITORY }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t "$REGISTRY/$REPOSITORY:$IMAGE_TAG" -t "$REGISTRY/$REPOSITORY:latest" backend
+          docker push "$REGISTRY/$REPOSITORY:$IMAGE_TAG"
+          docker push "$REGISTRY/$REPOSITORY:latest"
+
+      - name: Download current task definition
+        run: |
+          aws ecs describe-task-definition \
+            --task-definition "${{ vars.ECS_TASK_DEFINITION_FAMILY }}" \
+            --query taskDefinition > task-definition.json
+
+      - name: Render new task definition
+        id: render-task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task-definition.json
+          container-name: ${{ vars.ECS_CONTAINER_NAME }}
+          image: ${{ steps.ecr-login.outputs.registry }}/${{ vars.ECR_REPOSITORY }}:${{ github.sha }}
+
+      - name: Deploy to ECS
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ steps.render-task-def.outputs.task-definition }}
+          cluster: ${{ vars.ECS_CLUSTER }}
+          service: ${{ vars.ECS_SERVICE }}
+          wait-for-service-stability: true
+
+  deploy-frontend:
+    name: Deploy frontend (S3 + CloudFront)
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion == 'success'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install and build
+        working-directory: frontend
+        run: |
+          npm ci
+          npm run build
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Sync to S3
+        run: aws s3 sync frontend/dist "s3://${{ vars.S3_BUCKET_FRONTEND }}" --delete
+
+      - name: Invalidate CloudFront
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id "${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}" \
+            --paths "/*"

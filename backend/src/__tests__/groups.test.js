@@ -243,7 +243,7 @@ describe('POST /groups/:id/join', () => {
 
   it('returns 400 when group is full', async () => {
     const { user: admin }         = await createUser('jn3a@test.com');
-    const { user: joiner, cookie} = await createUser('jn3b@test.com');
+    const { cookie } = await createUser('jn3b@test.com');
     const group = await createGroup(admin._id, { memberCount: 500, maxMembers: 500 });
 
     const res = await request(app)

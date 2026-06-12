@@ -16,7 +16,6 @@ import { createCipheriv, createDecipheriv, randomBytes } from 'node:crypto';
 
 const ALGORITHM = 'aes-256-gcm';
 const IV_BYTES   = 12; // 96-bit IV — recommended for GCM
-const TAG_BYTES  = 16; // 128-bit auth tag (GCM default)
 
 /**
  * Returns a 32-byte Buffer from the ENCRYPTION_KEY env var.

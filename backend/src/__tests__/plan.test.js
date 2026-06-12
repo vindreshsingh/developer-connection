@@ -3,7 +3,6 @@
  * User.isPremium + seedPlans script.
  */
 
-import mongoose from 'mongoose';
 import Plan from '../models/plan.js';
 import Subscription from '../models/subscription.js';
 import PaymentEvent from '../models/paymentEvent.js';
