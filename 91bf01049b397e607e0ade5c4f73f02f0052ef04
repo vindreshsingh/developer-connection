@@ -1,0 +1,95 @@
+backend/.dockerignore
+  137798da01a2a907 1-8
+frontend/src/main.jsx
+  137798da01a2a907 9-10,12-14,24-31
+backend/src/utils/logger.js
+  137798da01a2a907 1-15
+backend/src/server.js
+  137798da01a2a907 4,7-9,23
+backend/src/routes/billing.js
+  137798da01a2a907 19,39
+frontend/src/components/SentryFallback.jsx
+  137798da01a2a907 1-7
+backend/src/middlewares/auth.js
+  137798da01a2a907 18
+.github/workflows/ci.yml
+  137798da01a2a907 1-46
+frontend/.dockerignore
+  137798da01a2a907 1-9
+backend/src/__tests__/errorHandler.test.js
+  137798da01a2a907 1-20
+backend/src/__tests__/premiumGating.test.js
+  137798da01a2a907 193
+backend/src/config/database.js
+  137798da01a2a907 2,5,7,9
+backend/src/middlewares/rateLimiter.js
+  137798da01a2a907 5-8,17-33
+backend/src/middlewares/errorHandler.js
+  137798da01a2a907 1-21
+backend/src/app.js
+  137798da01a2a907 5-8,19-20,28-53,55-64,79-84,95-96
+frontend/src/utils/sentry.js
+  137798da01a2a907 1-13
+backend/.env.example
+  137798da01a2a907 12-28,40-45
+backend/src/__tests__/chat.test.js
+  137798da01a2a907 59
+backend/package.json
+  137798da01a2a907 9-10
+backend/src/__tests__/enrichment.test.js
+  137798da01a2a907 16
+frontend/nginx.conf
+  137798da01a2a907 1-15
+backend/src/utils/sentry.js
+  137798da01a2a907 1-15
+backend/src/scripts/seedPlans.js
+  137798da01a2a907 12,65,69
+backend/Dockerfile
+  137798da01a2a907 1-16
+.github/dependabot.yml
+  137798da01a2a907 1-21
+backend/src/routes/health.js
+  137798da01a2a907 1-17
+frontend/.env.example
+  137798da01a2a907 1-6
+.github/workflows/deploy.yml
+  137798da01a2a907 1-124
+frontend/Dockerfile
+  137798da01a2a907 1-15
+backend/src/routes/oauth.js
+  137798da01a2a907 19,82
+backend/src/__tests__/groups.test.js
+  137798da01a2a907 246
+backend/eslint.config.js
+  137798da01a2a907 1-25
+backend/src/__tests__/securityHeaders.test.js
+  137798da01a2a907 1-20
+backend/src/routes/connection.js
+  137798da01a2a907 4,13
+docs/specs/phase7-hardening-rfc.md
+  137798da01a2a907 1-200
+backend/src/__tests__/health.test.js
+  137798da01a2a907 1-35
+docs/specs/phase7-plan.md
+  137798da01a2a907 1-427
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.5",
+  "base_commit_sha": "91bf01049b397e607e0ade5c4f73f02f0052ef04",
+  "prompts": {
+    "137798da01a2a907": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "123e2cb9-ecbb-4283-a8df-4f65340cc2f6",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "Vindresh Kumar <vksingh5198@gmail.com>",
+      "messages": [],
+      "total_additions": 1253,
+      "total_deletions": 77,
+      "accepted_lines": 1208,
+      "overriden_lines": 0
+    }
+  }
+}
