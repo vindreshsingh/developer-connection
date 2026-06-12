@@ -1,0 +1,33 @@
+frontend/eslint.config.js
+  137798da01a2a907 21-26
+frontend/src/widgets/MessageBubble/MessageBubble.jsx
+  137798da01a2a907 16-17
+frontend/src/context/CallContext.js
+  137798da01a2a907 1-5
+frontend/src/context/CallProvider.jsx
+  137798da01a2a907 1,4
+frontend/src/containers/Messages/index.jsx
+  137798da01a2a907 8
+frontend/src/hooks/call/useWebRTC.js
+  137798da01a2a907 174,186,211
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.5",
+  "base_commit_sha": "928fcb32a01e175dac6b5847b0fe192903c99b5f",
+  "prompts": {
+    "137798da01a2a907": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "123e2cb9-ecbb-4283-a8df-4f65340cc2f6",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "Vindresh Kumar <vksingh5198@gmail.com>",
+      "messages": [],
+      "total_additions": 35,
+      "total_deletions": 29,
+      "accepted_lines": 19,
+      "overriden_lines": 0
+    }
+  }
+}
