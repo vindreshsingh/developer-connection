@@ -15,7 +15,6 @@ import User from '../models/user.js';
 import Plan from '../models/plan.js';
 import Subscription from '../models/subscription.js';
 import Group from '../models/group.js';
-import ConnectionRequest from '../models/connectionRequest.js';
 import { hashPassword } from '../utils/sanitization.js';
 import { requirePremium } from '../middlewares/premium.js';
 
@@ -191,7 +190,7 @@ describe('GET /profile/feed?experienceLevel= (Premium advanced filter)', () => {
 describe('POST /request/send/interested/:toUserId — daily swipe limit', () => {
   it('returns SWIPE_LIMIT_REACHED once a free user hits the daily cap', async () => {
     await seedPlans(); // free plan dailySwipeLimit = 2
-    const { user, cookie } = await createUser({ isPremium: false });
+    const { cookie } = await createUser({ isPremium: false });
     const targets = await Promise.all([createUser(), createUser(), createUser()]);
 
     const first = await request(app).post(`/request/send/interested/${targets[0].user._id}`).set('Cookie', cookie);

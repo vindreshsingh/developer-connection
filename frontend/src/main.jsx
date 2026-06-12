@@ -6,8 +6,12 @@ import './index.css'
 import App from './App'
 import { store } from './store'
 import { AuthProvider } from './context/AuthContext'
+import { initSentry, isSentryEnabled, SentryErrorBoundary } from './utils/sentry'
+import SentryFallback from './components/SentryFallback'
 
-createRoot(document.getElementById('root')).render(
+initSentry()
+
+const app = (
   <StrictMode>
     <BrowserRouter>
       <Provider store={store}>
@@ -16,5 +20,13 @@ createRoot(document.getElementById('root')).render(
         </AuthProvider>
       </Provider>
     </BrowserRouter>
-  </StrictMode>,
+  </StrictMode>
+)
+
+createRoot(document.getElementById('root')).render(
+  isSentryEnabled() ? (
+    <SentryErrorBoundary fallback={<SentryFallback />}>{app}</SentryErrorBoundary>
+  ) : (
+    app
+  ),
 )

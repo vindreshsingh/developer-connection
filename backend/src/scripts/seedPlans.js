@@ -9,6 +9,7 @@ import 'dotenv/config';
 import mongoose from 'mongoose';
 import connectDB from '../config/database.js';
 import Plan from '../models/plan.js';
+import { logger } from '../utils/logger.js';
 
 const PLANS = [
   {
@@ -61,11 +62,11 @@ if (isMain) {
   connectDB()
     .then(seedPlans)
     .then(() => {
-      console.log('Plans seeded successfully');
+      logger.info('Plans seeded successfully');
       return mongoose.connection.close();
     })
     .catch((err) => {
-      console.error('Failed to seed plans:', err);
+      logger.error(`Failed to seed plans: ${err.message}`);
       process.exit(1);
     });
 }

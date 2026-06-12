@@ -16,6 +16,7 @@
 
 import express from 'express';
 import userAuth from '../middlewares/auth.js';
+import { checkoutRateLimiter } from '../middlewares/rateLimiter.js';
 import { BILLING } from '../constants/apiEndpoints.js';
 import Plan from '../models/plan.js';
 import Subscription from '../models/subscription.js';
@@ -35,7 +36,7 @@ router.get(BILLING.PLANS, async (req, res) => {
 
 // ── POST /checkout — create a Razorpay subscription order ─────────────────────
 
-router.post(BILLING.CHECKOUT, userAuth, async (req, res) => {
+router.post(BILLING.CHECKOUT, userAuth, checkoutRateLimiter, async (req, res) => {
   try {
     const { planKey } = req.body;
 

@@ -16,6 +16,7 @@ import { randomBytes } from 'node:crypto';
 import express from 'express';
 import passport from '../middlewares/passport.js';
 import { OAUTH } from '../constants/apiEndpoints.js';
+import { logger } from '../utils/logger.js';
 
 const router = express.Router();
 
@@ -78,7 +79,7 @@ router.get(OAUTH.CALLBACK, (req, res, next) => {
   // Custom callback gives us full control over the response.
   passport.authenticate(provider, { session: false }, (err, user) => {
     if (err) {
-      console.error(`[OAuth] Error from ${provider}:`, err.message);
+      logger.error(`[OAuth] Error from ${provider}: ${err.message}`);
       return res.redirect(
         `${process.env.FRONTEND_URL}/login?error=oauth_failed`,
       );

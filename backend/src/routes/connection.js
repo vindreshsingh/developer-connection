@@ -1,6 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import userAuth from '../middlewares/auth.js';
+import { swipeRateLimiter } from '../middlewares/rateLimiter.js';
 import { REQUEST } from '../constants/apiEndpoints.js';
 import ConnectionRequest from '../models/connectionRequest.js';
 import Report from '../models/report.js';
@@ -9,7 +10,7 @@ import Plan from '../models/plan.js';
 
 const router = express.Router();
 
-router.post(REQUEST.SEND, userAuth, async (req, res) => {
+router.post(REQUEST.SEND, userAuth, swipeRateLimiter, async (req, res) => {
   try {
     const fromUserId = req.user._id;
     const { status, toUserId } = req.params;
