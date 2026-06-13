@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import Button from '@/components/Button/Button';
-import './UpsellModal.scss';
 
 const FEATURE_COPY = {
   SWIPE_LIMIT_REACHED: {
@@ -25,16 +24,24 @@ export default function UpsellModal({ reason, onClose }) {
   const copy = FEATURE_COPY[reason] || FEATURE_COPY.PREMIUM_REQUIRED;
 
   return (
-    <div className="dc-upsell-modal-overlay" onClick={onClose}>
-      <div className="dc-upsell-modal" onClick={(e) => e.stopPropagation()}>
-        <button type="button" className="dc-upsell-modal-close" aria-label="Close" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/50 p-4" onClick={onClose}>
+      <div
+        className="relative w-full max-w-md rounded-2xl bg-white p-8 text-center opacity-0 [animation:dc-fade-in-up_0.25s_ease_forwards]"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          type="button"
+          className="absolute right-3 top-3 border-none bg-transparent text-2xl leading-none text-gray-400 hover:text-gray-600"
+          aria-label="Close"
+          onClick={onClose}
+        >
           ×
         </button>
 
-        <h2 className="dc-upsell-modal-title">{copy.title}</h2>
-        <p className="dc-upsell-modal-body">{copy.body}</p>
+        <h2 className="mb-2 text-xl font-extrabold text-gray-900">{copy.title}</h2>
+        <p className="mb-6 text-[0.9rem] text-gray-500">{copy.body}</p>
 
-        <div className="dc-upsell-modal-actions">
+        <div className="flex justify-center gap-3">
           <Button variant="outline" onClick={onClose}>
             Not now
           </Button>

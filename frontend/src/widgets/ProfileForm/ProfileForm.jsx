@@ -2,7 +2,6 @@ import FormInput from '@/components/FormInput/FormInput';
 import Button from '@/components/Button/Button';
 import TechStackEditor from '@/widgets/TechStackEditor/TechStackEditor';
 import ExperienceEditor from '@/widgets/ExperienceEditor/ExperienceEditor';
-import './ProfileForm.scss';
 
 export default function ProfileForm({
   form,
@@ -17,8 +16,8 @@ export default function ProfileForm({
   onSubmit,
 }) {
   return (
-    <form onSubmit={onSubmit} className="dc-profile-form">
-      <div className="dc-profile-form-grid-2">
+    <form onSubmit={onSubmit} className="flex flex-col gap-4 rounded-2xl border border-gray-100 bg-white p-6 text-left shadow-sm">
+      <div className="grid grid-cols-2 gap-4">
         <FormInput
           label="First name"
           value={form.firstName}
@@ -51,7 +50,7 @@ export default function ProfileForm({
 
       <ExperienceEditor entries={experience} onChange={onExperienceChange} />
 
-      <div className="dc-profile-form-grid-2">
+      <div className="grid grid-cols-2 gap-4">
         <FormInput
           label="GitHub URL"
           value={form.githubUrl}
@@ -64,7 +63,7 @@ export default function ProfileForm({
         />
       </div>
 
-      <div className="dc-profile-form-grid-2">
+      <div className="grid grid-cols-2 gap-4">
         <FormInput
           label="Age"
           type="number"
@@ -74,11 +73,11 @@ export default function ProfileForm({
           max={75}
         />
         <div>
-          <label className="dc-profile-form-label">Gender</label>
+          <label className="mb-1 block text-sm font-medium text-gray-700">Gender</label>
           <select
             value={form.gender}
             onChange={onFieldChange('gender')}
-            className="dc-profile-form-select"
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 outline-none focus:border-purple-300"
           >
             <option value="">Prefer not to say</option>
             <option value="male">Male</option>

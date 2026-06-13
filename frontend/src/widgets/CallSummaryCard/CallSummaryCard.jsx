@@ -11,7 +11,6 @@
  */
 
 import { formatTime } from '@/commonUtils/formatDate';
-import './CallSummaryCard.scss';
 
 // ── Duration formatter ────────────────────────────────────────────────────────
 
@@ -38,20 +37,20 @@ export default function CallSummaryCard({ message }) {
   const label = isGroup ? 'Group video call' : 'Video call';
 
   return (
-    <div className="dc-call-summary-card" role="status" aria-label={label}>
-      <div className="dc-call-summary-card-inner">
-        <span className="dc-call-summary-card-icon" aria-hidden="true">📹</span>
-        <span className="dc-call-summary-card-label">{label}</span>
+    <div className="flex justify-center py-[0.35rem] my-[0.1rem]" role="status" aria-label={label}>
+      <div className="inline-flex max-w-[90%] items-center gap-[0.35rem] overflow-hidden whitespace-nowrap rounded-full border border-gray-200 bg-gray-100 px-[0.85rem] py-[0.3rem] text-[0.78rem] text-gray-500">
+        <span className="flex-shrink-0 text-[0.85rem]" aria-hidden="true">📹</span>
+        <span className="whitespace-nowrap font-medium text-gray-700">{label}</span>
 
         {duration && (
           <>
-            <span className="dc-call-summary-card-sep" aria-hidden="true">·</span>
-            <span className="dc-call-summary-card-duration">{duration}</span>
+            <span className="text-[0.7rem] text-gray-300" aria-hidden="true">·</span>
+            <span className="font-medium text-gray-700">{duration}</span>
           </>
         )}
 
-        <span className="dc-call-summary-card-sep" aria-hidden="true">·</span>
-        <span className="dc-call-summary-card-time">{timeStamp}</span>
+        <span className="text-[0.7rem] text-gray-300" aria-hidden="true">·</span>
+        <span className="text-[0.73rem] text-gray-400">{timeStamp}</span>
       </div>
     </div>
   );

@@ -1,5 +1,3 @@
-import './Spinner.scss';
-
 export default function Spinner({ label = 'Loading...' }) {
-  return <p className="dc-spinner-text">{label}</p>;
+  return <p className="text-gray-500">{label}</p>;
 }
