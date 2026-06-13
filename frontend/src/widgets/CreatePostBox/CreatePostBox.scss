@@ -1,0 +1,146 @@
+@use '../../styles/tokens' as *;
+
+.dc-create-post-box {
+  background-color: #ffffff;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  border: 1px solid #f3f4f6;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.dc-create-post-box-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.dc-create-post-box-input {
+  flex: 1;
+}
+
+.dc-create-post-box-textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 3rem;
+}
+
+.dc-create-post-box-snippet {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.dc-create-post-box-lang-select {
+  align-self: flex-start;
+  font-size: 0.8rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  background: #fff;
+  color: #374151;
+  cursor: pointer;
+
+  &:focus {
+    outline: 2px solid #818cf8;
+    outline-offset: 1px;
+  }
+}
+
+.dc-create-post-box-code-area {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8rem;
+  font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+  color: #1f2937;
+  background: #f9fafb;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  resize: vertical;
+  tab-size: 2;
+  line-height: 1.6;
+
+  &:focus {
+    outline: 2px solid #818cf8;
+    outline-offset: 1px;
+  }
+
+  &::placeholder {
+    color: #9ca3af;
+  }
+}
+
+.dc-create-post-box-images {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(6rem, 1fr));
+  gap: 0.5rem;
+}
+
+.dc-create-post-box-image {
+  position: relative;
+}
+
+.dc-create-post-box-image-remove {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.75);
+  }
+}
+
+.dc-create-post-box-error {
+  font-size: 0.8rem;
+  color: #dc2626;
+}
+
+.dc-create-post-box-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.dc-create-post-box-mode-btn {
+  flex-shrink: 0;
+  padding: 0.375rem 0.5rem;
+  font-size: 0.75rem;
+  font-family: ui-monospace, monospace;
+  font-weight: 700;
+  color: #6b7280;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+
+  &:hover {
+    background: #e5e7eb;
+    color: #374151;
+  }
+
+  &--active {
+    background: #ede9fe;
+    color: #6d28d9;
+    border-color: #c4b5fd;
+  }
+}
+
+.dc-create-post-box-submit {
+  margin-left: auto;
+}
