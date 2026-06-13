@@ -92,6 +92,26 @@ export const AI = {
   INTERVIEW_GET:           '/interview/:sessionId',            // GET  — full transcript
 };
 
+// mounted at /posts
+export const POSTS = {
+  LIST:           '/',                          // GET  — paginated feed (?scope=network|public&page=1)
+  CREATE:         '/',                          // POST — create a post
+  UPLOAD_IMAGE:   '/upload-image',              // POST multipart — upload an image, returns { url }
+  GET:            '/:postId',                   // GET  — single post detail
+  DELETE:         '/:postId',                   // DELETE — author: soft-delete
+  LIKE:           '/:postId/like',              // POST — toggle like
+  COMMENTS:       '/:postId/comments',          // GET (paginated) / POST — comments
+  DELETE_COMMENT: '/:postId/comments/:commentId', // DELETE — comment author or post author
+};
+
+// mounted at /notifications
+export const NOTIFICATIONS = {
+  LIST:         '/',                  // GET   — paginated notifications
+  UNREAD_COUNT: '/unread-count',      // GET   — { count }
+  READ:         '/:notificationId/read', // PATCH — mark single notification as read
+  READ_ALL:     '/read-all',          // PATCH — mark all as read
+};
+
 // mounted at /chat
 export const CHAT = {
   CONVERSATIONS: '/conversations',                       // GET: list logged-in user's conversations
