@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import NavLink from '@/components/NavLink/NavLink';
 import Button from '@/components/Button/Button';
+import NotificationBell from '@/widgets/NotificationBell/NotificationBell';
 import { useCurrentUser } from '@/hooks/auth/useCurrentUser';
 import { useLogout } from '@/hooks/auth/useLogout';
 import './NavBar.scss';
@@ -53,6 +54,7 @@ export default function NavBar() {
           <NavLink to={pricingLink.to} onClick={closeMenu} className="dc-nav-bar-premium-link">
             {pricingLink.label}
           </NavLink>
+          <NotificationBell />
           <Button
             variant="ghost"
             className="dc-nav-bar-logout"
