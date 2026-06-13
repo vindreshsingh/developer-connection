@@ -2,7 +2,6 @@ import { classNames } from '@/commonUtils/classNames';
 import { formatTime } from '@/commonUtils/formatDate';
 import SnippetBlock from '@/widgets/SnippetBlock/SnippetBlock';
 import CallSummaryCard from '@/widgets/CallSummaryCard/CallSummaryCard';
-import './GroupMessageBubble.scss';
 
 /**
  * Message bubble for group chat.
@@ -33,19 +32,21 @@ export default function GroupMessageBubble({ message, isOwn, members = [] }) {
       : 'Member';
   })();
 
+  const isSnippet = message.type === 'snippet';
+
   return (
     <div
       className={classNames(
-        'dc-gm-bubble',
-        isOwn && 'dc-gm-bubble--own',
-        message.type === 'snippet' && 'dc-gm-bubble--snippet',
+        'relative mb-2 max-w-[75%] self-start rounded-2xl bg-gray-100 px-3.5 pb-1.5 pt-2',
+        isOwn && 'self-end bg-violet-100',
+        isSnippet && 'max-w-[90%] overflow-hidden rounded-lg bg-transparent p-0',
       )}
     >
       {!isOwn && (
-        <span className="dc-gm-bubble-sender">{senderName}</span>
+        <span className="mb-[0.15rem] block text-[0.72rem] font-semibold text-violet-800">{senderName}</span>
       )}
 
-      {message.type === 'snippet' ? (
+      {isSnippet ? (
         <SnippetBlock
           code={message.body}
           language={message.language}
@@ -53,11 +54,18 @@ export default function GroupMessageBubble({ message, isOwn, members = [] }) {
           senderName={senderName}
         />
       ) : (
-        <p className="dc-gm-bubble-body">{message.body}</p>
+        <p className="m-0 mb-1 whitespace-pre-wrap break-words text-[0.9rem] text-gray-900">{message.body}</p>
       )}
 
-      <div className="dc-gm-bubble-footer">
-        <span className="dc-gm-bubble-time">{formatTime(message.createdAt)}</span>
+      <div
+        className={classNames(
+          'flex items-center justify-end',
+          isSnippet && 'bg-[#1a1a2e] px-3 pb-1 pt-[0.3rem]',
+        )}
+      >
+        <span className={classNames('text-[0.7rem] text-gray-400', isSnippet && 'text-gray-500')}>
+          {formatTime(message.createdAt)}
+        </span>
       </div>
     </div>
   );
