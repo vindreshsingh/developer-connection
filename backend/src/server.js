@@ -1,8 +1,12 @@
 import 'dotenv/config';
 import http from 'http';
 import connectDB from './config/database.js';
+import { initSentry } from './utils/sentry.js';
 import app from './app.js';
 import { initSockets } from './sockets/index.js';
+import { logger } from './utils/logger.js';
+
+initSentry();
 
 const PORT = process.env.PORT || 3008;
 
@@ -16,6 +20,6 @@ app.set('io', io);
 
 connectDB().then(() => {
   httpServer.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    logger.info(`Server running on port ${PORT}`);
   });
 });

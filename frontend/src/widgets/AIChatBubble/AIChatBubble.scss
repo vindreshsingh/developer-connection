@@ -1,0 +1,26 @@
+.dc-ai-chat-bubble {
+  max-width: 80%;
+  padding: 0.75rem 1rem;
+  border-radius: 1rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.dc-ai-chat-bubble--assistant {
+  align-self: flex-start;
+  background: #f3f4f6;
+  color: #111827;
+  border-bottom-left-radius: 0.25rem;
+}
+
+.dc-ai-chat-bubble--user {
+  align-self: flex-end;
+  background: linear-gradient(135deg, var(--dc-primary), #ec4899);
+  color: #ffffff;
+  border-bottom-right-radius: 0.25rem;
+}
+
+.dc-ai-chat-bubble-content {
+  margin: 0;
+}

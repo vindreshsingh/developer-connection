@@ -140,6 +140,46 @@ router.get(PROFILE.FEED, userAuth, async (req, res) => {
       }
     }
 
+    // Phase 6: advanced filters — Premium only. Non-premium users have these
+    // params silently ignored rather than rejected.
+    const { experienceLevel } = req.query;
+    if (experienceLevel && req.user.isPremium) {
+      const ranges = {
+        junior: { $lt: 2 },
+        mid: { $gte: 2, $lt: 5 },
+        senior: { $gte: 5 },
+      };
+      const range = ranges[experienceLevel];
+      if (range) {
+        // Total years of experience = sum of (endDate ?? now) - startDate
+        // across the experience array, in years.
+        filter.$expr = {
+          $let: {
+            vars: {
+              totalYears: {
+                $reduce: {
+                  input: '$experience',
+                  initialValue: 0,
+                  in: {
+                    $add: [
+                      '$$value',
+                      {
+                        $divide: [
+                          { $subtract: [{ $ifNull: ['$$this.endDate', '$$NOW'] }, '$$this.startDate'] },
+                          1000 * 60 * 60 * 24 * 365,
+                        ],
+                      },
+                    ],
+                  },
+                },
+              },
+            },
+            in: { $and: Object.entries(range).map(([op, val]) => ({ [op]: ['$$totalYears', val] })) },
+          },
+        };
+      }
+    }
+
     const total = await User.countDocuments(filter);
     const users = await User.find(filter)
       .select(PUBLIC_PROFILE_FIELDS)

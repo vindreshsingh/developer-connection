@@ -39,6 +39,17 @@
   margin-left: 0.5rem;
 }
 
+.dc-nav-bar-premium-link.dc-nav-link {
+  background: linear-gradient(135deg, var(--dc-primary), #ec4899);
+  color: #ffffff;
+  font-weight: 600;
+
+  &:hover {
+    background: linear-gradient(135deg, var(--dc-primary), #ec4899);
+    opacity: 0.9;
+  }
+}
+
 .dc-nav-bar-toggle {
   display: none;
   flex-direction: column;

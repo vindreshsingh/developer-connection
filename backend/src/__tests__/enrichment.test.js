@@ -13,7 +13,7 @@ import app      from '../app.js';
 import User     from '../models/user.js';
 import { GitHubEnrichmentService }   from '../services/GitHubEnrichmentService.js';
 import { LinkedInEnrichmentService } from '../services/LinkedInEnrichmentService.js';
-import { encryptToken, decryptToken } from '../utils/encryption.js';
+import { encryptToken } from '../utils/encryption.js';
 import { hashPassword } from '../utils/sanitization.js';
 
 // ── Test fixtures ─────────────────────────────────────────────────────────────

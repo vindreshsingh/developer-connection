@@ -188,6 +188,15 @@ const userSchema = new mongoose.Schema(
       profileUrl: { type: String, default: null },
       syncedAt:   { type: Date, default: null },
     },
+
+    // ── Phase 6: Premium entitlement ──────────────────────────────────────────
+    // Denormalized read path for premium gating. Written only by
+    // BillingEventHandler (webhook) and requirePremium's lazy grace-period
+    // check — never set directly from a client request.
+    isPremium: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

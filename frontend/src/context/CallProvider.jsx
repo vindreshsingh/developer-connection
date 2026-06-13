@@ -1,14 +1,9 @@
-import { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSocket } from '@/hooks/chat/useSocket';
 import { useAcceptCallMutation, useDeclineCallMutation } from '@/hooks/call/callApi';
+import { CallContext } from '@/context/CallContext';
 import CallOverlay from '@/widgets/CallOverlay/CallOverlay';
 import './CallProvider.scss';
-
-// ── Context ───────────────────────────────────────────────────────────────────
-
-const CallContext = createContext(null);
-
-export const useCall = () => useContext(CallContext);
 
 // ── Provider ──────────────────────────────────────────────────────────────────
 

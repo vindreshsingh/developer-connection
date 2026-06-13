@@ -4,6 +4,7 @@ const uploadImageBuffer = jest.fn();
 
 jest.unstable_mockModule('../utils/cloudinary.js', () => ({
   uploadImageBuffer,
+  uploadRawBuffer: jest.fn(),
   default: {},
 }));
 

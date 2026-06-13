@@ -56,7 +56,7 @@ describe('Chat REST routes', () => {
     });
 
     it('rejects users who are not accepted connections', async () => {
-      const { user: userA, cookie: cookieA } = await createUser({ email: 'a@example.com' });
+      const { cookie: cookieA } = await createUser({ email: 'a@example.com' });
       const { user: userB } = await createUser({ email: 'b@example.com' });
 
       const res = await request(app)
