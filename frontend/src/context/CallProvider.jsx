@@ -3,7 +3,6 @@ import { useSocket } from '@/hooks/chat/useSocket';
 import { useAcceptCallMutation, useDeclineCallMutation } from '@/hooks/call/callApi';
 import { CallContext } from '@/context/CallContext';
 import CallOverlay from '@/widgets/CallOverlay/CallOverlay';
-import './CallProvider.scss';
 
 // ── Provider ──────────────────────────────────────────────────────────────────
 
@@ -126,28 +125,32 @@ export default function CallProvider({ children }) {
 
       {/* ── Incoming call banner ───────────────────────────────────────── */}
       {incomingCall && !activeCall && (
-        <div className="dc-incoming-call-banner" role="alertdialog" aria-label="Incoming call">
-          <div className="dc-incoming-call-info">
+        <div
+          className="fixed left-1/2 top-4 z-[8500] flex min-w-[300px] max-w-[90vw] -translate-x-1/2 items-center gap-4 rounded-2xl bg-[#1e1b4b] px-5 py-4 text-white shadow-[0_8px_32px_rgba(0,0,0,0.35)] [animation:dc-banner-slide-in_0.25s_ease-out]"
+          role="alertdialog"
+          aria-label="Incoming call"
+        >
+          <div className="flex min-w-0 flex-1 items-center gap-3">
             {incomingCall.callerPhotoUrl ? (
               <img
-                className="dc-incoming-call-avatar"
+                className="h-11 w-11 flex-shrink-0 rounded-full object-cover"
                 src={incomingCall.callerPhotoUrl}
                 alt={incomingCall.callerName}
               />
             ) : (
-              <div className="dc-incoming-call-avatar dc-incoming-call-avatar--placeholder">
+              <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-violet-800 text-[1.1rem] font-bold">
                 {incomingCall.callerName?.charAt(0)?.toUpperCase() ?? '?'}
               </div>
             )}
             <div>
-              <p className="dc-incoming-call-name">{incomingCall.callerName}</p>
-              <p className="dc-incoming-call-label">Incoming video call…</p>
+              <p className="overflow-hidden whitespace-nowrap text-ellipsis text-[0.95rem] font-semibold">{incomingCall.callerName}</p>
+              <p className="mt-[0.1rem] text-xs text-white/65">Incoming video call…</p>
             </div>
           </div>
-          <div className="dc-incoming-call-actions">
+          <div className="flex flex-shrink-0 gap-2">
             <button
               type="button"
-              className="dc-incoming-call-btn dc-incoming-call-btn--accept"
+              className="rounded-full bg-green-600 px-4 py-[0.45rem] text-[0.8rem] font-semibold text-white transition-[filter] duration-150 hover:brightness-[1.15]"
               onClick={handleAccept}
               aria-label="Accept call"
             >
@@ -155,7 +158,7 @@ export default function CallProvider({ children }) {
             </button>
             <button
               type="button"
-              className="dc-incoming-call-btn dc-incoming-call-btn--decline"
+              className="rounded-full bg-red-600 px-4 py-[0.45rem] text-[0.8rem] font-semibold text-white transition-[filter] duration-150 hover:brightness-[1.15]"
               onClick={handleDecline}
               aria-label="Decline call"
             >

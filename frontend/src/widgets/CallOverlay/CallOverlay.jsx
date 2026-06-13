@@ -2,7 +2,6 @@ import { useEffect, useRef } from 'react';
 import { useEndCallMutation } from '@/hooks/call/callApi';
 import { useWebRTC } from '@/hooks/call/useWebRTC';
 import CallControls from '@/widgets/CallControls/CallControls';
-import './CallOverlay.scss';
 
 /**
  * Full-screen call overlay for 1:1 WebRTC calls.
@@ -102,56 +101,63 @@ export default function CallOverlay({
     '';
 
   return (
-    <div className="dc-call-overlay" role="dialog" aria-label="Video call" aria-modal="true">
+    <div
+      className="fixed inset-0 z-[9000] flex flex-col items-center justify-center overflow-hidden bg-[#111]"
+      role="dialog"
+      aria-label="Video call"
+      aria-modal="true"
+    >
       {/* Remote video — fills the overlay */}
       <video
         ref={remoteVideoRef}
-        className="dc-call-overlay-remote"
+        className="absolute inset-0 h-full w-full object-cover"
         autoPlay
         playsInline
       />
 
       {/* Placeholder when remote video isn't connected yet */}
       {!remoteStream && callStatus !== 'ended' && (
-        <div className="dc-call-overlay-waiting">
-          <div className="dc-call-overlay-avatar">
+        <div className="relative z-[1] flex flex-col items-center gap-3">
+          <div className="flex h-20 w-20 items-center justify-center rounded-full bg-violet-800 text-2xl font-bold text-white">
             {remoteUserName?.charAt(0)?.toUpperCase() ?? '?'}
           </div>
-          <p className="dc-call-overlay-waiting-name">{remoteUserName}</p>
-          <p className="dc-call-overlay-status">{statusLabel}</p>
+          <p className="text-xl font-semibold text-white">{remoteUserName}</p>
+          <p className="text-[0.9rem] text-white/65">{statusLabel}</p>
         </div>
       )}
 
       {/* Call ended message */}
       {callStatus === 'ended' && (
-        <div className="dc-call-overlay-ended">
+        <div className="relative z-[1] text-[1.1rem] text-white/80">
           <p>Call ended</p>
         </div>
       )}
 
       {/* Error banner */}
       {webRTCError && (
-        <div className="dc-call-overlay-error">{webRTCError}</div>
+        <div className="absolute left-1/2 top-4 z-10 max-w-[80vw] -translate-x-1/2 rounded-lg bg-red-600/85 px-5 py-2 text-center text-sm text-white">
+          {webRTCError}
+        </div>
       )}
 
       {/* Local video — picture-in-picture, bottom right */}
       <video
         ref={localVideoRef}
-        className="dc-call-overlay-local"
+        className="absolute bottom-24 right-5 z-[5] h-[105px] w-[140px] rounded-lg border-2 border-white/25 bg-[#1a1a1a] object-cover max-[480px]:bottom-[5.5rem] max-[480px]:h-[68px] max-[480px]:w-[90px]"
         autoPlay
         playsInline
         muted  // always muted locally to avoid echo
       />
 
       {/* Header — remote name + status */}
-      <header className="dc-call-overlay-header">
-        <span className="dc-call-overlay-header-name">{remoteUserName}</span>
-        <span className="dc-call-overlay-header-status">{statusLabel}</span>
+      <header className="absolute left-6 top-6 z-[5] flex flex-col gap-[0.2rem]">
+        <span className="text-[1.1rem] font-semibold text-white [text-shadow:0_1px_3px_rgba(0,0,0,0.5)]">{remoteUserName}</span>
+        <span className="text-[0.8rem] text-white/65">{statusLabel}</span>
       </header>
 
       {/* Controls */}
       {callStatus !== 'ended' && (
-        <div className="dc-call-overlay-controls">
+        <div className="absolute bottom-6 left-1/2 z-[5] -translate-x-1/2">
           <CallControls
             isMuted={isMuted}
             isCameraOff={isCameraOff}

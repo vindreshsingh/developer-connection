@@ -18,7 +18,7 @@
  */
 
 import { useEffect, useRef } from 'react';
-import './ParticipantTile.scss';
+import { classNames } from '@/commonUtils/classNames';
 
 export default function ParticipantTile({ participant }) {
   const {
@@ -46,11 +46,16 @@ export default function ParticipantTile({ participant }) {
   const initial = (name ?? '?').charAt(0).toUpperCase();
 
   return (
-    <div className={`dc-participant-tile${isLocal ? ' dc-participant-tile--local' : ''}`}>
+    <div
+      className={classNames(
+        'relative flex aspect-video items-center justify-center overflow-hidden rounded-xl bg-[#1a1a2e]',
+        isLocal && 'outline outline-2 outline-[rgba(139,92,246,0.5)]',
+      )}
+    >
       {/* Video element — hidden via CSS when camera is off */}
       <video
         ref={videoRef}
-        className="dc-participant-tile-video"
+        className="absolute inset-0 h-full w-full object-cover"
         autoPlay
         playsInline
         // Mirror local camera so it feels natural
@@ -60,18 +65,21 @@ export default function ParticipantTile({ participant }) {
 
       {/* Avatar shown when camera is off or track not yet available */}
       {(isCameraOff || !videoTrack) && (
-        <div className="dc-participant-tile-avatar" aria-hidden="true">
+        <div
+          className="relative z-[1] flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full bg-violet-800 text-[1.75rem] font-bold text-white"
+          aria-hidden="true"
+        >
           {initial}
         </div>
       )}
 
       {/* Name + mute badge */}
-      <div className="dc-participant-tile-footer">
-        <span className="dc-participant-tile-name">
+      <div className="absolute inset-x-0 bottom-0 z-[2] flex items-center gap-[0.4rem] bg-[linear-gradient(transparent,rgba(0,0,0,0.55))] px-[0.6rem] py-[0.4rem]">
+        <span className="overflow-hidden text-[0.78rem] font-medium text-white text-ellipsis whitespace-nowrap [text-shadow:0_1px_2px_rgba(0,0,0,0.6)]">
           {name}{isLocal ? ' (you)' : ''}
         </span>
         {isMuted && (
-          <span className="dc-participant-tile-muted" aria-label="Microphone muted">
+          <span className="flex-shrink-0 text-xs" aria-label="Microphone muted">
             🔇
           </span>
         )}

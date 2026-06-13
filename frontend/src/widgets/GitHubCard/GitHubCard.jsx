@@ -9,7 +9,7 @@
  * @param {{ github: object, linkedin: object }} props
  */
 
-import './GitHubCard.scss';
+import { classNames } from '@/commonUtils/classNames';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -36,22 +36,22 @@ export default function GitHubCard({ github, linkedin }) {
   if (!hasGitHub && !hasLinkedIn) return null;
 
   return (
-    <div className="dc-github-card">
+    <div className="mt-4 overflow-hidden rounded-[0.625rem] border border-gray-200 bg-white opacity-0 [animation:dc-fade-in-up_0.45s_ease_forwards] [animation-delay:0.1s]">
       {/* ── GitHub section ─────────────────────────────────────────────── */}
       {hasGitHub && (
-        <div className="dc-github-card-section">
-          <div className="dc-github-card-header">
-            <span className="dc-github-card-icon">🐙</span>
+        <div className="px-4 py-3.5 [&+&]:border-t [&+&]:border-gray-200">
+          <div className="mb-2 flex flex-wrap items-center gap-2">
+            <span className="text-base">🐙</span>
             <a
               href={github.profileUrl ?? `https://github.com/${github.username}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="dc-github-card-username"
+              className="text-[0.9375rem] font-semibold text-[#2563eb] no-underline hover:underline"
             >
               @{github.username}
             </a>
             {github.contributionsLastYear != null && (
-              <span className="dc-github-card-contributions">
+              <span className="ml-auto text-xs text-gray-500">
                 ~{github.contributionsLastYear} contributions
               </span>
             )}
@@ -59,9 +59,9 @@ export default function GitHubCard({ github, linkedin }) {
 
           {/* Top languages */}
           {github.topLanguages?.length > 0 && (
-            <div className="dc-github-card-langs">
+            <div className="mb-2.5 flex flex-wrap gap-1.5">
               {github.topLanguages.map((lang) => (
-                <span key={lang} className="dc-github-card-lang-pill">
+                <span key={lang} className="rounded-full border border-[#bfdbfe] bg-[#eff6ff] px-2 py-0.5 text-xs font-medium text-[#2563eb]">
                   {lang}
                 </span>
               ))}
@@ -70,21 +70,21 @@ export default function GitHubCard({ github, linkedin }) {
 
           {/* Top repos */}
           {github.topRepos?.length > 0 && (
-            <ul className="dc-github-card-repos">
+            <ul className="m-0 flex list-none flex-col gap-1.5 p-0">
               {github.topRepos.map((repo) => (
-                <li key={repo.name} className="dc-github-card-repo">
+                <li key={repo.name} className="flex items-center gap-2 text-[0.8125rem]">
                   <a
                     href={repo.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="dc-github-card-repo-name"
+                    className="font-medium text-[#2563eb] no-underline hover:underline"
                   >
                     {repo.name}
                   </a>
                   {repo.language && (
-                    <span className="dc-github-card-repo-lang">{repo.language}</span>
+                    <span className="text-xs text-gray-500 before:content-['·_']">{repo.language}</span>
                   )}
-                  <span className="dc-github-card-repo-stars">
+                  <span className="ml-auto flex items-center gap-1 text-xs text-gray-400">
                     <StarIcon />
                     {repo.stars?.toLocaleString() ?? 0}
                   </span>
@@ -97,29 +97,34 @@ export default function GitHubCard({ github, linkedin }) {
 
       {/* ── LinkedIn section ───────────────────────────────────────────── */}
       {hasLinkedIn && (
-        <div className="dc-github-card-section dc-github-card-section--linkedin">
-          <div className="dc-github-card-header">
-            <span className="dc-github-card-icon">💼</span>
+        <div
+          className={classNames(
+            'px-4 py-3.5 [&+&]:border-t [&+&]:border-gray-200',
+            'bg-[#f8fbff]',
+          )}
+        >
+          <div className="mb-2 flex flex-wrap items-center gap-2">
+            <span className="text-base">💼</span>
             {linkedin.profileUrl ? (
               <a
                 href={linkedin.profileUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="dc-github-card-username"
+                className="text-[0.9375rem] font-semibold text-[#2563eb] no-underline hover:underline"
               >
                 LinkedIn profile
               </a>
             ) : (
-              <span className="dc-github-card-username">LinkedIn</span>
+              <span className="text-[0.9375rem] font-semibold text-[#2563eb]">LinkedIn</span>
             )}
           </div>
 
           {linkedin.headline && (
-            <p className="dc-github-card-headline">{linkedin.headline}</p>
+            <p className="m-0 mb-1 text-sm font-medium text-gray-700">{linkedin.headline}</p>
           )}
 
           {(linkedin.jobTitle || linkedin.company) && (
-            <p className="dc-github-card-position">
+            <p className="m-0 text-[0.8125rem] text-gray-500">
               {[linkedin.jobTitle, linkedin.company].filter(Boolean).join(' at ')}
             </p>
           )}
