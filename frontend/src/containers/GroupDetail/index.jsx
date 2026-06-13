@@ -14,7 +14,6 @@ import Button from '@/components/Button/Button';
 import MessageComposer from '@/widgets/MessageComposer/MessageComposer';
 import GroupMessageBubble from '@/widgets/GroupMessageBubble/GroupMessageBubble';
 import GroupCallOverlay from '@/widgets/GroupCallOverlay/GroupCallOverlay';
-import './GroupDetail.scss';
 
 /**
  * Group detail page — shows the group header, member sidebar, live chat thread,
@@ -137,12 +136,12 @@ export default function GroupDetailContainer() {
 
   // ── Loading / error states ────────────────────────────────────────────────
   if (isFetching) {
-    return <div className="dc-group-detail-loading">Loading group…</div>;
+    return <div className="py-8 text-center text-gray-500">Loading group…</div>;
   }
 
   if (error || !group) {
     return (
-      <div className="dc-group-detail-error">
+      <div className="px-4 py-12 text-center text-red-600">
         {getApiErrorMessage(error, 'Group not found or has been deleted.')}
       </div>
     );
@@ -159,25 +158,25 @@ export default function GroupDetailContainer() {
 
   return (
     <>
-      <div className="dc-group-detail">
+      <div className="mx-auto my-5 flex max-w-[1100px] flex-col gap-5 px-3 sm:my-8 sm:px-4">
         {/* ── Header ─────────────────────────────────────────────────────── */}
-        <header className="dc-group-detail-header">
+        <header className="flex flex-col gap-4 rounded-xl border border-gray-200 bg-white p-4 opacity-0 [animation:dc-fade-in-up_0.45s_ease_forwards] sm:flex-row sm:items-start sm:justify-between sm:px-6 sm:py-5">
           <div>
-            <h1 className="dc-group-detail-name">{group.name}</h1>
+            <h1 className="mb-1 text-[1.4rem] font-bold text-gray-900">{group.name}</h1>
             {group.description && (
-              <p className="dc-group-detail-desc">{group.description}</p>
+              <p className="mb-2 text-[0.9rem] text-gray-600">{group.description}</p>
             )}
             {group.tags?.length > 0 && (
-              <div className="dc-group-detail-tags">
+              <div className="flex flex-wrap gap-[0.35rem]">
                 {group.tags.map((tag) => (
-                  <span key={tag} className="dc-groups-tag">{tag}</span>
+                  <span key={tag} className="rounded-full bg-violet-100 px-[0.55rem] py-[0.1rem] text-xs text-violet-800">{tag}</span>
                 ))}
               </div>
             )}
           </div>
 
-          <div className="dc-group-detail-actions">
-            <span className="dc-group-detail-count">
+          <div className="flex w-full shrink-0 flex-col items-start gap-2 sm:w-auto sm:items-end">
+            <span className="text-[0.8rem] whitespace-nowrap text-gray-500">
               {group.memberCount} / {group.maxMembers} members
             </span>
 
@@ -185,7 +184,7 @@ export default function GroupDetailContainer() {
             {isMember && (
               <button
                 type="button"
-                className="dc-group-detail-call-btn"
+                className="cursor-pointer rounded-lg border border-gray-200 bg-transparent px-[0.6rem] py-[0.35rem] text-base transition-colors duration-150 hover:not-disabled:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40"
                 onClick={handleStartCall}
                 disabled={isCallBusy}
                 title={activeGroupCall ? 'Call in progress' : 'Start group video call'}
@@ -217,24 +216,24 @@ export default function GroupDetailContainer() {
         </header>
 
         {(joinError || leaveError) && (
-          <p className="dc-group-detail-error-inline">
+          <p className="text-sm text-red-600">
             {getApiErrorMessage(joinError || leaveError, 'Action failed')}
           </p>
         )}
 
         {callError && (
-          <p className="dc-group-detail-error-inline">{callError}</p>
+          <p className="text-sm text-red-600">{callError}</p>
         )}
 
         {/* ── Incoming call banner ────────────────────────────────────── */}
         {incomingGroupCall && !activeGroupCall && (
-          <div className="dc-group-detail-call-banner" role="alert">
-            <span className="dc-group-detail-call-banner-text">
+          <div className="flex items-center gap-3 rounded-xl bg-indigo-950 px-4 py-3 text-sm text-white [animation:dc-gc-banner-in_0.2s_ease-out]" role="alert">
+            <span className="flex-1 font-medium">
               📹 Group call started{incomingGroupCall.startedBy ? ` by ${incomingGroupCall.startedBy}` : ''}
             </span>
             <button
               type="button"
-              className="dc-group-detail-call-banner-btn dc-group-detail-call-banner-btn--join"
+              className="shrink-0 cursor-pointer rounded-full border-none bg-green-600 px-[0.9rem] py-[0.35rem] text-[0.8rem] font-semibold text-white transition-[filter] duration-150 hover:[filter:brightness(1.15)] disabled:cursor-not-allowed disabled:opacity-60"
               onClick={() => handleJoinCall(incomingGroupCall.callId)}
               disabled={isFetchingToken}
             >
@@ -242,7 +241,7 @@ export default function GroupDetailContainer() {
             </button>
             <button
               type="button"
-              className="dc-group-detail-call-banner-btn dc-group-detail-call-banner-btn--dismiss"
+              className="shrink-0 cursor-pointer rounded-full border-none bg-white/15 px-[0.6rem] py-[0.35rem] text-[0.8rem] font-semibold text-white transition-[filter] duration-150 hover:[filter:brightness(1.15)] disabled:cursor-not-allowed disabled:opacity-60"
               onClick={() => setIncomingGroupCall(null)}
               aria-label="Dismiss"
             >
@@ -252,28 +251,28 @@ export default function GroupDetailContainer() {
         )}
 
         {/* ── Layout ─────────────────────────────────────────────────────── */}
-        <div className="dc-group-detail-layout">
+        <div className="grid grid-cols-1 items-start gap-4 sm:grid-cols-[220px_1fr]">
           {/* ── Members sidebar ──────────────────────────────────────────── */}
-          <aside className="dc-group-detail-sidebar">
-            <h2 className="dc-group-detail-sidebar-title">Members</h2>
-            <ul className="dc-group-detail-member-list">
+          <aside className="rounded-xl border border-gray-200 bg-white p-4">
+            <h2 className="mb-3 text-[0.85rem] font-semibold text-gray-700 uppercase tracking-[0.05em]">Members</h2>
+            <ul className="m-0 flex flex-col gap-[0.6rem] p-0 list-none">
               {group.members?.map((m) => {
                 const memberUser = m.userId;
                 const name = typeof memberUser === 'object'
                   ? [memberUser.firstName, memberUser.lastName].filter(Boolean).join(' ')
                   : 'Member';
                 return (
-                  <li key={m.userId?._id ?? m.userId} className="dc-group-detail-member">
+                  <li key={m.userId?._id ?? m.userId} className="flex items-center gap-2">
                     {memberUser?.photoUrl && (
                       <img
-                        className="dc-group-detail-avatar"
+                        className="h-7 w-7 shrink-0 rounded-full object-cover"
                         src={memberUser.photoUrl}
                         alt={name}
                       />
                     )}
-                    <span className="dc-group-detail-member-name">{name}</span>
+                    <span className="min-w-0 flex-1 truncate text-sm text-gray-900">{name}</span>
                     {m.role === 'admin' && (
-                      <span className="dc-group-detail-admin-badge">Admin</span>
+                      <span className="shrink-0 rounded-full bg-blue-100 px-[0.45rem] py-[0.1rem] text-[0.7rem] text-blue-700">Admin</span>
                     )}
                   </li>
                 );
@@ -282,19 +281,19 @@ export default function GroupDetailContainer() {
           </aside>
 
           {/* ── Chat thread ──────────────────────────────────────────────── */}
-          <section className="dc-group-detail-thread">
+          <section className="flex min-h-[380px] flex-col overflow-hidden rounded-xl border border-gray-200 bg-white sm:min-h-[500px]">
             {!isMember ? (
-              <div className="dc-group-detail-join-prompt">
+              <div className="flex flex-1 items-center justify-center p-12 text-gray-500">
                 <p>Join this group to see and send messages.</p>
               </div>
             ) : (
               <>
-                <div className="dc-group-detail-thread-body">
+                <div className="flex max-h-[60vh] flex-1 flex-col gap-2 overflow-y-auto p-4 sm:max-h-[540px]">
                   {msgFetching && messages.length === 0 && (
-                    <p className="dc-group-detail-loading">Loading messages…</p>
+                    <p className="py-8 text-center text-gray-500">Loading messages…</p>
                   )}
                   {groupError && (
-                    <p className="dc-group-detail-error-inline">{groupError}</p>
+                    <p className="text-sm text-red-600">{groupError}</p>
                   )}
 
                   {messages.map((msg) => {
@@ -312,7 +311,7 @@ export default function GroupDetailContainer() {
                   })}
 
                   {typingUserIds.size > 0 && (
-                    <p className="dc-group-detail-typing">
+                    <p className="py-1 text-[0.8rem] text-gray-500 italic">
                       {typingNames} {typingUserIds.size === 1 ? 'is' : 'are'} typing…
                     </p>
                   )}
