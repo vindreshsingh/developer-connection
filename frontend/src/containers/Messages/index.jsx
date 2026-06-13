@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useCurrentUser } from '@/hooks/auth/useCurrentUser';
 import { useGetConversationsQuery } from '@/hooks/chat/chatApi';
 import { useChat } from '@/hooks/chat/useChat';
 import { usePresence } from '@/hooks/chat/usePresence';
 import { useSocket } from '@/hooks/chat/useSocket';
+import { useCall } from '@/context/CallProvider';
+import { useInitiateCallMutation } from '@/hooks/call/callApi';
 import { getApiErrorMessage } from '@/commonUtils/apiError';
 import ConversationList from '@/widgets/ConversationList/ConversationList';
 import MessageBubble from '@/widgets/MessageBubble/MessageBubble';
@@ -13,7 +16,10 @@ import './Messages.scss';
 
 export default function MessagesContainer() {
   const { user } = useCurrentUser();
+  const location = useLocation();
   const socket = useSocket();
+  const { initiateCall, activeCall } = useCall() ?? {};
+  const [initiateCallMutation, { isLoading: isCallInitiating }] = useInitiateCallMutation();
   const { isOnline } = usePresence(socket);
   const { data, isFetching, error } = useGetConversationsQuery();
   const [activeConversationId, setActiveConversationId] = useState(null);
@@ -36,15 +42,19 @@ export default function MessagesContainer() {
 
   const threadEndRef = useRef(null);
 
-  // Default to the most recent conversation once the list loads —
-  // adjusting state in response to async-loaded query data is the
+  // Default to the conversation we navigated here for (e.g. "Message" from a
+  // connection card), falling back to the most recent conversation once the
+  // list loads — adjusting state in response to async-loaded query data is the
   // documented exception (React docs: "Adjusting state when a prop changes").
   useEffect(() => {
-    if (!activeConversationId && conversations.length > 0) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setActiveConversationId(conversations[0]._id);
-    }
-  }, [activeConversationId, conversations]);
+    if (activeConversationId || conversations.length === 0) return;
+
+    const requestedId = location.state?.conversationId;
+    const requested = requestedId && conversations.find((c) => c._id === requestedId);
+
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setActiveConversationId(requested ? requested._id : conversations[0]._id);
+  }, [activeConversationId, conversations, location.state]);
 
   // Mark the active conversation as read whenever it changes or new messages arrive
   useEffect(() => {
@@ -73,7 +83,7 @@ export default function MessagesContainer() {
 
       {conversationsError && <p className="dc-messages-error">{conversationsError}</p>}
 
-      <div className="dc-messages-layout">
+      <div className={`dc-messages-layout ${activeConversationId ? 'dc-messages-layout--thread-active' : ''}`}>
         <aside className="dc-messages-sidebar">
           {isFetching ? (
             <p className="dc-messages-loading">Loading conversations…</p>
@@ -94,10 +104,41 @@ export default function MessagesContainer() {
             <>
               {activeConversation && (
                 <header className="dc-messages-thread-header">
+                  <button
+                    type="button"
+                    className="dc-messages-back-btn"
+                    aria-label="Back to conversations"
+                    onClick={() => setActiveConversationId(null)}
+                  >
+                    ←
+                  </button>
                   <span>{activeConversation.otherUser?.firstName} {activeConversation.otherUser?.lastName}</span>
                   {isOnline(activeConversation.otherUser?._id) && (
                     <span className="dc-messages-thread-online">● Online</span>
                   )}
+                  <button
+                    type="button"
+                    className="dc-messages-call-btn"
+                    disabled={!!activeCall || isCallInitiating}
+                    title="Start video call"
+                    aria-label="Start video call"
+                    onClick={async () => {
+                      try {
+                        const result = await initiateCallMutation({
+                          type: '1:1',
+                          targetUserId: activeConversation.otherUser._id,
+                        }).unwrap();
+                        initiateCall?.({
+                          callId:         result.callId,
+                          remoteUserName: [activeConversation.otherUser?.firstName, activeConversation.otherUser?.lastName].filter(Boolean).join(' '),
+                        });
+                      } catch {
+                        // error handled by RTK Query
+                      }
+                    }}
+                  >
+                    📹
+                  </button>
                 </header>
               )}
 

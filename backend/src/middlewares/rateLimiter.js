@@ -13,4 +13,4 @@ export const createAuthRateLimiter = (max, windowMs = 15 * 60 * 1000) =>
     message: RATE_LIMIT_MESSAGE,
   });
 
-export const authRateLimiter = createAuthRateLimiter(process.env.NODE_ENV === 'test' ? 1000 : 5);
+export const authRateLimiter = createAuthRateLimiter(process.env.NODE_ENV === 'test' ? 1000 : 5000);

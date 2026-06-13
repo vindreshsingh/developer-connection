@@ -9,6 +9,8 @@ import { authRateLimiter } from '../middlewares/rateLimiter.js';
 
 const router = express.Router();
 
+const skipEmailVerification = process.env.SKIP_EMAIL_VERIFICATION === 'true';
+
 // Generates a fresh hashed verification token for the user, saves it, and emails the link.
 // Shared by signup (new account) and resend-verification (existing unverified account).
 const sendVerificationEmail = async (user) => {
@@ -49,10 +51,18 @@ router.post(AUTH.SIGNUP, authRateLimiter, async (req, res) => {
     data.password = await hashPassword(data.password);
 
     const user = new User(data);
+    if (skipEmailVerification) {
+      user.isEmailVerified = true;
+    }
     await user.save();
-    await sendVerificationEmail(user);
+    if (!skipEmailVerification) {
+      await sendVerificationEmail(user);
+    }
 
-    res.status(201).json({ message: 'User created successfully. Please check your email to verify your account.', user });
+    const message = skipEmailVerification
+      ? 'User created successfully.'
+      : 'User created successfully. Please check your email to verify your account.';
+    res.status(201).json({ message, user });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
@@ -66,6 +76,9 @@ router.post(AUTH.RESEND_VERIFICATION, async (req, res) => {
 
     const user = await User.findOne({ email: email.toLowerCase() });
     if (!user) return res.status(404).json({ error: 'No account found with this email' });
+
+    if (skipEmailVerification)
+      return res.status(400).json({ error: 'Email verification is currently disabled' });
 
     if (user.isEmailVerified)
       return res.status(400).json({ error: 'This account is already verified' });
@@ -93,7 +106,7 @@ router.post(AUTH.LOGIN, authRateLimiter, async (req, res) => {
     const isMatch = await user.validatePassword(password);
     if (!isMatch) return res.status(401).json({ error: 'Invalid credentials' });
 
-    if (!user.isEmailVerified)
+    if (!skipEmailVerification && !user.isEmailVerified)
       return res.status(403).json({ error: 'Please verify your email before logging in' });
 
     const token = user.getJWT();

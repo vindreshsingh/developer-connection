@@ -5,6 +5,8 @@ import { useProfile } from '@/hooks/profile/useProfile';
 import { useImageUpload } from '@/hooks/profile/useImageUpload';
 import ImageUploadPanel from '@/widgets/ImageUploadPanel/ImageUploadPanel';
 import ProfileForm from '@/widgets/ProfileForm/ProfileForm';
+import LinkedAccounts from '@/widgets/LinkedAccounts/LinkedAccounts';
+import BlockedUsers from '@/widgets/BlockedUsers/BlockedUsers';
 import reducer, {
   saveStarted,
   saveSucceeded,
@@ -107,6 +109,11 @@ export default function ProfileContainer() {
         onExperienceChange={setExperience}
         onSubmit={handleSubmit}
       />
+
+      {/* Phase 4: OAuth / enrichment ─────────────────────────────────── */}
+      <LinkedAccounts />
+
+      <BlockedUsers />
     </div>
   );
 }
