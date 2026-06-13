@@ -13,6 +13,7 @@
  *   - Socket emission for notification:new (Task B2)
  */
 
+import { jest } from '@jest/globals';
 import request from 'supertest';
 import app from '../app.js';
 import User from '../models/user.js';
