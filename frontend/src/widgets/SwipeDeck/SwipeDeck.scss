@@ -1,6 +1,12 @@
+@use '../../styles/tokens' as *;
+
 .dc-swipe-deck {
   position: relative;
   height: 32.5rem;
+
+  @include mobile {
+    height: min(28rem, 65vh);
+  }
 }
 
 .dc-swipe-deck-empty {
@@ -14,6 +20,9 @@
   border-radius: 1rem;
   border: 1px dashed #d1d5db;
   color: #9ca3af;
+  text-align: center;
+  padding: 1.5rem;
+  @include fade-in-up;
 }
 
 .dc-swipe-deck-actions {
@@ -34,10 +43,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.15s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 
   &:hover {
-    transform: scale(1.05);
+    transform: scale(1.08) translateY(-2px);
+    box-shadow: 0 8px 16px -8px rgba(0, 0, 0, 0.25);
+  }
+
+  &:active {
+    transform: scale(0.96);
   }
 }
 

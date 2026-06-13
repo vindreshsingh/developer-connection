@@ -1,0 +1,50 @@
+// Neutral, centred system message — not a bubble, just a timeline marker
+
+.dc-call-summary-card {
+  display: flex;
+  justify-content: center;
+  padding: 0.35rem 0;
+  // Small vertical breathing room so it doesn't crowd adjacent bubbles
+  margin: 0.1rem 0;
+}
+
+.dc-call-summary-card-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 9999px;
+  padding: 0.3rem 0.85rem;
+  font-size: 0.78rem;
+  color: #6b7280;
+  white-space: nowrap;
+  max-width: 90%;
+  overflow: hidden;
+}
+
+.dc-call-summary-card-icon {
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.dc-call-summary-card-label {
+  font-weight: 500;
+  color: #374151;
+  white-space: nowrap;
+}
+
+.dc-call-summary-card-sep {
+  color: #d1d5db;
+  font-size: 0.7rem;
+}
+
+.dc-call-summary-card-duration {
+  font-weight: 500;
+  color: #374151;
+}
+
+.dc-call-summary-card-time {
+  color: #9ca3af;
+  font-size: 0.73rem;
+}

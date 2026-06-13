@@ -1,0 +1,74 @@
+@use '../../styles/tokens' as *;
+
+.dc-user-profile {
+  max-width: 36rem;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  @include fade-in-up;
+
+  @include mobile {
+    padding: 1.25rem 0.75rem;
+  }
+}
+
+.dc-user-profile-back {
+  display: inline-block;
+  font-size: 0.875rem;
+  color: #6b7280;
+  text-decoration: none;
+  margin-bottom: 1rem;
+
+  &:hover {
+    color: #374151;
+  }
+}
+
+.dc-user-profile-loading,
+.dc-user-profile-error {
+  max-width: 36rem;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  font-size: 0.875rem;
+}
+
+.dc-user-profile-error {
+  color: #ef4444;
+}
+
+.dc-user-profile-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+
+  @include mobile {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+.dc-user-profile-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.dc-user-profile-meta {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-top: 0.25rem;
+  text-transform: capitalize;
+}
+
+.dc-user-profile-bio {
+  font-size: 0.9375rem;
+  color: #374151;
+  margin-bottom: 1rem;
+}
+
+.dc-user-profile-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  margin-bottom: 1rem;
+}

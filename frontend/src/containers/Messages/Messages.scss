@@ -1,7 +1,13 @@
+@use '../../styles/tokens' as *;
+
 .dc-messages {
   max-width: 56rem;
   margin: 0 auto;
   padding: 2rem 1rem;
+
+  @include mobile {
+    padding: 1rem 0.5rem;
+  }
 }
 
 .dc-messages-heading {
@@ -9,6 +15,7 @@
   font-weight: 700;
   color: #111827;
   margin-bottom: 1rem;
+  @include fade-in-up;
 }
 
 .dc-messages-layout {
@@ -19,6 +26,15 @@
   border-radius: 0.75rem;
   overflow: hidden;
   background: #fff;
+  box-shadow: 0 12px 32px -20px rgba(17, 24, 39, 0.25);
+  @include fade-in-up(0.45s, 0.05s);
+
+  @include mobile {
+    gap: 0;
+    height: calc(100svh - 9rem);
+    border-radius: 0.5rem;
+    position: relative;
+  }
 }
 
 .dc-messages-sidebar {
@@ -27,6 +43,11 @@
   border-right: 1px solid #e5e7eb;
   overflow-y: auto;
   padding: 0.5rem;
+
+  @include mobile {
+    width: 100%;
+    border-right: none;
+  }
 }
 
 .dc-messages-thread {
@@ -34,6 +55,45 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
+
+  @include mobile {
+    width: 100%;
+  }
+}
+
+.dc-messages-back-btn {
+  display: none;
+  border: none;
+  background: none;
+  font-size: 1.125rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0.25rem 0.375rem;
+  margin: -0.25rem 0.25rem -0.25rem -0.375rem;
+  border-radius: 0.375rem;
+  color: #4b5563;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: #f3f4f6;
+  }
+}
+
+@include mobile {
+  // Single-panel mobile view: show the conversation list until a thread is
+  // opened, then swap to the thread (with a back button to return).
+  .dc-messages-layout:not(.dc-messages-layout--thread-active) .dc-messages-thread {
+    display: none;
+  }
+
+  .dc-messages-layout--thread-active .dc-messages-sidebar {
+    display: none;
+  }
+
+  .dc-messages-back-btn {
+    display: inline-flex;
+    align-items: center;
+  }
 }
 
 .dc-messages-thread-header {
@@ -44,6 +104,30 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+
+  // Push the call button to the far right
+  .dc-messages-call-btn {
+    margin-left: auto;
+  }
+}
+
+.dc-messages-call-btn {
+  background: none;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 0.35rem 0.6rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:hover:not(:disabled) {
+    background: #f3f4f6;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
 }
 
 .dc-messages-thread-online {

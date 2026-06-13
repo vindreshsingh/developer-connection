@@ -21,15 +21,21 @@
     "express": "^5.2.1",
     "express-rate-limit": "^8.5.2",
     "jsonwebtoken": "^9.0.3",
+    "livekit-server-sdk": "^2.15.4",
     "mongoose": "^9.6.3",
     "multer": "^2.1.1",
     "nodemailer": "^8.0.10",
+    "passport": "^0.7.0",
+    "passport-github2": "^0.1.12",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-linkedin-oauth2": "^2.0.0",
     "socket.io": "^4.8.3",
     "validator": "^13.15.35"
   },
   "devDependencies": {
     "jest": "^30.4.2",
     "mongodb-memory-server": "^11.2.0",
+    "nock": "^14.0.15",
     "nodemon": "^3.1.14",
     "socket.io-client": "^4.8.3",
     "supertest": "^7.2.2"
