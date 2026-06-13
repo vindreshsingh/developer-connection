@@ -11,9 +11,9 @@ const ERROR_MESSAGES = {
 const FeedbackSection = ({ title, items }) => {
   if (!items?.length) return null;
   return (
-    <div className="dc-ai-assistant-resume-section">
-      <h3 className="dc-ai-assistant-resume-section-title">{title}</h3>
-      <ul className="dc-ai-assistant-resume-section-list">
+    <div>
+      <h3 className="mb-2 text-[0.95rem] font-semibold text-gray-900">{title}</h3>
+      <ul className="m-0 pl-5 text-sm leading-[1.6] text-gray-600">
         {items.map((item, i) => (
           <li key={i}>{item}</li>
         ))}
@@ -42,8 +42,8 @@ export default function ResumeFeedbackTab() {
   const history = historyData?.data || [];
 
   return (
-    <div className="dc-ai-assistant-resume">
-      <p className="dc-ai-assistant-resume-intro">
+    <div>
+      <p className="mb-4 text-sm text-gray-500">
         Upload your resume as a PDF (max 5MB) for AI-powered feedback on strengths, areas to improve, and ATS
         readiness.
       </p>
@@ -52,17 +52,17 @@ export default function ResumeFeedbackTab() {
         ref={fileInputRef}
         type="file"
         accept="application/pdf"
-        className="dc-ai-assistant-resume-input"
+        className="hidden"
         onChange={handleFileChange}
       />
       <Button onClick={() => fileInputRef.current?.click()} disabled={submitting}>
         {submitting ? 'Analyzing…' : 'Upload resume'}
       </Button>
 
-      {errorMessage && <p className="dc-ai-assistant-error">{errorMessage}</p>}
+      {errorMessage && <p className="my-3 text-[0.8125rem] text-red-500">{errorMessage}</p>}
 
       {latest && (
-        <div className="dc-ai-assistant-resume-feedback">
+        <div className="mt-6 flex flex-col gap-5">
           <FeedbackSection title="Strengths" items={latest.feedback.strengths} />
           <FeedbackSection title="Improvements" items={latest.feedback.improvements} />
           <FeedbackSection title="ATS notes" items={latest.feedback.atsNotes} />
@@ -70,9 +70,9 @@ export default function ResumeFeedbackTab() {
       )}
 
       {history.length > 0 && (
-        <div className="dc-ai-assistant-resume-history">
-          <h3 className="dc-ai-assistant-resume-section-title">Past reviews</h3>
-          <ul className="dc-ai-assistant-resume-section-list">
+        <div className="mt-6 border-t border-gray-200 pt-4">
+          <h3 className="mb-2 text-[0.95rem] font-semibold text-gray-900">Past reviews</h3>
+          <ul className="m-0 pl-5 text-sm leading-[1.6] text-gray-600">
             {history.map((item) => (
               <li key={item._id}>{new Date(item.createdAt).toLocaleString()}</li>
             ))}

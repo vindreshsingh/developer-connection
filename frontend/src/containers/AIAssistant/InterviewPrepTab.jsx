@@ -33,14 +33,14 @@ export default function InterviewPrepTab() {
 
   if (status === 'idle') {
     return (
-      <div className="dc-ai-assistant-interview-start">
-        <p className="dc-ai-assistant-resume-intro">
+      <div className="flex flex-col items-start gap-3">
+        <p className="mb-4 text-sm text-gray-500">
           Practice for your next technical interview with an AI interviewer. You'll get up to 10 questions with
           feedback after each answer.
         </p>
 
         <select
-          className="dc-ai-assistant-interview-focus"
+          className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700"
           value={focusArea}
           onChange={(e) => setFocusArea(e.target.value)}
         >
@@ -55,32 +55,31 @@ export default function InterviewPrepTab() {
           {starting ? 'Starting…' : 'Start mock interview'}
         </Button>
 
-        {errorMessage && <p className="dc-ai-assistant-error">{errorMessage}</p>}
+        {errorMessage && <p className="my-3 text-[0.8125rem] text-red-500">{errorMessage}</p>}
       </div>
     );
   }
 
   return (
-    <div className="dc-ai-assistant-interview">
-      <div className="dc-ai-assistant-interview-chat">
+    <div>
+      <div className="mb-4 flex flex-col gap-3">
         {messages.map((message, i) => (
           <AIChatBubble key={i} role={message.role} content={message.content} />
         ))}
       </div>
 
-      {errorMessage && <p className="dc-ai-assistant-error">{errorMessage}</p>}
+      {errorMessage && <p className="my-3 text-[0.8125rem] text-red-500">{errorMessage}</p>}
 
       {status === 'active' ? (
-        <form className="dc-ai-assistant-interview-form" onSubmit={handleSubmit}>
+        <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
           <FormInput
             as="textarea"
             rows={3}
             value={answer}
             onChange={(e) => setAnswer(e.target.value)}
             placeholder="Type your answer…"
-            wrapperClassName="dc-ai-assistant-interview-input"
           />
-          <div className="dc-ai-assistant-interview-actions">
+          <div className="flex items-center gap-2">
             <Button type="submit" disabled={responding || !answer.trim()}>
               {responding ? 'Sending…' : 'Send answer'}
             </Button>
@@ -90,8 +89,8 @@ export default function InterviewPrepTab() {
           </div>
         </form>
       ) : (
-        <div className="dc-ai-assistant-interview-actions">
-          <p className="dc-ai-assistant-empty">Interview complete!</p>
+        <div className="flex items-center gap-2">
+          <p className="py-8 text-center text-sm text-gray-500">Interview complete!</p>
           <Button onClick={reset}>Start a new session</Button>
         </div>
       )}
