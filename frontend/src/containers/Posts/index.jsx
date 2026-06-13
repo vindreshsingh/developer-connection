@@ -5,7 +5,6 @@ import { classNames } from '@/commonUtils/classNames';
 import Button from '@/components/Button/Button';
 import CreatePostBox from '@/widgets/CreatePostBox/CreatePostBox';
 import PostCard from '@/widgets/PostCard/PostCard';
-import './Posts.scss';
 
 const SCOPES = [
   { value: 'network', label: 'My Network' },
@@ -27,15 +26,18 @@ export default function PostsContainer() {
   };
 
   return (
-    <div className="dc-posts">
-      <div className="dc-posts-header">
-        <h1 className="dc-posts-title">Feed</h1>
-        <div className="dc-posts-tabs">
+    <div className="mx-auto my-5 flex max-w-[640px] flex-col gap-4 px-3 sm:my-8 sm:px-4">
+      <div className="flex flex-wrap items-center justify-between gap-3 opacity-0 [animation:dc-fade-in-up_0.45s_ease_forwards]">
+        <h1 className="text-2xl font-bold text-gray-900">Feed</h1>
+        <div className="flex gap-1 rounded-lg bg-gray-100 p-1">
           {SCOPES.map((s) => (
             <button
               key={s.value}
               type="button"
-              className={classNames('dc-posts-tab', scope === s.value && 'dc-posts-tab--active')}
+              className={classNames(
+                'rounded-md px-3 py-1.5 text-[0.85rem] font-medium text-gray-500 transition-colors hover:text-gray-700',
+                scope === s.value && 'bg-white text-violet-800 shadow-sm',
+              )}
               onClick={() => handleScopeChange(s.value)}
             >
               {s.label}
@@ -47,25 +49,25 @@ export default function PostsContainer() {
       <CreatePostBox />
 
       {error && (
-        <p className="dc-posts-error">{getApiErrorMessage(error, 'Could not load feed')}</p>
+        <p className="text-red-600">{getApiErrorMessage(error, 'Could not load feed')}</p>
       )}
 
       {isFetching ? (
-        <p className="dc-posts-loading">Loading posts…</p>
+        <p className="py-12 text-center text-gray-500">Loading posts…</p>
       ) : posts.length === 0 ? (
-        <p className="dc-posts-empty">
+        <p className="py-12 text-center text-gray-500">
           {scope === 'network'
             ? 'No posts yet from you or your connections. Be the first to share something!'
             : 'No posts yet. Be the first to share something!'}
         </p>
       ) : (
-        <div className="dc-posts-list">
+        <div className="flex flex-col gap-4">
           {posts.map((post) => <PostCard key={post._id} post={post} />)}
         </div>
       )}
 
       {pagination && pagination.totalPages > 1 && (
-        <div className="dc-posts-pagination">
+        <div className="mt-2 flex items-center justify-center gap-4">
           <Button
             variant="ghost"
             disabled={page <= 1 || isFetching}
@@ -73,7 +75,7 @@ export default function PostsContainer() {
           >
             ← Prev
           </Button>
-          <span className="dc-posts-pagination-info">
+          <span className="text-sm text-gray-500">
             Page {pagination.page} of {pagination.totalPages}
           </span>
           <Button

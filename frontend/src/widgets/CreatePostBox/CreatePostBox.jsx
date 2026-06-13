@@ -8,7 +8,7 @@ import { SUPPORTED_LANGUAGES } from '@/widgets/SnippetBlock/snippetLanguages';
 import { useCreatePostMutation, useUploadPostImageMutation } from '@/hooks/posts/postApi';
 import { useCurrentUser } from '@/hooks/auth/useCurrentUser';
 import { getApiErrorMessage } from '@/commonUtils/apiError';
-import './CreatePostBox.scss';
+import { classNames } from '@/commonUtils/classNames';
 
 const MAX_IMAGES = 4;
 
@@ -69,25 +69,28 @@ export default function CreatePostBox() {
   };
 
   return (
-    <form className="dc-create-post-box" onSubmit={handleSubmit}>
-      <div className="dc-create-post-box-header">
+    <form
+      className="flex flex-col gap-3 rounded-xl border border-gray-100 bg-white p-4 shadow-sm"
+      onSubmit={handleSubmit}
+    >
+      <div className="flex items-start gap-3">
         <Avatar user={user} />
         <FormInput
           as="textarea"
           placeholder="Share something with your network…"
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          wrapperClassName="dc-create-post-box-input"
-          className="dc-create-post-box-textarea"
+          wrapperClassName="flex-1"
+          className="w-full resize-y min-h-[3rem]"
           rows={3}
           maxLength={3000}
         />
       </div>
 
       {snippetMode && (
-        <div className="dc-create-post-box-snippet">
+        <div className="flex flex-col gap-2">
           <select
-            className="dc-create-post-box-lang-select"
+            className="self-start rounded-md border border-gray-300 bg-white px-2 py-1 text-[0.8rem] text-gray-700 cursor-pointer focus:outline focus:outline-2 focus:outline-indigo-400 focus:outline-offset-1"
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
             aria-label="Snippet language"
@@ -97,7 +100,7 @@ export default function CreatePostBox() {
             ))}
           </select>
           <textarea
-            className="dc-create-post-box-code-area"
+            className="w-full resize-y rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 text-[0.8rem] font-mono leading-relaxed text-gray-800 [tab-size:2] placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-400 focus:outline-offset-1"
             placeholder="Paste or type your code here…"
             value={code}
             onChange={(e) => setCode(e.target.value)}
@@ -109,13 +112,13 @@ export default function CreatePostBox() {
       )}
 
       {images.length > 0 && (
-        <div className="dc-create-post-box-images">
+        <div className="grid gap-2 [grid-template-columns:repeat(auto-fill,minmax(6rem,1fr))]">
           {images.map((url) => (
-            <div key={url} className="dc-create-post-box-image">
+            <div key={url} className="relative">
               <ImagePreview src={url} alt="Attached" shape="banner" />
               <button
                 type="button"
-                className="dc-create-post-box-image-remove"
+                className="absolute right-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-black/55 text-base leading-none text-white hover:bg-black/75"
                 onClick={() => removeImage(url)}
                 aria-label="Remove image"
               >
@@ -126,12 +129,15 @@ export default function CreatePostBox() {
         </div>
       )}
 
-      {error && <p className="dc-create-post-box-error">{error}</p>}
+      {error && <p className="text-[0.8rem] text-red-600">{error}</p>}
 
-      <div className="dc-create-post-box-actions">
+      <div className="flex items-center gap-3">
         <button
           type="button"
-          className={`dc-create-post-box-mode-btn${snippetMode ? ' dc-create-post-box-mode-btn--active' : ''}`}
+          className={classNames(
+            'flex-shrink-0 whitespace-nowrap rounded-md border border-gray-200 bg-gray-100 px-2 py-1.5 font-mono text-xs font-bold text-gray-500 transition-colors hover:bg-gray-200 hover:text-gray-700',
+            snippetMode && 'border-violet-300 bg-violet-100 text-violet-700',
+          )}
           onClick={toggleSnippetMode}
           title={snippetMode ? 'Remove code snippet' : 'Add a code snippet'}
           aria-pressed={snippetMode}
@@ -145,7 +151,7 @@ export default function CreatePostBox() {
           hint={isUploading ? 'Uploading…' : `Add image (${images.length}/${MAX_IMAGES})`}
         />
 
-        <Button type="submit" disabled={isEmpty || isPosting} className="dc-create-post-box-submit">
+        <Button type="submit" disabled={isEmpty || isPosting} className="ml-auto">
           {isPosting ? 'Posting…' : 'Post'}
         </Button>
       </div>
