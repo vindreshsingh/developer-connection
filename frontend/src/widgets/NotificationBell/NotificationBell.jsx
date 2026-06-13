@@ -11,7 +11,6 @@ import {
 } from '@/hooks/notifications/notificationApi';
 import { formatTime } from '@/commonUtils/formatDate';
 import { classNames } from '@/commonUtils/classNames';
-import './NotificationBell.scss';
 
 const NOTIFICATION_TEXT = {
   post_like:    'liked your post',
@@ -62,27 +61,29 @@ export default function NotificationBell() {
   };
 
   return (
-    <div className="dc-notification-bell" ref={containerRef}>
+    <div className="relative ml-2" ref={containerRef}>
       <button
         type="button"
-        className="dc-notification-bell-trigger"
+        className="relative flex h-9 w-9 items-center justify-center rounded-full border-none bg-none text-[1.1rem] transition-colors hover:bg-gray-100"
         onClick={() => setOpen((o) => !o)}
         aria-label="Notifications"
         aria-expanded={open}
       >
         🔔
         {unreadCount > 0 && (
-          <span className="dc-notification-bell-badge">{unreadCount > 9 ? '9+' : unreadCount}</span>
+          <span className="absolute right-[0.1rem] top-[0.1rem] flex h-[1.1rem] min-w-[1.1rem] items-center justify-center rounded-full bg-red-600 px-1 text-[0.65rem] font-bold leading-none text-white">
+            {unreadCount > 9 ? '9+' : unreadCount}
+          </span>
         )}
       </button>
 
       {open && (
-        <div className="dc-notification-bell-dropdown">
-          <div className="dc-notification-bell-header">
-            <span className="dc-notification-bell-title">Notifications</span>
+        <div className="absolute right-0 top-[calc(100%+0.5rem)] z-30 max-h-96 w-64 overflow-y-auto rounded-xl border border-gray-200 bg-white shadow-[0_12px_24px_-12px_rgba(0,0,0,0.25)] sm:w-80">
+          <div className="flex items-center justify-between gap-2 border-b border-gray-100 px-4 py-3">
+            <span className="font-semibold text-gray-900">Notifications</span>
             <button
               type="button"
-              className="dc-notification-bell-mark-all"
+              className="border-none bg-none text-xs text-violet-700 disabled:cursor-not-allowed disabled:text-gray-400 disabled:no-underline hover:underline"
               onClick={() => markAllRead()}
               disabled={isMarkingAll || unreadCount === 0}
             >
@@ -91,11 +92,11 @@ export default function NotificationBell() {
           </div>
 
           {isFetching ? (
-            <p className="dc-notification-bell-loading">Loading…</p>
+            <p className="px-4 py-6 text-center text-[0.85rem] text-gray-400">Loading…</p>
           ) : notifications.length === 0 ? (
-            <p className="dc-notification-bell-empty">No notifications yet.</p>
+            <p className="px-4 py-6 text-center text-[0.85rem] text-gray-400">No notifications yet.</p>
           ) : (
-            <ul className="dc-notification-bell-list">
+            <ul className="m-0 list-none p-0">
               {notifications.map((notification) => {
                 const actorName = [notification.actorId?.firstName, notification.actorId?.lastName]
                   .filter(Boolean)
@@ -105,22 +106,22 @@ export default function NotificationBell() {
                   <li
                     key={notification._id}
                     className={classNames(
-                      'dc-notification-bell-item',
-                      !notification.read && 'dc-notification-bell-item--unread',
+                      'border-b border-gray-50 last:border-b-0',
+                      !notification.read && 'bg-violet-50',
                     )}
                   >
                     <Link
                       to="/posts"
-                      className="dc-notification-bell-link"
+                      className="flex flex-col gap-0.5 px-4 py-2.5 text-inherit no-underline hover:bg-gray-100"
                       onClick={() => {
                         handleNotificationClick(notification);
                         setOpen(false);
                       }}
                     >
-                      <span className="dc-notification-bell-text">
+                      <span className="text-[0.85rem] text-gray-700">
                         <strong>{actorName || 'Someone'}</strong> {NOTIFICATION_TEXT[notification.type] ?? 'sent you a notification'}
                       </span>
-                      <span className="dc-notification-bell-time">{formatTime(notification.createdAt)}</span>
+                      <span className="text-[0.7rem] text-gray-400">{formatTime(notification.createdAt)}</span>
                     </Link>
                   </li>
                 );

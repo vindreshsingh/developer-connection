@@ -16,7 +16,6 @@ import {
 import { useCurrentUser } from '@/hooks/auth/useCurrentUser';
 import { getApiErrorMessage } from '@/commonUtils/apiError';
 import { classNames } from '@/commonUtils/classNames';
-import './PostCard.scss';
 
 export default function PostCard({ post }) {
   const { user } = useCurrentUser();
@@ -48,30 +47,35 @@ export default function PostCard({ post }) {
   };
 
   return (
-    <div className="dc-post-card">
-      <div className="dc-post-card-header">
-        <Link to={`/profile?userId=${post.authorId._id}`} className="dc-post-card-author">
+    <div className="flex flex-col gap-3 rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
+      <div className="flex items-start justify-between gap-3">
+        <Link to={`/profile?userId=${post.authorId._id}`} className="group flex min-w-0 items-center gap-3 text-inherit no-underline">
           <Avatar user={post.authorId} />
           <div>
-            <p className="dc-post-card-author-name">{authorName}</p>
-            <p className="dc-post-card-time">{new Date(post.createdAt).toLocaleString()}</p>
+            <p className="font-semibold text-gray-900 group-hover:underline">{authorName}</p>
+            <p className="text-xs text-gray-400">{new Date(post.createdAt).toLocaleString()}</p>
           </div>
         </Link>
         {isAuthor && (
-          <button type="button" className="dc-post-card-delete" onClick={handleDelete} disabled={isDeleting}>
+          <button
+            type="button"
+            className="flex-shrink-0 cursor-pointer border-none bg-transparent text-xs text-gray-400 hover:text-red-600"
+            onClick={handleDelete}
+            disabled={isDeleting}
+          >
             Delete
           </button>
         )}
       </div>
 
-      {post.content && <p className="dc-post-card-content">{post.content}</p>}
+      {post.content && <p className="whitespace-pre-wrap break-words text-gray-800">{post.content}</p>}
 
       {post.codeSnippet?.code && (
         <SnippetBlock code={post.codeSnippet.code} language={post.codeSnippet.language} />
       )}
 
       {post.images?.length > 0 && (
-        <div className="dc-post-card-images">
+        <div className="grid gap-2 [grid-template-columns:repeat(auto-fill,minmax(8rem,1fr))]">
           {post.images.map((url) => (
             <ImagePreview key={url} src={url} alt="Post attachment" shape="banner" />
           ))}
@@ -79,22 +83,29 @@ export default function PostCard({ post }) {
       )}
 
       {post.tags?.length > 0 && (
-        <div className="dc-post-card-tags">
+        <div className="flex flex-wrap gap-1.5">
           {post.tags.map((tag) => <Tag key={tag}>{tag}</Tag>)}
         </div>
       )}
 
-      {error && <p className="dc-post-card-error">{error}</p>}
+      {error && <p className="text-[0.8rem] text-red-600">{error}</p>}
 
-      <div className="dc-post-card-actions">
+      <div className="flex items-center gap-4 border-t border-gray-100 pt-2">
         <button
           type="button"
-          className={classNames('dc-post-card-like-btn', post.likedByMe && 'dc-post-card-like-btn--active')}
+          className={classNames(
+            'flex items-center gap-1.5 rounded-md px-2 py-1 text-[0.85rem] text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700',
+            post.likedByMe && 'text-red-600',
+          )}
           onClick={handleLike}
         >
           {post.likedByMe ? '❤️' : '🤍'} {post.likeCount}
         </button>
-        <button type="button" className="dc-post-card-comment-btn" onClick={() => setCommentsOpen((open) => !open)}>
+        <button
+          type="button"
+          className="flex items-center gap-1.5 rounded-md px-2 py-1 text-[0.85rem] text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700"
+          onClick={() => setCommentsOpen((open) => !open)}
+        >
           💬 {post.commentCount}
         </button>
       </div>
@@ -138,24 +149,24 @@ function PostComments({ postId, postAuthorId, currentUserId }) {
   };
 
   return (
-    <div className="dc-post-card-comments">
-      {isLoading && <p className="dc-post-card-comments-loading">Loading comments…</p>}
+    <div className="flex flex-col gap-2.5 border-t border-gray-100 pt-2.5">
+      {isLoading && <p className="text-[0.8rem] text-gray-400">Loading comments…</p>}
 
       {data?.data.map((comment) => {
         const canDelete = comment.authorId._id === currentUserId || postAuthorId === currentUserId;
         const commentAuthorName = [comment.authorId.firstName, comment.authorId.lastName].filter(Boolean).join(' ');
 
         return (
-          <div key={comment._id} className="dc-post-card-comment">
+          <div key={comment._id} className="flex items-start gap-2">
             <Avatar user={comment.authorId} />
-            <div className="dc-post-card-comment-body">
-              <p className="dc-post-card-comment-author">{commentAuthorName}</p>
-              <p className="dc-post-card-comment-content">{comment.content}</p>
+            <div className="min-w-0 flex-1 rounded-lg bg-gray-50 px-2.5 py-1.5">
+              <p className="text-[0.8rem] font-semibold text-gray-900">{commentAuthorName}</p>
+              <p className="whitespace-pre-wrap break-words text-[0.85rem] text-gray-700">{comment.content}</p>
             </div>
             {canDelete && (
               <button
                 type="button"
-                className="dc-post-card-comment-delete"
+                className="flex h-5 w-5 flex-shrink-0 items-center justify-center text-base leading-none text-gray-400 hover:text-red-600"
                 onClick={() => handleDelete(comment._id)}
                 aria-label="Delete comment"
               >
@@ -167,23 +178,33 @@ function PostComments({ postId, postAuthorId, currentUserId }) {
       })}
 
       {data?.pagination && data.pagination.totalPages > 1 && (
-        <div className="dc-post-card-comments-pagination">
-          <button type="button" disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>
+        <div className="flex items-center justify-center gap-3 text-[0.8rem] text-gray-500">
+          <button
+            type="button"
+            className="rounded-md border border-gray-300 bg-white px-2.5 py-1 disabled:cursor-not-allowed disabled:opacity-50"
+            disabled={page <= 1}
+            onClick={() => setPage((p) => p - 1)}
+          >
             Prev
           </button>
           <span>Page {data.pagination.page} of {data.pagination.totalPages}</span>
-          <button type="button" disabled={!data.pagination.hasNextPage} onClick={() => setPage((p) => p + 1)}>
+          <button
+            type="button"
+            className="rounded-md border border-gray-300 bg-white px-2.5 py-1 disabled:cursor-not-allowed disabled:opacity-50"
+            disabled={!data.pagination.hasNextPage}
+            onClick={() => setPage((p) => p + 1)}
+          >
             Next
           </button>
         </div>
       )}
 
-      <form className="dc-post-card-comment-form" onSubmit={handleAdd}>
+      <form className="flex gap-2" onSubmit={handleAdd}>
         <FormInput
           placeholder="Write a comment…"
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          wrapperClassName="dc-post-card-comment-input"
+          wrapperClassName="flex-1"
           maxLength={1000}
         />
         <Button type="submit" variant="outline" disabled={!content.trim() || isAdding}>
@@ -191,7 +212,7 @@ function PostComments({ postId, postAuthorId, currentUserId }) {
         </Button>
       </form>
 
-      {error && <p className="dc-post-card-error">{error}</p>}
+      {error && <p className="text-[0.8rem] text-red-600">{error}</p>}
     </div>
   );
 }
