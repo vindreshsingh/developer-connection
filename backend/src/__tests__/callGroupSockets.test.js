@@ -100,13 +100,6 @@ const waitForEvent = (client, event, timeoutMs = 8000) =>
     });
   });
 
-const noEvent = (client, event, waitMs = 300) =>
-  new Promise((resolve) => {
-    let received = false;
-    client.once(event, () => { received = true; });
-    setTimeout(() => resolve(!received), waitMs);
-  });
-
 // ── group_call_join ───────────────────────────────────────────────────────────
 
 describe('group_call_join', () => {

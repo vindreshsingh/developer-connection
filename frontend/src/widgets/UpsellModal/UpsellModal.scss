@@ -1,0 +1,58 @@
+@use '../../styles/tokens' as *;
+
+.dc-upsell-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(17, 24, 39, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  padding: 1rem;
+}
+
+.dc-upsell-modal {
+  position: relative;
+  background-color: #ffffff;
+  border-radius: 1rem;
+  padding: 2rem;
+  max-width: 26rem;
+  width: 100%;
+  text-align: center;
+  @include fade-in-up(0.25s);
+}
+
+.dc-upsell-modal-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  border: none;
+  background: transparent;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: #9ca3af;
+  cursor: pointer;
+
+  &:hover {
+    color: #4b5563;
+  }
+}
+
+.dc-upsell-modal-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 0.5rem;
+}
+
+.dc-upsell-modal-body {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-bottom: 1.5rem;
+}
+
+.dc-upsell-modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}

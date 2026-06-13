@@ -5,7 +5,7 @@ import { useGetConversationsQuery } from '@/hooks/chat/chatApi';
 import { useChat } from '@/hooks/chat/useChat';
 import { usePresence } from '@/hooks/chat/usePresence';
 import { useSocket } from '@/hooks/chat/useSocket';
-import { useCall } from '@/context/CallProvider';
+import { useCall } from '@/context/CallContext';
 import { useInitiateCallMutation } from '@/hooks/call/callApi';
 import { getApiErrorMessage } from '@/commonUtils/apiError';
 import ConversationList from '@/widgets/ConversationList/ConversationList';

@@ -20,6 +20,7 @@ import mongoose from 'mongoose';
 import userAuth from '../middlewares/auth.js';
 import { CALLS } from '../constants/apiEndpoints.js';
 import CallSession from '../models/callSession.js';
+import Plan from '../models/plan.js';
 import { canUsersChat } from '../utils/chatAuthorization.js';
 import { canUserAccessGroup } from '../utils/groupAuthorization.js';
 import { generateRoomToken } from '../services/LiveKitService.js';
@@ -124,6 +125,7 @@ router.post(CALLS.INITIATE, userAuth, async (req, res) => {
       participants: [{ userId: callerId, joinedAt: new Date() }],
       status: 'active',
       startedAt: new Date(),
+      isPriority: req.user.isPremium, // Phase 6: raises the group call participant cap
     });
 
     // Notify group members
@@ -353,7 +355,13 @@ router.post(CALLS.GROUP_TOKEN, userAuth, async (req, res) => {
       displayName: displayName || undefined,
     });
 
-    res.status(200).json({ token, room: `call:${callId}` });
+    // Phase 6: surface the participant cap so the frontend's ParticipantGrid
+    // knows when to switch overflow participants to audio-only.
+    const planKey = call.isPriority ? 'premium' : 'free';
+    const plan = await Plan.findOne({ key: planKey });
+    const maxParticipants = plan?.features?.groupCallParticipantCap ?? 8;
+
+    res.status(200).json({ token, room: `call:${callId}`, maxParticipants });
   } catch (err) {
     // Distinguish config errors (503) from runtime errors (500)
     if (err.message.includes('LIVEKIT_API_KEY')) {

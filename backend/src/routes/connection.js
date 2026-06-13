@@ -1,14 +1,16 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import userAuth from '../middlewares/auth.js';
+import { swipeRateLimiter } from '../middlewares/rateLimiter.js';
 import { REQUEST } from '../constants/apiEndpoints.js';
 import ConnectionRequest from '../models/connectionRequest.js';
 import Report from '../models/report.js';
 import User from '../models/user.js';
+import Plan from '../models/plan.js';
 
 const router = express.Router();
 
-router.post(REQUEST.SEND, userAuth, async (req, res) => {
+router.post(REQUEST.SEND, userAuth, swipeRateLimiter, async (req, res) => {
   try {
     const fromUserId = req.user._id;
     const { status, toUserId } = req.params;
@@ -35,6 +37,27 @@ router.post(REQUEST.SEND, userAuth, async (req, res) => {
     });
     if (existingRequest)
       return res.status(400).json({ error: 'Connection request already exists' });
+
+    // 5b. Phase 6: free users have a daily cap on 'interested' requests ("swipes")
+    if (status === 'interested' && !req.user.isPremium) {
+      const freePlan = await Plan.findOne({ key: 'free' });
+      const dailySwipeLimit = freePlan?.features?.dailySwipeLimit;
+
+      if (typeof dailySwipeLimit === 'number') {
+        const startOfDay = new Date();
+        startOfDay.setHours(0, 0, 0, 0);
+
+        const sentToday = await ConnectionRequest.countDocuments({
+          fromUserId,
+          status: 'interested',
+          createdAt: { $gte: startOfDay },
+        });
+
+        if (sentToday >= dailySwipeLimit) {
+          return res.status(403).json({ error: 'SWIPE_LIMIT_REACHED' });
+        }
+      }
+    }
 
     // 6. Create and save the request
     const request = new ConnectionRequest({ fromUserId, toUserId, status });

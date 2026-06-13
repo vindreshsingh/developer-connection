@@ -13,7 +13,6 @@ import { describe, it, expect, beforeAll, afterAll } from '@jest/globals';
 
 // 64 hex chars = 32 bytes — valid AES-256 key
 const VALID_KEY = 'a'.repeat(64);
-const ALT_KEY   = 'b'.repeat(64);
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 

@@ -1,0 +1,43 @@
+@use '../../styles/tokens' as *;
+
+.dc-pricing {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  text-align: center;
+
+  @include mobile {
+    padding: 1.25rem 0.75rem;
+  }
+}
+
+.dc-pricing-heading {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #111827;
+  @include fade-in-up;
+}
+
+.dc-pricing-subheading {
+  color: #6b7280;
+  font-size: 0.95rem;
+  margin: 0.5rem 0 2rem;
+}
+
+.dc-pricing-error {
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.dc-pricing-loading {
+  color: #9ca3af;
+  font-size: 0.875rem;
+}
+
+.dc-pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 1.25rem;
+  text-align: left;
+}

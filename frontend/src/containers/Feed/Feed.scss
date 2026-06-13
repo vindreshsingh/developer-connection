@@ -46,6 +46,25 @@
   width: 100%;
 }
 
+.dc-feed-filter-select {
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: #374151;
+  background-color: #fff;
+
+  @include mobile {
+    width: 100%;
+  }
+}
+
+.dc-feed-filter-select--locked {
+  border-color: var(--dc-primary);
+  color: var(--dc-primary);
+  cursor: pointer;
+}
+
 .dc-feed-error {
   color: #ef4444;
   font-size: 0.875rem;
