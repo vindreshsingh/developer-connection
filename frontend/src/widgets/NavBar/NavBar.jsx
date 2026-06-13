@@ -7,6 +7,7 @@ import './NavBar.scss';
 
 const LINKS = [
   { to: '/', label: 'Discover', end: true },
+  { to: '/posts', label: 'Feed' },
   { to: '/requests', label: 'Requests' },
   { to: '/connections', label: 'Connections' },
   { to: '/messages', label: 'Messages' },
