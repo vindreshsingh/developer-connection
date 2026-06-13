@@ -15,7 +15,7 @@ import {
   useDisconnectLinkedinMutation,
   oauthLoginUrl,
 } from '@/hooks/auth/oauthApi';
-import './LinkedAccounts.scss';
+import { classNames } from '@/commonUtils/classNames';
 
 const PROVIDERS = [
   { id: 'github',   label: 'GitHub',   icon: '🐙', canSync: true  },
@@ -45,14 +45,16 @@ export default function LinkedAccounts() {
 
   if (isLoading) return null;
 
+  const btnBase = 'rounded-md border border-transparent px-3 py-1.5 text-[0.8125rem] font-medium transition-opacity duration-150 disabled:cursor-not-allowed disabled:opacity-60';
+
   return (
-    <section className="dc-linked-accounts">
-      <h2 className="dc-linked-accounts-heading">Connected Accounts</h2>
-      <p className="dc-linked-accounts-sub">
+    <section className="mt-8 border-t border-gray-200 pt-6">
+      <h2 className="mb-1 text-lg font-semibold text-gray-900">Connected Accounts</h2>
+      <p className="mb-4 text-[0.8125rem] text-gray-500">
         Link your developer accounts to enrich your profile.
       </p>
 
-      <ul className="dc-linked-accounts-list">
+      <ul className="m-0 flex list-none flex-col gap-2.5 p-0">
         {PROVIDERS.map(({ id, label, icon, canSync }) => {
           const connected = isConnected(id);
           const linkedAt  = linked.find((p) => p.provider === id)?.linkedAt;
@@ -60,24 +62,24 @@ export default function LinkedAccounts() {
           const isDiscing = id === 'github' ? discGh      : discLi;
 
           return (
-            <li key={id} className="dc-linked-accounts-item">
-              <span className="dc-linked-accounts-icon">{icon}</span>
+            <li key={id} className="flex items-center gap-3 rounded-lg border border-gray-200 bg-[#fafafa] px-4 py-3">
+              <span className="w-7 flex-shrink-0 text-center text-xl">{icon}</span>
 
-              <div className="dc-linked-accounts-info">
-                <span className="dc-linked-accounts-name">{label}</span>
+              <div className="flex min-w-0 flex-1 flex-col">
+                <span className="text-[0.9375rem] font-medium text-gray-900">{label}</span>
                 {connected && linkedAt && (
-                  <span className="dc-linked-accounts-date">
+                  <span className="mt-0.5 text-xs text-gray-400">
                     Linked {new Date(linkedAt).toLocaleDateString()}
                   </span>
                 )}
               </div>
 
-              <div className="dc-linked-accounts-actions">
+              <div className="flex flex-shrink-0 gap-2">
                 {connected ? (
                   <>
                     {canSync && (
                       <button
-                        className="dc-linked-accounts-btn dc-linked-accounts-btn--sync"
+                        className={classNames(btnBase, 'border-gray-300 bg-white text-gray-700 enabled:hover:bg-gray-50')}
                         onClick={() => handleSync(id)}
                         disabled={isSyncing}
                       >
@@ -85,7 +87,7 @@ export default function LinkedAccounts() {
                       </button>
                     )}
                     <button
-                      className="dc-linked-accounts-btn dc-linked-accounts-btn--disconnect"
+                      className={classNames(btnBase, 'border-red-300 bg-white text-red-500 enabled:hover:bg-red-50')}
                       onClick={() => handleDisconnect(id)}
                       disabled={isDiscing}
                     >
@@ -96,7 +98,7 @@ export default function LinkedAccounts() {
                   // Full-page redirect to server-side OAuth — use <a> not a button
                   <a
                     href={oauthLoginUrl(id)}
-                    className="dc-linked-accounts-btn dc-linked-accounts-btn--connect"
+                    className={classNames(btnBase, 'bg-blue-600 text-white hover:bg-blue-700')}
                   >
                     Connect
                   </a>
