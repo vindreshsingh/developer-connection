@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useInjectReducer } from '@/commonUtils/useInjectReducer';
 import {
   useGetJobQuery,
   useApplyToJobMutation,
@@ -15,6 +17,7 @@ import FormInput from '@/components/FormInput/FormInput';
 import Tag from '@/components/Tag/Tag';
 import Avatar from '@/components/Avatar/Avatar';
 import { APPLICATION_STATUSES, JOB_TYPE_LABELS, formatSalaryRange } from '@/widgets/JobCard/jobConstants';
+import reducer, { applicantsPageChanged } from './reducer';
 
 export default function JobDetailContainer() {
   const { jobId } = useParams();
@@ -173,7 +176,10 @@ export default function JobDetailContainer() {
 }
 
 function ApplicantsList({ jobId }) {
-  const [page, setPage] = useState(1);
+  useInjectReducer('jobDetail', reducer);
+
+  const dispatch = useDispatch();
+  const page = useSelector((state) => state.jobDetail?.applicantsPage ?? 1);
   const { data, isFetching, error } = useGetJobApplicationsQuery({ jobId, page });
   const [updateStatus] = useUpdateApplicationStatusMutation();
   const [statusError, setStatusError] = useState('');
@@ -236,7 +242,7 @@ function ApplicantsList({ jobId }) {
           <Button
             variant="ghost"
             disabled={page <= 1 || isFetching}
-            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            onClick={() => dispatch(applicantsPageChanged(Math.max(1, page - 1)))}
           >
             ← Prev
           </Button>
@@ -246,7 +252,7 @@ function ApplicantsList({ jobId }) {
           <Button
             variant="ghost"
             disabled={!pagination.hasNextPage || isFetching}
-            onClick={() => setPage((p) => p + 1)}
+            onClick={() => dispatch(applicantsPageChanged(page + 1))}
           >
             Next →
           </Button>

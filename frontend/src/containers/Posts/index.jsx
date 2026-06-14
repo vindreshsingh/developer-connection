@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useInjectReducer } from '@/commonUtils/useInjectReducer';
 import { useGetFeedQuery } from '@/hooks/posts/postApi';
 import { getApiErrorMessage } from '@/commonUtils/apiError';
 import { classNames } from '@/commonUtils/classNames';
 import Button from '@/components/Button/Button';
 import CreatePostBox from '@/widgets/CreatePostBox/CreatePostBox';
 import PostCard from '@/widgets/PostCard/PostCard';
+import reducer, { scopeChanged, pageChanged } from './reducer';
 
 const SCOPES = [
   { value: 'network', label: 'My Network' },
@@ -12,18 +14,16 @@ const SCOPES = [
 ];
 
 export default function PostsContainer() {
-  const [scope, setScope] = useState('network');
-  const [page, setPage] = useState(1);
+  useInjectReducer('posts', reducer);
+
+  const dispatch = useDispatch();
+  const scope = useSelector((state) => state.posts?.scope ?? 'network');
+  const page = useSelector((state) => state.posts?.page ?? 1);
 
   const { data, isFetching, error } = useGetFeedQuery({ scope, page });
 
   const posts = data?.data ?? [];
   const pagination = data?.pagination;
-
-  const handleScopeChange = (value) => {
-    setScope(value);
-    setPage(1);
-  };
 
   return (
     <div className="mx-auto my-5 flex max-w-[640px] flex-col gap-4 px-3 sm:my-8 sm:px-4">
@@ -38,7 +38,7 @@ export default function PostsContainer() {
                 'rounded-md px-3 py-1.5 text-[0.85rem] font-medium text-gray-500 transition-colors hover:text-gray-700',
                 scope === s.value && 'bg-white text-violet-800 shadow-sm',
               )}
-              onClick={() => handleScopeChange(s.value)}
+              onClick={() => dispatch(scopeChanged(s.value))}
             >
               {s.label}
             </button>
@@ -71,7 +71,7 @@ export default function PostsContainer() {
           <Button
             variant="ghost"
             disabled={page <= 1 || isFetching}
-            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            onClick={() => dispatch(pageChanged(Math.max(1, page - 1)))}
           >
             ← Prev
           </Button>
@@ -81,7 +81,7 @@ export default function PostsContainer() {
           <Button
             variant="ghost"
             disabled={!pagination.hasNextPage || isFetching}
-            onClick={() => setPage((p) => p + 1)}
+            onClick={() => dispatch(pageChanged(page + 1))}
           >
             Next →
           </Button>
