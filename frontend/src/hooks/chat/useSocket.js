@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { io } from 'socket.io-client';
 import { useCurrentUser } from '@/hooks/auth/useCurrentUser';
 
-const SOCKET_URL = import.meta.env.VITE_API_URL || 'http://localhost:3008';
+const SOCKET_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
 
 /**
  * Low-level Socket.IO connection hook. Connects once per mount while the user

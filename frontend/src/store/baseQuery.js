@@ -1,6 +1,6 @@
 import { fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3008';
+const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:4000';
 
 // CSRF (double-submit cookie): the gateway sets an httpOnly secret cookie and
 // returns a matching token from GET /csrf-token. Every mutating request must
