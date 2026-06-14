@@ -18,13 +18,21 @@ const notificationSchema = new mongoose.Schema(
       type:     String,
       required: true,
       enum: {
-        values: ['post_like', 'post_comment'],
+        values: [
+          'post_like', 'post_comment',
+          'job_application', 'job_application_status', // Phase 9
+        ],
         message: '{VALUE} is not a valid notification type',
       },
     },
     postId: {
       type:    ObjectId,
       ref:     'Post',
+      default: null,
+    },
+    jobId: {
+      type:    ObjectId,
+      ref:     'JobPosting',
       default: null,
     },
     read: {

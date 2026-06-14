@@ -19,10 +19,11 @@ import multer from 'multer';
 import userAuth from '../middlewares/auth.js';
 import { POSTS } from '../constants/apiEndpoints.js';
 import { uploadImageBuffer } from '../utils/cloudinary.js';
+import { getExcludedUserIds } from '../utils/blocking.js';
+import { emitNotification } from '../utils/notifications.js';
 import Post from '../models/post.js';
 import PostComment from '../models/postComment.js';
 import Notification from '../models/notification.js';
-import User from '../models/user.js';
 import ConnectionRequest from '../models/connectionRequest.js';
 
 const router = express.Router();
@@ -56,12 +57,6 @@ const getConnectionIds = async (userId) => {
   return connections.map((c) => (c.fromUserId.equals(userId) ? c.toUserId : c.fromUserId));
 };
 
-/** Returns the ObjectIds to exclude from `user`'s feed: users they blocked + users who blocked them. */
-const getExcludedUserIds = async (user) => {
-  const blockedMe = await User.find({ blockedUsers: user._id }).select('_id');
-  return [...user.blockedUsers, ...blockedMe.map((u) => u._id)];
-};
-
 /** Serializes a Post document for API responses: strips raw `likes[]`, adds `likedByMe`. */
 const formatPost = (postDoc, userId) => {
   const likedByMe = postDoc.isLikedBy(userId);
@@ -69,16 +64,6 @@ const formatPost = (postDoc, userId) => {
   delete obj.likes;
   obj.likedByMe = likedByMe;
   return obj;
-};
-
-/** Emits `notification:new` to the recipient's socket room, if Socket.io is attached. */
-const emitNotification = async (req, notification) => {
-  const io = req.app.get('io');
-  if (!io) return;
-
-  const populated = await Notification.findById(notification._id)
-    .populate('actorId', 'firstName lastName photoUrl');
-  io.to(`user:${notification.recipientId}`).emit('notification:new', populated);
 };
 
 // ── POST / — Create a post ────────────────────────────────────────────────────
