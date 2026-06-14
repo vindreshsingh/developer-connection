@@ -9,6 +9,7 @@ import { classNames } from '@/commonUtils/classNames';
 const LINKS = [
   { to: '/', label: 'Discover', end: true },
   { to: '/posts', label: 'Feed' },
+  { to: '/jobs', label: 'Jobs' },
   { to: '/requests', label: 'Requests' },
   { to: '/connections', label: 'Connections' },
   { to: '/messages', label: 'Messages' },

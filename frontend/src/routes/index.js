@@ -11,6 +11,8 @@ const UserProfilePage = lazy(() => import('@/pages/UserProfile/UserProfile'));
 const MessagesPage = lazy(() => import('@/pages/Messages/Messages'));
 const GroupsPage = lazy(() => import('@/pages/Groups/Groups'));
 const PostsPage = lazy(() => import('@/pages/Posts/Posts'));
+const JobsPage = lazy(() => import('@/pages/Jobs/Jobs'));
+const JobDetailPage = lazy(() => import('@/pages/JobDetail/JobDetail'));
 const GroupDetailPage = lazy(() => import('@/pages/GroupDetail/GroupDetail'));
 const CallHistoryPage = lazy(() => import('@/pages/CallHistory/CallHistory'));
 const PricingPage = lazy(() => import('@/pages/Pricing/Pricing'));
@@ -28,6 +30,8 @@ export const routes = [
   { path: '/connections', Page: ConnectionsPage, guard: 'protected' },
   { path: '/messages', Page: MessagesPage, guard: 'protected' },
   { path: '/posts', Page: PostsPage, guard: 'protected' },
+  { path: '/jobs', Page: JobsPage, guard: 'protected' },
+  { path: '/jobs/:jobId', Page: JobDetailPage, guard: 'protected' },
   { path: '/groups', Page: GroupsPage, guard: 'protected' },
   { path: '/groups/:groupId', Page: GroupDetailPage, guard: 'protected' },
   { path: '/calls', Page: CallHistoryPage, guard: 'protected' },

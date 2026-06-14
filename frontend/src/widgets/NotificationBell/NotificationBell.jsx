@@ -13,8 +13,16 @@ import { formatTime } from '@/commonUtils/formatDate';
 import { classNames } from '@/commonUtils/classNames';
 
 const NOTIFICATION_TEXT = {
-  post_like:    'liked your post',
-  post_comment: 'commented on your post',
+  post_like:              'liked your post',
+  post_comment:           'commented on your post',
+  job_application:        'applied to your job posting',
+  job_application_status: 'updated your application status',
+};
+
+/** Resolves the in-app link a notification should navigate to. */
+const getNotificationLink = (notification) => {
+  if (notification.jobId) return `/jobs/${notification.jobId}`;
+  return '/posts';
 };
 
 export default function NotificationBell() {
@@ -111,7 +119,7 @@ export default function NotificationBell() {
                     )}
                   >
                     <Link
-                      to="/posts"
+                      to={getNotificationLink(notification)}
                       className="flex flex-col gap-0.5 px-4 py-2.5 text-inherit no-underline hover:bg-gray-100"
                       onClick={() => {
                         handleNotificationClick(notification);
