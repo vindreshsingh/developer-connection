@@ -6,7 +6,6 @@ import {
   useGetBillingHistoryQuery,
 } from '@/hooks/billing/billingApi';
 import { getApiErrorMessage } from '@/commonUtils/apiError';
-import './BillingPanel.scss';
 
 const STATUS_LABELS = {
   created: 'Pending',
@@ -33,16 +32,16 @@ export default function BillingPanel() {
   };
 
   return (
-    <section className="dc-billing-panel">
-      <h2 className="dc-billing-panel-heading">Billing</h2>
+    <section className="mt-8 border-t border-gray-200 pt-6">
+      <h2 className="mb-4 text-lg font-semibold text-gray-900">Billing</h2>
 
-      {error && <p className="dc-billing-panel-error">{getApiErrorMessage(error, 'Could not cancel subscription')}</p>}
+      {error && <p className="mb-3 text-[0.8125rem] text-red-500">{getApiErrorMessage(error, 'Could not cancel subscription')}</p>}
 
-      <div className="dc-billing-panel-plan">
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <span className="dc-billing-panel-plan-name">{plan?.name ?? 'Free'}</span>
+          <span className="mr-2.5 text-base font-bold text-gray-900">{plan?.name ?? 'Free'}</span>
           {subscription && (
-            <span className="dc-billing-panel-status">
+            <span className="inline-block rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-semibold text-gray-500">
               {STATUS_LABELS[subscription.status] ?? subscription.status}
             </span>
           )}
@@ -60,17 +59,17 @@ export default function BillingPanel() {
       </div>
 
       {subscription?.cancelAtPeriodEnd && subscription?.currentPeriodEnd && (
-        <p className="dc-billing-panel-note">
+        <p className="mt-3 text-[0.8125rem] text-gray-500">
           Your subscription will end on {new Date(subscription.currentPeriodEnd).toLocaleDateString()}.
         </p>
       )}
 
       {history.length > 0 && (
-        <div className="dc-billing-panel-history">
-          <h3 className="dc-billing-panel-history-heading">Recent payments</h3>
-          <ul className="dc-billing-panel-history-list">
+        <div className="mt-5">
+          <h3 className="mb-2 text-sm font-semibold text-gray-700">Recent payments</h3>
+          <ul className="m-0 flex list-none flex-col gap-1.5 p-0">
             {history.map((event) => (
-              <li key={event._id} className="dc-billing-panel-history-item">
+              <li key={event._id} className="flex justify-between rounded-md bg-[#fafafa] px-3 py-2 text-[0.8125rem] text-gray-500">
                 <span>{event.type}</span>
                 <span>{event.amount != null ? `₹${(event.amount / 100).toLocaleString('en-IN')}` : '—'}</span>
                 <span>{new Date(event.createdAt).toLocaleDateString()}</span>

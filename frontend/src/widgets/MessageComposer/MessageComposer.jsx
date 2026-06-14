@@ -2,7 +2,7 @@ import { useState } from 'react';
 import FormInput from '@/components/FormInput/FormInput';
 import Button from '@/components/Button/Button';
 import { SUPPORTED_LANGUAGES } from '@/widgets/SnippetBlock/snippetLanguages';
-import './MessageComposer.scss';
+import { classNames } from '@/commonUtils/classNames';
 
 export default function MessageComposer({ onSend, onType, disabled }) {
   const [body, setBody] = useState('');
@@ -33,11 +33,14 @@ export default function MessageComposer({ onSend, onType, disabled }) {
   };
 
   return (
-    <form className="dc-message-composer" onSubmit={handleSubmit}>
+    <form className="flex items-end gap-2 border-t border-gray-200 p-3" onSubmit={handleSubmit}>
       {/* Mode toggle */}
       <button
         type="button"
-        className={`dc-message-composer-mode-btn${snippetMode ? ' dc-message-composer-mode-btn--active' : ''}`}
+        className={classNames(
+          'flex-shrink-0 self-end whitespace-nowrap rounded-md border border-gray-200 bg-gray-100 px-2 py-1.5 font-mono text-xs font-bold text-gray-500 transition-colors duration-150 hover:bg-gray-200 hover:text-gray-700',
+          snippetMode && 'border-violet-300 bg-violet-100 text-violet-700',
+        )}
         onClick={toggleSnippetMode}
         title={snippetMode ? 'Switch to text mode' : 'Switch to code snippet mode'}
         aria-pressed={snippetMode}
@@ -46,11 +49,11 @@ export default function MessageComposer({ onSend, onType, disabled }) {
         {'</>'}
       </button>
 
-      <div className="dc-message-composer-body">
+      <div className="flex min-w-0 flex-1 flex-col gap-1.5">
         {snippetMode && (
-          <div className="dc-message-composer-snippet-controls">
+          <div className="flex items-center gap-2">
             <select
-              className="dc-message-composer-lang-select"
+              className="cursor-pointer rounded-md border border-gray-300 bg-white px-2 py-1 text-[0.8rem] text-gray-700 focus:outline-2 focus:outline-offset-1 focus:outline-indigo-400"
               value={language}
               onChange={(e) => setLanguage(e.target.value)}
               disabled={disabled}
@@ -65,7 +68,7 @@ export default function MessageComposer({ onSend, onType, disabled }) {
 
         {snippetMode ? (
           <textarea
-            className="dc-message-composer-code-area"
+            className="w-full resize-y rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 font-mono text-[0.8rem] text-gray-800 [tab-size:2] leading-[1.6] placeholder:text-gray-400 focus:outline-2 focus:outline-offset-1 focus:outline-indigo-400"
             placeholder="Paste or type your code here…"
             value={body}
             onChange={handleChange}
@@ -78,7 +81,7 @@ export default function MessageComposer({ onSend, onType, disabled }) {
             placeholder="Type a message…"
             value={body}
             onChange={handleChange}
-            wrapperClassName="dc-message-composer-input"
+            wrapperClassName="flex-1"
             disabled={disabled}
           />
         )}

@@ -12,9 +12,9 @@ import Button from '@/components/Button/Button';
 import SwipeDeck from '@/widgets/SwipeDeck/SwipeDeck';
 import UpsellModal from '@/widgets/UpsellModal/UpsellModal';
 import AIPicks from '@/widgets/AIPicks/AIPicks';
+import { classNames } from '@/commonUtils/classNames';
 import reducer, { profileDismissed } from './reducer';
 import { parseFeedPage } from './parser';
-import './Feed.scss';
 
 const EXPERIENCE_LEVELS = [
   { value: '', label: 'Any experience' },
@@ -79,25 +79,31 @@ export default function FeedContainer() {
   };
 
   return (
-    <div className="dc-feed">
-      <h1 className="dc-feed-heading">Discover</h1>
-      <p className="dc-feed-subheading">Swipe right to connect, left to pass</p>
+    <div className="mx-auto max-w-[28rem] px-3 py-5 sm:px-4 sm:py-8">
+      <h1 className="mb-1 text-2xl font-bold text-gray-900 opacity-0 [animation:dc-fade-in-up_0.45s_ease_forwards]">Discover</h1>
+      <p className="mb-6 text-sm text-gray-500 opacity-0 [animation:dc-fade-in-up_0.45s_ease_forwards] [animation-delay:0.05s]">Swipe right to connect, left to pass</p>
 
       <AIPicks />
 
-      <form className="dc-feed-filter" onSubmit={handleApplyFilter}>
+      <form
+        className="mb-5 flex flex-col items-start gap-2 opacity-0 [animation:dc-fade-in-up_0.45s_ease_forwards] [animation-delay:0.1s] sm:flex-row"
+        onSubmit={handleApplyFilter}
+      >
         <FormInput
           placeholder="Filter by skills (e.g. react, node)"
           value={skillsInput}
           onChange={(e) => setSkillsInput(e.target.value)}
-          wrapperClassName="dc-feed-filter-input"
+          wrapperClassName="w-full flex-1"
         />
-        <Button type="submit" variant="outline">
+        <Button type="submit" variant="outline" className="w-full sm:w-auto">
           Apply
         </Button>
 
         <select
-          className={`dc-feed-filter-select${!user?.isPremium ? ' dc-feed-filter-select--locked' : ''}`}
+          className={classNames(
+            'w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 sm:w-auto',
+            !user?.isPremium && 'cursor-pointer border-purple-600 text-purple-600',
+          )}
           value={experienceLevel}
           onChange={handleExperienceLevelChange}
           title={!user?.isPremium ? 'Upgrade to Premium to filter by experience level' : undefined}
@@ -111,7 +117,7 @@ export default function FeedContainer() {
       </form>
 
       {error && (
-        <p className="dc-feed-error">{getApiErrorMessage(error, 'Could not load feed')}</p>
+        <p className="mb-4 text-sm text-red-500">{getApiErrorMessage(error, 'Could not load feed')}</p>
       )}
 
       <AnimatePresence>

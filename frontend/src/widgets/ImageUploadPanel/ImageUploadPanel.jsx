@@ -1,7 +1,6 @@
 import { useRef } from 'react';
 import ImagePreview from '@/components/ImagePreview/ImagePreview';
 import FileInput from '@/components/FileInput/FileInput';
-import './ImageUploadPanel.scss';
 
 export default function ImageUploadPanel({
   photoUrl,
@@ -29,21 +28,21 @@ export default function ImageUploadPanel({
   };
 
   return (
-    <div className="dc-image-upload-panel">
-      <h2 className="dc-image-upload-panel-title">Photos</h2>
-      <div className="dc-image-upload-panel-grid">
+    <div className="mb-6 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+      <h2 className="mb-4 text-lg font-semibold text-gray-900">Photos</h2>
+      <div className="grid grid-cols-2 gap-4">
         <div>
-          <span className="dc-image-upload-panel-label">Profile photo</span>
+          <span className="mb-1 block text-sm font-medium text-gray-700">Profile photo</span>
           {photoUrl && <ImagePreview src={photoUrl} alt="Profile" shape="circle" className="mb-2" />}
           <FileInput
             ref={photoInputRef}
             onChange={handlePhotoSelect}
             disabled={uploadingPhoto}
           />
-          {uploadingPhoto && <p className="dc-image-upload-panel-hint">Uploading...</p>}
+          {uploadingPhoto && <p className="mt-1 text-xs text-gray-400">Uploading...</p>}
         </div>
         <div>
-          <span className="dc-image-upload-panel-label">Cover image</span>
+          <span className="mb-1 block text-sm font-medium text-gray-700">Cover image</span>
           {coverImageUrl && (
             <ImagePreview src={coverImageUrl} alt="Cover" shape="banner" className="mb-2" />
           )}
@@ -52,7 +51,7 @@ export default function ImageUploadPanel({
             onChange={handleCoverSelect}
             disabled={uploadingCover}
           />
-          {uploadingCover && <p className="dc-image-upload-panel-hint">Uploading...</p>}
+          {uploadingCover && <p className="mt-1 text-xs text-gray-400">Uploading...</p>}
         </div>
       </div>
     </div>

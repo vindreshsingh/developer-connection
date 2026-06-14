@@ -1,6 +1,5 @@
 import FormInput from '@/components/FormInput/FormInput';
 import Tag from '@/components/Tag/Tag';
-import './TechStackEditor.scss';
 
 export default function TechStackEditor({ value, onChange }) {
   const tags = value
@@ -17,7 +16,7 @@ export default function TechStackEditor({ value, onChange }) {
         placeholder="TypeScript, Express, Docker"
       />
       {tags.length > 0 && (
-        <div className="dc-tech-stack-editor-tags">
+        <div className="mt-2 flex flex-wrap gap-2">
           {tags.map((tag, i) => (
             <Tag key={`${tag}-${i}`}>{tag}</Tag>
           ))}

@@ -1,13 +1,12 @@
 import { classNames } from '@/commonUtils/classNames';
-import './StatusMessage.scss';
 
 const VARIANT_MODIFIER = {
-  success: 'dc-status-message--success',
-  error: 'dc-status-message--error',
+  success: 'text-green-600',
+  error: 'text-red-500',
 };
 
 export default function StatusMessage({ variant, children }) {
   if (!children) return null;
 
-  return <p className={classNames('dc-status-message', VARIANT_MODIFIER[variant])}>{children}</p>;
+  return <p className={classNames('mb-4 font-medium', VARIANT_MODIFIER[variant])}>{children}</p>;
 }

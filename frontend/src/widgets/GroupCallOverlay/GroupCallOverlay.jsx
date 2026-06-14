@@ -18,9 +18,9 @@
 
 import { useEffect } from 'react';
 import { useGroupCall } from '@/hooks/call/useGroupCall';
+import { classNames } from '@/commonUtils/classNames';
 import CallControls from '@/widgets/CallControls/CallControls';
 import ParticipantTile from '@/widgets/ParticipantTile/ParticipantTile';
-import './GroupCallOverlay.scss';
 
 export default function GroupCallOverlay({
   socket,
@@ -68,36 +68,38 @@ export default function GroupCallOverlay({
     callState === 'error'      ? 'Connection error' :
     '';
 
+  const gridCount = Math.min(participants.length, 4);
+
   return (
     <div
-      className="dc-group-call-overlay"
+      className="fixed inset-0 z-[9100] flex flex-col overflow-hidden bg-[#0d0d1a]"
       role="dialog"
       aria-label={`Group call — ${groupName}`}
       aria-modal="true"
     >
       {/* ── Header ────────────────────────────────────────────────────────── */}
-      <header className="dc-group-call-header">
-        <span className="dc-group-call-header-name">{groupName}</span>
-        <span className="dc-group-call-header-status">{statusLabel}</span>
+      <header className="pointer-events-none absolute left-6 top-5 z-10 flex flex-col gap-[0.15rem]">
+        <span className="text-base font-semibold text-white [text-shadow:0_1px_3px_rgba(0,0,0,0.5)]">{groupName}</span>
+        <span className="text-[0.78rem] text-white/55">{statusLabel}</span>
       </header>
 
       {/* ── Error banner ──────────────────────────────────────────────────── */}
       {groupCallError && (
-        <div className="dc-group-call-error" role="alert">
+        <div className="absolute left-1/2 top-4 z-20 max-w-[80vw] -translate-x-1/2 rounded-lg bg-red-600/90 px-5 py-2 text-center text-sm text-white" role="alert">
           {groupCallError}
         </div>
       )}
 
       {/* ── Connecting / ended state ──────────────────────────────────────── */}
       {callState === 'connecting' && (
-        <div className="dc-group-call-connecting">
-          <div className="dc-group-call-spinner" aria-hidden="true" />
+        <div className="flex flex-1 flex-col items-center justify-center gap-4 text-base text-white/70">
+          <div className="h-10 w-10 animate-[dc-spin-slow_0.75s_linear_infinite] rounded-full border-[3px] border-white/15 border-t-violet-500" aria-hidden="true" />
           <p>Joining call…</p>
         </div>
       )}
 
       {(callState === 'ended' || callState === 'error') && (
-        <div className="dc-group-call-ended">
+        <div className="flex flex-1 flex-col items-center justify-center gap-4 text-base text-white/70">
           <p>{callState === 'error' ? 'Could not connect to the call.' : 'Call ended'}</p>
         </div>
       )}
@@ -105,7 +107,13 @@ export default function GroupCallOverlay({
       {/* ── Participant grid ──────────────────────────────────────────────── */}
       {callState === 'active' && participants.length > 0 && (
         <div
-          className={`dc-group-call-grid dc-group-call-grid--${Math.min(participants.length, 4)}`}
+          className={classNames(
+            'grid flex-1 gap-1.5 px-2 pt-16 pb-22 sm:gap-2 sm:px-4 sm:pt-18 sm:pb-24',
+            gridCount === 1 && '[grid-template-columns:1fr]',
+            gridCount === 2 && '[grid-template-columns:1fr] sm:[grid-template-columns:1fr_1fr]',
+            (gridCount === 3 || gridCount === 4) &&
+              '[grid-template-columns:1fr] sm:[grid-template-columns:1fr_1fr] sm:[grid-template-rows:1fr_1fr]',
+          )}
           aria-label="Participants"
         >
           {participants.map((p) => (
@@ -116,7 +124,7 @@ export default function GroupCallOverlay({
 
       {/* ── Controls bar ─────────────────────────────────────────────────── */}
       {callState === 'active' && (
-        <div className="dc-group-call-controls">
+        <div className="absolute bottom-5 left-1/2 z-10 flex -translate-x-1/2 items-center gap-3">
           <CallControls
             isMuted={isMuted}
             isCameraOff={isCameraOff}
@@ -129,7 +137,7 @@ export default function GroupCallOverlay({
           {/* Leave without ending for everyone */}
           <button
             type="button"
-            className="dc-group-call-leave-btn"
+            className="whitespace-nowrap rounded-full border border-white/20 bg-white/12 px-4 py-2 text-[0.8rem] font-medium text-white transition-colors hover:bg-white/20"
             onClick={leave}
             title="Leave call (others stay)"
             aria-label="Leave call"
