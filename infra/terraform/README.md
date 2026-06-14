@@ -1,24 +1,18 @@
-# AWS infrastructure for developer-connection
+# AWS infrastructure for developer-connection (frontend)
 
 This Terraform configuration provisions everything the [`Deploy`](../../.github/workflows/deploy.yml)
-GitHub Actions workflow needs:
+GitHub Actions workflow needs to host the **frontend**:
 
-- VPC with 2 public subnets, IGW, route table (`networking.tf`)
-- Security groups for the ALB and ECS tasks (`security_groups.tf`)
-- ECR repository for the backend image (`ecr.tf`)
-- Secrets Manager secret holding the backend's env vars (`secrets.tf`)
-- IAM roles: ECS task execution role, ECS task role, GitHub OIDC provider +
-  deploy role (`iam.tf`)
-- Application Load Balancer + target group + listener, health check on
-  `/health` (`alb.tf`)
-- ECS Fargate cluster, task definition, and service (`ecs.tf`)
-- ElastiCache Redis (cache, queues, pub/sub, presence) with a security group
-  scoped to the ECS tasks; its endpoint is injected into the tasks as
-  `REDIS_URL` (`elasticache.tf`)
-- A second ECS Fargate service running the BullMQ worker on the same image
-  with `command = ["node","src/worker.js"]` (`ecs_worker.tf`)
-- S3 bucket + CloudFront distribution (with OAC) for the frontend
+- S3 bucket + CloudFront distribution (with OAC) for the static SPA
   (`s3_cloudfront.tf`)
+- IAM: GitHub OIDC provider + a deploy role scoped to S3 sync and CloudFront
+  invalidation (`iam.tf`)
+
+> **The backend infrastructure was removed.** All APIs now run in the
+> [developer-connection-microservices](https://github.com/vindreshsingh/developer-connection-microservices)
+> stack, which owns its own deployment. The ECR/ECS/ALB/ElastiCache/Secrets/VPC
+> resources that used to live here are gone — see "Tearing down the old backend
+> infrastructure" below if you applied a previous revision.
 
 ## Prerequisites
 
@@ -42,55 +36,21 @@ terraform plan
 terraform apply
 ```
 
-This creates everything with a placeholder backend image
-(`public.ecr.aws/docker/library/hello-world:latest`) and empty secret values.
-The ECS service will start a task that fails health checks until both of
-those are fixed in the next two steps — that's expected for a first apply.
+> ⚠️ If you previously applied the backend version of this config, `terraform
+> plan` will show the ECR/ECS/ALB/ElastiCache/Secrets/VPC resources as
+> **destroyed**. That's intended — review the plan and confirm before applying.
 
-## 2. Populate the backend secrets
-
-`terraform apply` creates the Secrets Manager secret
-(`<project_name>/backend/env`) with all keys present but empty. Fill in real
-values, e.g.:
-
-```bash
-aws secretsmanager put-secret-value \
-  --secret-id "$(terraform output -raw backend_env_secret_name)" \
-  --secret-string file://backend-env.json
-```
-
-Where `backend-env.json` is a JSON object with the same keys as
-`backend/.env.example` (see `var.backend_env_secret_keys` in `variables.tf`
-for the full list) and your real values.
-
-After updating the secret, force a new deployment so the running task picks
-up the new values:
-
-```bash
-aws ecs update-service \
-  --cluster "$(terraform output -raw ecs_cluster_name)" \
-  --service "$(terraform output -raw ecs_service_name)" \
-  --force-new-deployment
-```
-
-## 3. Configure GitHub repo secrets and variables
+## 2. Configure GitHub repo secrets and variables
 
 Set these via the GitHub UI (Settings → Secrets and variables → Actions) or
 the `gh` CLI, using the corresponding Terraform outputs:
 
-| GitHub setting                                  | Terraform output             |
-| ------------------------------------------------ | ----------------------------- |
-| Secret `AWS_DEPLOY_ROLE_ARN`                      | `github_deploy_role_arn`       |
-| Variable `AWS_REGION`                             | `aws_region`                   |
-| Variable `ECR_REPOSITORY`                         | `ecr_repository_name`          |
-| Variable `ECS_CLUSTER`                            | `ecs_cluster_name`             |
-| Variable `ECS_SERVICE`                            | `ecs_service_name`             |
-| Variable `ECS_TASK_DEFINITION_FAMILY`             | `ecs_task_definition_family`   |
-| Variable `ECS_CONTAINER_NAME`                     | `ecs_container_name`           |
-| Variable `ECS_WORKER_SERVICE`                     | `worker_service_name`          |
-| Variable `ECS_WORKER_TASK_DEFINITION_FAMILY`      | `worker_task_definition_family`|
-| Variable `S3_BUCKET_FRONTEND`                     | `s3_bucket_frontend`           |
-| Variable `CLOUDFRONT_DISTRIBUTION_ID`             | `cloudfront_distribution_id`   |
+| GitHub setting                        | Terraform output             |
+| ------------------------------------- | ---------------------------- |
+| Secret `AWS_DEPLOY_ROLE_ARN`          | `github_deploy_role_arn`     |
+| Variable `AWS_REGION`                 | `aws_region`                 |
+| Variable `S3_BUCKET_FRONTEND`         | `s3_bucket_frontend`         |
+| Variable `CLOUDFRONT_DISTRIBUTION_ID` | `cloudfront_distribution_id` |
 
 Example using `gh`:
 
@@ -98,36 +58,31 @@ Example using `gh`:
 gh secret set AWS_DEPLOY_ROLE_ARN --body "$(terraform output -raw github_deploy_role_arn)"
 
 gh variable set AWS_REGION --body "$(terraform output -raw aws_region)"
-gh variable set ECR_REPOSITORY --body "$(terraform output -raw ecr_repository_name)"
-gh variable set ECS_CLUSTER --body "$(terraform output -raw ecs_cluster_name)"
-gh variable set ECS_SERVICE --body "$(terraform output -raw ecs_service_name)"
-gh variable set ECS_TASK_DEFINITION_FAMILY --body "$(terraform output -raw ecs_task_definition_family)"
-gh variable set ECS_CONTAINER_NAME --body "$(terraform output -raw ecs_container_name)"
-gh variable set ECS_WORKER_SERVICE --body "$(terraform output -raw worker_service_name)"
-gh variable set ECS_WORKER_TASK_DEFINITION_FAMILY --body "$(terraform output -raw worker_task_definition_family)"
 gh variable set S3_BUCKET_FRONTEND --body "$(terraform output -raw s3_bucket_frontend)"
 gh variable set CLOUDFRONT_DISTRIBUTION_ID --body "$(terraform output -raw cloudfront_distribution_id)"
 ```
 
-## 4. Set FRONTEND_URL / OAUTH_CALLBACK_BASE_URL / VITE_API_URL
+## 3. Point the frontend at the API gateway
 
-Once applied, two URLs are available:
+The frontend talks to the microservices API gateway via `VITE_API_URL`
+(see `frontend/.env.example`). Set it to the gateway's public URL for your
+deployment. The frontend itself is served from
+`terraform output cloudfront_domain_name`.
 
-- Frontend: `terraform output cloudfront_domain_name` (CloudFront)
-- Backend API: `terraform output alb_dns_name` (ALB)
+For production use, put a custom domain + ACM certificate in front of the
+CloudFront distribution — this configuration uses the default AWS-issued
+endpoint to keep the initial setup simple.
 
-Use these to fill in the `FRONTEND_URL`, `OAUTH_CALLBACK_BASE_URL`, and any
-OAuth provider callback URLs in the backend secret (step 2), and
-`VITE_API_URL` in the frontend build (set as a repo variable consumed by the
-frontend build step, or baked into `frontend/.env.production`).
-
-For production use, put a custom domain + ACM certificate in front of both
-the ALB and CloudFront distribution — this configuration uses the default
-AWS-issued endpoints to keep the initial setup simple.
-
-## 5. Trigger the Deploy workflow
+## 4. Trigger the Deploy workflow
 
 Once the secrets/variables above are set, push to `master` (or re-run the
-`CI` workflow) — the `Deploy` workflow will build and push the backend image,
-register a new ECS task definition revision, roll out the service, build the
-frontend, sync it to S3, and invalidate CloudFront.
+`CI` workflow) — the `Deploy` workflow builds the frontend, syncs it to S3,
+and invalidates CloudFront.
+
+## Tearing down the old backend infrastructure
+
+If you applied a previous revision that created the backend resources, running
+`terraform apply` with this config will destroy them (ECR, ECS cluster/services,
+ALB, ElastiCache, Secrets Manager secret, VPC, and the ECS IAM roles). Review
+the `terraform plan` output carefully and ensure no data you need lives in those
+resources (e.g. the Secrets Manager secret) before applying.

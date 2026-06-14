@@ -1,53 +1,4 @@
 # ---------------------------------------------------------------------------
-# ECS task execution role — used by the ECS agent to pull the image from ECR,
-# write logs to CloudWatch, and resolve secrets from Secrets Manager.
-# ---------------------------------------------------------------------------
-data "aws_iam_policy_document" "ecs_tasks_assume_role" {
-  statement {
-    effect  = "Allow"
-    actions = ["sts:AssumeRole"]
-
-    principals {
-      type        = "Service"
-      identifiers = ["ecs-tasks.amazonaws.com"]
-    }
-  }
-}
-
-resource "aws_iam_role" "ecs_task_execution" {
-  name               = "${var.project_name}-ecs-task-execution"
-  assume_role_policy = data.aws_iam_policy_document.ecs_tasks_assume_role.json
-}
-
-resource "aws_iam_role_policy_attachment" "ecs_task_execution_managed" {
-  role       = aws_iam_role.ecs_task_execution.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
-}
-
-data "aws_iam_policy_document" "ecs_task_execution_secrets" {
-  statement {
-    effect    = "Allow"
-    actions   = ["secretsmanager:GetSecretValue"]
-    resources = [aws_secretsmanager_secret.backend_env.arn]
-  }
-}
-
-resource "aws_iam_role_policy" "ecs_task_execution_secrets" {
-  name   = "${var.project_name}-ecs-task-execution-secrets"
-  role   = aws_iam_role.ecs_task_execution.id
-  policy = data.aws_iam_policy_document.ecs_task_execution_secrets.json
-}
-
-# ---------------------------------------------------------------------------
-# ECS task role — assumed by the application code itself. Empty for now;
-# attach permissions here if the backend needs to call other AWS APIs.
-# ---------------------------------------------------------------------------
-resource "aws_iam_role" "ecs_task" {
-  name               = "${var.project_name}-ecs-task"
-  assume_role_policy = data.aws_iam_policy_document.ecs_tasks_assume_role.json
-}
-
-# ---------------------------------------------------------------------------
 # GitHub OIDC provider — lets the Deploy workflow assume an AWS role without
 # long-lived credentials.
 # ---------------------------------------------------------------------------
@@ -60,6 +11,8 @@ resource "aws_iam_openid_connect_provider" "github" {
 # ---------------------------------------------------------------------------
 # GitHub deploy role — assumed by .github/workflows/deploy.yml via OIDC.
 # Trust is scoped to workflow_run events on var.github_deploy_branch.
+# Permissions cover the frontend deploy only (S3 sync + CloudFront
+# invalidation); the backend ECR/ECS resources were removed.
 # ---------------------------------------------------------------------------
 data "aws_iam_policy_document" "github_deploy_assume_role" {
   statement {
@@ -91,47 +44,6 @@ resource "aws_iam_role" "github_deploy" {
 }
 
 data "aws_iam_policy_document" "github_deploy" {
-  statement {
-    sid       = "ECRAuth"
-    effect    = "Allow"
-    actions   = ["ecr:GetAuthorizationToken"]
-    resources = ["*"]
-  }
-
-  statement {
-    sid    = "ECRPushPull"
-    effect = "Allow"
-    actions = [
-      "ecr:BatchCheckLayerAvailability",
-      "ecr:GetDownloadUrlForLayer",
-      "ecr:BatchGetImage",
-      "ecr:PutImage",
-      "ecr:InitiateLayerUpload",
-      "ecr:UploadLayerPart",
-      "ecr:CompleteLayerUpload",
-    ]
-    resources = [aws_ecr_repository.backend.arn]
-  }
-
-  statement {
-    sid    = "ECSDeploy"
-    effect = "Allow"
-    actions = [
-      "ecs:DescribeTaskDefinition",
-      "ecs:RegisterTaskDefinition",
-      "ecs:DescribeServices",
-      "ecs:UpdateService",
-    ]
-    resources = ["*"]
-  }
-
-  statement {
-    sid       = "PassTaskRoles"
-    effect    = "Allow"
-    actions   = ["iam:PassRole"]
-    resources = [aws_iam_role.ecs_task_execution.arn, aws_iam_role.ecs_task.arn]
-  }
-
   statement {
     sid    = "FrontendBucket"
     effect = "Allow"
