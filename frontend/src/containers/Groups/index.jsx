@@ -1,21 +1,27 @@
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useInjectReducer } from '@/commonUtils/useInjectReducer';
 import { useListGroupsQuery, useCreateGroupMutation, useJoinGroupMutation } from '@/hooks/groups/groupApi';
 import { getApiErrorMessage } from '@/commonUtils/apiError';
 import Button from '@/components/Button/Button';
 import FormInput from '@/components/FormInput/FormInput';
+import reducer, { filterApplied, filterCleared, pageChanged } from './reducer';
 
 /**
  * Browse / create groups page — shows a filterable list of public groups and
  * a quick-create form. Navigates to /groups/:id on row click or join success.
  */
 export default function GroupsContainer() {
+  useInjectReducer('groups', reducer);
+
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   // ── filter ───────────────────────────────────────────────────────────────
   const [tagInput, setTagInput] = useState('');
-  const [appliedTags, setAppliedTags] = useState('');
-  const [page, setPage] = useState(1);
+  const appliedTags = useSelector((state) => state.groups?.appliedTags ?? '');
+  const page = useSelector((state) => state.groups?.page ?? 1);
 
   const { data, isFetching, error } = useListGroupsQuery({ tags: appliedTags, page });
 
@@ -24,8 +30,7 @@ export default function GroupsContainer() {
 
   const applyFilter = (e) => {
     e.preventDefault();
-    setAppliedTags(tagInput.trim().replace(/\s+/g, ','));
-    setPage(1);
+    dispatch(filterApplied(tagInput.trim().replace(/\s+/g, ',')));
   };
 
   // ── create group ─────────────────────────────────────────────────────────
@@ -121,7 +126,7 @@ export default function GroupsContainer() {
           <Button
             type="button"
             variant="ghost"
-            onClick={() => { setTagInput(''); setAppliedTags(''); setPage(1); }}
+            onClick={() => { setTagInput(''); dispatch(filterCleared()); }}
           >
             Clear
           </Button>
@@ -187,7 +192,7 @@ export default function GroupsContainer() {
           <Button
             variant="ghost"
             disabled={page <= 1 || isFetching}
-            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            onClick={() => dispatch(pageChanged(Math.max(1, page - 1)))}
           >
             ← Prev
           </Button>
@@ -197,7 +202,7 @@ export default function GroupsContainer() {
           <Button
             variant="ghost"
             disabled={!pagination.hasNextPage || isFetching}
-            onClick={() => setPage((p) => p + 1)}
+            onClick={() => dispatch(pageChanged(page + 1))}
           >
             Next →
           </Button>

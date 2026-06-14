@@ -1,5 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
+import { useInjectReducer } from '@/commonUtils/useInjectReducer';
 import { useCurrentUser } from '@/hooks/auth/useCurrentUser';
 import { useGetConversationsQuery } from '@/hooks/chat/chatApi';
 import { useChat } from '@/hooks/chat/useChat';
@@ -13,16 +15,20 @@ import ConversationList from '@/widgets/ConversationList/ConversationList';
 import MessageBubble from '@/widgets/MessageBubble/MessageBubble';
 import MessageComposer from '@/widgets/MessageComposer/MessageComposer';
 import { parseConversations, parseConversationsError } from './parser';
+import reducer, { conversationSelected } from './reducer';
 
 export default function MessagesContainer() {
+  useInjectReducer('messages', reducer);
+
   const { user } = useCurrentUser();
   const location = useLocation();
   const socket = useSocket();
+  const dispatch = useDispatch();
   const { initiateCall, activeCall } = useCall() ?? {};
   const [initiateCallMutation, { isLoading: isCallInitiating }] = useInitiateCallMutation();
   const { isOnline } = usePresence(socket);
   const { data, isFetching, error } = useGetConversationsQuery();
-  const [activeConversationId, setActiveConversationId] = useState(null);
+  const activeConversationId = useSelector((state) => state.messages?.activeConversationId ?? null);
 
   const conversations = parseConversations(data);
   const conversationsError = parseConversationsError(error);
@@ -44,17 +50,15 @@ export default function MessagesContainer() {
 
   // Default to the conversation we navigated here for (e.g. "Message" from a
   // connection card), falling back to the most recent conversation once the
-  // list loads — adjusting state in response to async-loaded query data is the
-  // documented exception (React docs: "Adjusting state when a prop changes").
+  // list loads.
   useEffect(() => {
     if (activeConversationId || conversations.length === 0) return;
 
     const requestedId = location.state?.conversationId;
     const requested = requestedId && conversations.find((c) => c._id === requestedId);
 
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setActiveConversationId(requested ? requested._id : conversations[0]._id);
-  }, [activeConversationId, conversations, location.state]);
+    dispatch(conversationSelected(requested ? requested._id : conversations[0]._id));
+  }, [activeConversationId, conversations, location.state, dispatch]);
 
   // Mark the active conversation as read whenever it changes or new messages arrive
   useEffect(() => {
@@ -96,7 +100,7 @@ export default function MessagesContainer() {
             <ConversationList
               conversations={conversations}
               activeConversationId={activeConversationId}
-              onSelect={setActiveConversationId}
+              onSelect={(id) => dispatch(conversationSelected(id))}
               isOnline={isOnline}
             />
           )}
@@ -118,7 +122,7 @@ export default function MessagesContainer() {
                     type="button"
                     className="-mt-1 -mb-1 -ml-1.5 mr-1 inline-flex items-center rounded-md border-none bg-transparent px-1.5 py-1 text-lg leading-none text-gray-600 transition-colors duration-150 hover:bg-gray-100 sm:hidden"
                     aria-label="Back to conversations"
-                    onClick={() => setActiveConversationId(null)}
+                    onClick={() => dispatch(conversationSelected(null))}
                   >
                     ←
                   </button>

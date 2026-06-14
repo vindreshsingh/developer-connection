@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Button from '@/components/Button/Button';
 import { classNames } from '@/commonUtils/classNames';
 import { useCurrentUser } from '@/hooks/auth/useCurrentUser';
+import { useInjectReducer } from '@/commonUtils/useInjectReducer';
 import RecommendationsTab from './RecommendationsTab';
 import ResumeFeedbackTab from './ResumeFeedbackTab';
 import InterviewPrepTab from './InterviewPrepTab';
+import reducer, { tabChanged } from './reducer';
 
 const TABS = [
   { key: 'recommendations', label: 'Recommendations' },
@@ -14,8 +16,11 @@ const TABS = [
 ];
 
 export default function AIAssistantContainer() {
+  useInjectReducer('aiAssistant', reducer);
+
   const { user } = useCurrentUser();
-  const [activeTab, setActiveTab] = useState('recommendations');
+  const dispatch = useDispatch();
+  const activeTab = useSelector((state) => state.aiAssistant?.activeTab ?? 'recommendations');
 
   return (
     <div className="mx-auto max-w-[40rem] px-3 py-5 sm:px-4 sm:py-8">
@@ -42,7 +47,7 @@ export default function AIAssistantContainer() {
                   'cursor-pointer rounded-full border-none px-4 py-1.5 text-sm font-medium transition-colors duration-150',
                   activeTab === tab.key ? 'bg-purple-600 text-white' : 'bg-gray-100 text-gray-600',
                 )}
-                onClick={() => setActiveTab(tab.key)}
+                onClick={() => dispatch(tabChanged(tab.key))}
               >
                 {tab.label}
               </button>

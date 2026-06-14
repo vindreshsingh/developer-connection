@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { useInjectReducer } from '@/commonUtils/useInjectReducer';
 import { useGetCallHistoryQuery } from '@/hooks/call/callApi';
 import { useCurrentUser } from '@/hooks/auth/useCurrentUser';
 import Avatar from '@/components/Avatar/Avatar';
 import Button from '@/components/Button/Button';
 import { classNames } from '@/commonUtils/classNames';
 import { parseCallHistory, parseCallHistoryPagination, parseCallHistoryError } from './parser';
+import reducer, { pageChanged } from './reducer';
 
 const STATUS_LABELS = {
   ringing: 'Ringing',
@@ -24,8 +26,11 @@ const STATUS_CLASSES = {
 };
 
 export default function CallHistoryContainer() {
+  useInjectReducer('callHistory', reducer);
+
   const { user } = useCurrentUser();
-  const [page, setPage] = useState(1);
+  const dispatch = useDispatch();
+  const page = useSelector((state) => state.callHistory?.page ?? 1);
   const { data, isFetching, error } = useGetCallHistoryQuery(page);
 
   const calls = parseCallHistory(data, user?._id);
@@ -85,7 +90,7 @@ export default function CallHistoryContainer() {
           <Button
             variant="ghost"
             disabled={page <= 1 || isFetching}
-            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            onClick={() => dispatch(pageChanged(Math.max(1, page - 1)))}
           >
             ← Prev
           </Button>
@@ -95,7 +100,7 @@ export default function CallHistoryContainer() {
           <Button
             variant="ghost"
             disabled={!pagination.hasNextPage || isFetching}
-            onClick={() => setPage((p) => p + 1)}
+            onClick={() => dispatch(pageChanged(page + 1))}
           >
             Next →
           </Button>

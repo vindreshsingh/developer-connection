@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { useInjectReducer } from '@/commonUtils/useInjectReducer';
 import { useGetJobsQuery, useGetMyApplicationsQuery } from '@/hooks/jobs/jobApi';
 import { getApiErrorMessage } from '@/commonUtils/apiError';
 import { classNames } from '@/commonUtils/classNames';
@@ -8,6 +10,7 @@ import Tag from '@/components/Tag/Tag';
 import JobCard from '@/widgets/JobCard/JobCard';
 import JobPostForm from '@/widgets/JobPostForm/JobPostForm';
 import { JOB_TYPE_LABELS, JOB_TYPES } from '@/widgets/JobCard/jobConstants';
+import reducer, { tabChanged, pageChanged, typeChanged, skillsChanged } from './reducer';
 
 const TABS = [
   { value: 'browse', label: 'Browse Jobs' },
@@ -15,10 +18,13 @@ const TABS = [
 ];
 
 export default function JobsContainer() {
-  const [tab, setTab] = useState('browse');
-  const [page, setPage] = useState(1);
-  const [type, setType] = useState('');
-  const [skills, setSkills] = useState('');
+  useInjectReducer('jobs', reducer);
+
+  const dispatch = useDispatch();
+  const tab = useSelector((state) => state.jobs?.tab ?? 'browse');
+  const page = useSelector((state) => state.jobs?.page ?? 1);
+  const type = useSelector((state) => state.jobs?.type ?? '');
+  const skills = useSelector((state) => state.jobs?.skills ?? '');
   const [showForm, setShowForm] = useState(false);
 
   const { data, isFetching, error } = useGetJobsQuery(
@@ -29,11 +35,6 @@ export default function JobsContainer() {
     { page },
     { skip: tab !== 'applications' },
   );
-
-  const handleTabChange = (value) => {
-    setTab(value);
-    setPage(1);
-  };
 
   const jobs = data?.data ?? [];
   const pagination = data?.pagination;
@@ -53,7 +54,7 @@ export default function JobsContainer() {
                 'rounded-md px-3 py-1.5 text-[0.85rem] font-medium text-gray-500 transition-colors hover:text-gray-700',
                 tab === t.value && 'bg-white text-violet-800 shadow-sm',
               )}
-              onClick={() => handleTabChange(t.value)}
+              onClick={() => dispatch(tabChanged(t.value))}
             >
               {t.label}
             </button>
@@ -75,7 +76,7 @@ export default function JobsContainer() {
             <select
               className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 focus:outline-none focus:shadow-[0_0_0_2px_rgba(192,132,252,0.6)]"
               value={type}
-              onChange={(e) => { setType(e.target.value); setPage(1); }}
+              onChange={(e) => dispatch(typeChanged(e.target.value))}
               aria-label="Filter by job type"
             >
               <option value="">All types</option>
@@ -85,7 +86,7 @@ export default function JobsContainer() {
               className="min-w-[10rem] flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:shadow-[0_0_0_2px_rgba(192,132,252,0.6)]"
               placeholder="Filter by skills (comma separated)"
               value={skills}
-              onChange={(e) => { setSkills(e.target.value); setPage(1); }}
+              onChange={(e) => dispatch(skillsChanged(e.target.value))}
             />
           </div>
 
@@ -106,7 +107,7 @@ export default function JobsContainer() {
               <Button
                 variant="ghost"
                 disabled={page <= 1 || isFetching}
-                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                onClick={() => dispatch(pageChanged(Math.max(1, page - 1)))}
               >
                 ← Prev
               </Button>
@@ -116,7 +117,7 @@ export default function JobsContainer() {
               <Button
                 variant="ghost"
                 disabled={!pagination.hasNextPage || isFetching}
-                onClick={() => setPage((p) => p + 1)}
+                onClick={() => dispatch(pageChanged(page + 1))}
               >
                 Next →
               </Button>
@@ -160,7 +161,7 @@ export default function JobsContainer() {
               <Button
                 variant="ghost"
                 disabled={page <= 1 || isFetchingApps}
-                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                onClick={() => dispatch(pageChanged(Math.max(1, page - 1)))}
               >
                 ← Prev
               </Button>
@@ -170,7 +171,7 @@ export default function JobsContainer() {
               <Button
                 variant="ghost"
                 disabled={!appsPagination.hasNextPage || isFetchingApps}
-                onClick={() => setPage((p) => p + 1)}
+                onClick={() => dispatch(pageChanged(page + 1))}
               >
                 Next →
               </Button>
