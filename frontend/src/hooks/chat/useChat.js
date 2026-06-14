@@ -47,7 +47,7 @@ export const useChat = (socket, conversationId) => {
     socket.emit('join_conversation', { conversationId });
 
     const onReceive = (message) => {
-      if (message.conversationId !== conversationId) return;
+      if (String(message.conversationId) !== String(conversationId)) return;
       setLiveMessages((prev) => [...prev, message]);
     };
     const onChatError = (payload) => setChatError(payload?.message || 'Something went wrong');
