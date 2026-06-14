@@ -5,19 +5,3 @@ aws_region           = "ap-south-1"
 project_name         = "dc"
 github_repository    = "vindreshsingh/developer-connection"
 github_deploy_branch = "master"
-
-vpc_cidr            = "10.0.0.0/16"
-public_subnet_cidrs = ["10.0.1.0/24", "10.0.2.0/24"]
-
-backend_container_port = 3008
-backend_cpu            = 256
-backend_memory         = 512
-backend_desired_count  = 1
-
-# Phase 10 — Redis (ElastiCache) + BullMQ worker service
-redis_node_type      = "cache.t4g.micro"
-redis_engine_version = "7.1"
-worker_cpu           = 256
-worker_memory        = 512
-worker_desired_count = 1
-worker_concurrency   = 5
