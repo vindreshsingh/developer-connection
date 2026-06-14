@@ -112,6 +112,20 @@ export const NOTIFICATIONS = {
   READ_ALL:     '/read-all',          // PATCH — mark all as read
 };
 
+// mounted at /jobs
+export const JOBS = {
+  LIST:               '/',                              // GET  — paginated browse (?skills=&type=&page=1)
+  CREATE:             '/',                              // POST — create a job posting
+  MY_APPLICATIONS:    '/applications/mine',             // GET  — logged-in user's own applications
+                                                         // IMPORTANT: must be registered before GET
+  GET:                '/:jobId',                        // GET  — single posting detail
+  UPDATE:             '/:jobId',                        // PATCH — author: update posting (incl. status)
+  DELETE:             '/:jobId',                        // DELETE — author: soft-delete
+  APPLY:              '/:jobId/apply',                  // POST — apply to a posting
+  APPLICATIONS:       '/:jobId/applications',           // GET  — poster: paginated applicants
+  APPLICATION_STATUS: '/:jobId/applications/:applicationId', // PATCH — poster: update application status
+};
+
 // mounted at /chat
 export const CHAT = {
   CONVERSATIONS: '/conversations',                       // GET: list logged-in user's conversations
