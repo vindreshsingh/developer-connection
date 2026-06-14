@@ -1,0 +1,27 @@
+backend/src/server.js
+  7dfed2b4131656b7 14,19
+backend/src/app.js
+  7dfed2b4131656b7 1-9,27,34,39-43
+docs/migration/monolith-to-microservices.md
+  7dfed2b4131656b7 1-365
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.5",
+  "base_commit_sha": "bfa832f54e6a61ff5de1fc52c2ed614c913f52b0",
+  "prompts": {
+    "7dfed2b4131656b7": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "1ee9e928-5ca9-4756-9a59-6251e05831d2",
+        "model": "composer-2.5"
+      },
+      "human_author": "Vindresh Kumar <vksingh5198@gmail.com>",
+      "messages": [],
+      "total_additions": 1011,
+      "total_deletions": 106,
+      "accepted_lines": 986,
+      "overriden_lines": 0
+    }
+  }
+}
