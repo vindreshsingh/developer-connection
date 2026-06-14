@@ -19,7 +19,7 @@ npm install
 Create a `.env` file with:
 
 ```
-VITE_API_URL=http://localhost:3008
+VITE_API_URL=http://localhost:4000   # the microservices API gateway
 ```
 
 ## Running
