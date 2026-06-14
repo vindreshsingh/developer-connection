@@ -64,6 +64,44 @@ variable "backend_desired_count" {
   default     = 1
 }
 
+# ── Phase 10: Redis (ElastiCache) + worker service ───────────────────────────
+
+variable "redis_node_type" {
+  description = "ElastiCache node type for the Redis cluster"
+  type        = string
+  default     = "cache.t4g.micro"
+}
+
+variable "redis_engine_version" {
+  description = "Redis engine version for ElastiCache"
+  type        = string
+  default     = "7.1"
+}
+
+variable "worker_cpu" {
+  description = "Fargate CPU units for the BullMQ worker task"
+  type        = number
+  default     = 256
+}
+
+variable "worker_memory" {
+  description = "Fargate memory (MiB) for the BullMQ worker task"
+  type        = number
+  default     = 512
+}
+
+variable "worker_desired_count" {
+  description = "Number of worker tasks to run (scales independently of the API)"
+  type        = number
+  default     = 1
+}
+
+variable "worker_concurrency" {
+  description = "Per-worker BullMQ job concurrency (WORKER_CONCURRENCY env var)"
+  type        = number
+  default     = 5
+}
+
 variable "backend_env_secret_keys" {
   description = "Keys written into the backend env Secrets Manager secret (values left blank — fill in via console/CLI after apply)"
   type        = list(string)

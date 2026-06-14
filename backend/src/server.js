@@ -5,6 +5,8 @@ import { initSentry } from './utils/sentry.js';
 import app from './app.js';
 import { initSockets } from './sockets/index.js';
 import { logger } from './utils/logger.js';
+import { closeRedis } from './config/redis.js';
+import { closeQueues } from './queues/index.js';
 
 initSentry();
 
@@ -23,3 +25,12 @@ connectDB().then(() => {
     logger.info(`Server running on port ${PORT}`);
   });
 });
+
+// Release Redis + BullMQ producer connections on rolling deploys / scale-in.
+const shutdown = async () => {
+  logger.info('Shutting down — closing connections...');
+  await Promise.allSettled([closeQueues(), closeRedis()]);
+  httpServer.close(() => process.exit(0));
+};
+process.on('SIGTERM', shutdown);
+process.on('SIGINT', shutdown);

@@ -66,3 +66,20 @@ output "backend_env_secret_name" {
   description = "Secrets Manager secret to populate with real backend env values after apply"
   value       = aws_secretsmanager_secret.backend_env.name
 }
+
+# ── Phase 10 ──────────────────────────────────────────────────────────────────
+
+output "redis_primary_endpoint" {
+  description = "ElastiCache Redis primary endpoint (injected into tasks as REDIS_URL)"
+  value       = aws_elasticache_replication_group.redis.primary_endpoint_address
+}
+
+output "worker_service_name" {
+  description = "-> repo variable ECS_WORKER_SERVICE (Deploy workflow rolls this alongside the backend)"
+  value       = aws_ecs_service.worker.name
+}
+
+output "worker_task_definition_family" {
+  description = "-> repo variable ECS_WORKER_TASK_DEFINITION_FAMILY"
+  value       = aws_ecs_task_definition.worker.family
+}

@@ -2,7 +2,9 @@ import { api } from '@/store/api';
 
 const aiApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    // GET /ai/recommendations — cached AI match suggestions (24h TTL server-side)
+    // GET /ai/recommendations — cached AI match suggestions (24h TTL server-side).
+    // On a cold miss the server may return 202 `{ status: 'generating', data: [] }`
+    // while a worker builds them; the component polls until data arrives.
     getRecommendations: builder.query({
       query: () => '/ai/recommendations',
       providesTags: ['Recommendations'],
