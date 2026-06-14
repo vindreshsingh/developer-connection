@@ -110,14 +110,15 @@ export const useGroupChat = (socket, groupId) => {
 
   // Cleanup send-side timers on unmount / group change
   useEffect(() => {
+    const clearTimers = typingClearTimers.current;
     return () => {
       clearTimeout(stopTimer.current);
       if (isSendingTyping.current && socket && groupId) {
         socket.emit('group_typing', { groupId, isTyping: false });
         isSendingTyping.current = false;
       }
-      typingClearTimers.current.forEach((t) => clearTimeout(t));
-      typingClearTimers.current.clear();
+      clearTimers.forEach((t) => clearTimeout(t));
+      clearTimers.clear();
     };
   }, [socket, groupId]);
 

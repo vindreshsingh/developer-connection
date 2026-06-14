@@ -2,7 +2,6 @@ import { useGetPlansQuery, useGetSubscriptionQuery } from '@/hooks/billing/billi
 import { useRazorpayCheckout } from '@/hooks/billing/useRazorpayCheckout';
 import PlanCard from '@/widgets/PlanCard/PlanCard';
 import { parsePlans, parseCurrentPlanKey, parsePlansError } from './parser';
-import './Pricing.scss';
 
 export default function PricingContainer() {
   const { data: plansData, isFetching, error } = useGetPlansQuery();
@@ -13,19 +12,19 @@ export default function PricingContainer() {
   const currentPlanKey = parseCurrentPlanKey(subscriptionData);
 
   return (
-    <div className="dc-pricing">
-      <h1 className="dc-pricing-heading">Plans &amp; Pricing</h1>
-      <p className="dc-pricing-subheading">
+    <div className="mx-auto max-w-[48rem] px-3 py-5 text-center sm:px-4 sm:py-8">
+      <h1 className="text-[1.75rem] font-extrabold text-gray-900 opacity-0 [animation:dc-fade-in-up_0.45s_ease_forwards]">Plans &amp; Pricing</h1>
+      <p className="mt-2 mb-8 text-[0.95rem] text-gray-500">
         Upgrade to Premium for unlimited swipes, advanced filters, bigger group calls, and the AI developer assistant.
       </p>
 
-      {error && <p className="dc-pricing-error">{parsePlansError(error)}</p>}
-      {checkoutError && <p className="dc-pricing-error">{checkoutError}</p>}
+      {error && <p className="mb-4 text-sm text-red-500">{parsePlansError(error)}</p>}
+      {checkoutError && <p className="mb-4 text-sm text-red-500">{checkoutError}</p>}
 
       {isFetching ? (
-        <p className="dc-pricing-loading">Loading plans…</p>
+        <p className="text-sm text-gray-400">Loading plans…</p>
       ) : (
-        <div className="dc-pricing-grid">
+        <div className="grid gap-5 text-left [grid-template-columns:repeat(auto-fit,minmax(14rem,1fr))]">
           {plans.map((plan) => (
             <PlanCard
               key={plan.key}

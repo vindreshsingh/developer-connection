@@ -1,7 +1,6 @@
 import { Highlight, themes } from 'prism-react-renderer';
 import { Link } from 'react-router-dom';
 import { SUPPORTED_LANGUAGES } from './snippetLanguages';
-import './SnippetBlock.scss';
 
 const LANGUAGE_LABEL = Object.fromEntries(
   SUPPORTED_LANGUAGES.map(({ value, label }) => [value, label])
@@ -21,13 +20,13 @@ export default function SnippetBlock({ code, language, senderId, senderName }) {
   const profileId = senderId?._id || senderId;
 
   return (
-    <div className="dc-snippet-block">
-      <div className="dc-snippet-block-header">
-        <span className="dc-snippet-block-lang">{langLabel}</span>
+    <div className="max-w-full overflow-hidden rounded-lg text-[0.8rem]">
+      <div className="flex items-center justify-between gap-2 border-b border-[#2d2d2d] bg-[#1e1e1e] px-3 py-1.5">
+        <span className="text-[0.7rem] font-semibold uppercase tracking-[0.05em] text-gray-400">{langLabel}</span>
         {profileId && (
           <Link
             to={`/profile?userId=${profileId}`}
-            className="dc-snippet-block-author"
+            className="text-[0.7rem] text-indigo-400 no-underline hover:text-[#a5b4fc] hover:underline"
           >
             {senderName || 'View profile'}
           </Link>
@@ -36,10 +35,10 @@ export default function SnippetBlock({ code, language, senderId, senderName }) {
 
       <Highlight theme={themes.vsDark} code={code} language={lang}>
         {({ className, style, tokens, getLineProps, getTokenProps }) => (
-          <pre className={`dc-snippet-block-pre ${className}`} style={style}>
+          <pre className={`m-0 overflow-x-auto py-3 font-mono text-[0.8rem] leading-relaxed [border-radius:0_!important] ${className}`} style={style}>
             {tokens.map((line, i) => (
               <div key={i} {...getLineProps({ line })}>
-                <span className="dc-snippet-block-lineno">{i + 1}</span>
+                <span className="inline-block w-9 select-none pr-3 text-right text-xs text-gray-600">{i + 1}</span>
                 {line.map((token, key) => (
                   <span key={key} {...getTokenProps({ token })} />
                 ))}

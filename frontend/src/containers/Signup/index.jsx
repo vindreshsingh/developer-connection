@@ -8,7 +8,6 @@ import { useInjectReducer } from '@/commonUtils/useInjectReducer';
 import { useSignup } from '@/hooks/auth/useSignup';
 import reducer, { submissionStarted, submissionFailed } from './reducer';
 import { parseSignupOutcome } from './parser';
-import './Signup.scss';
 
 const EMPTY_FORM = { firstName: '', lastName: '', email: '', password: '' };
 
@@ -36,10 +35,10 @@ export default function SignupContainer() {
   };
 
   return (
-    <div className="dc-auth-page">
-      <form onSubmit={handleSubmit} className="dc-auth-card">
-        <h1 className="dc-auth-title">DevConnect</h1>
-        <p className="dc-auth-subtitle">Create your developer profile</p>
+    <div className="flex min-h-screen items-center justify-center px-4 py-8 [background:radial-gradient(circle_at_top_left,#f3e8ff,transparent_55%),radial-gradient(circle_at_bottom_right,#fce7f3,transparent_55%),linear-gradient(to_bottom_right,#faf5ff,#fdf2f8)]">
+      <form onSubmit={handleSubmit} className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-[0_20px_25px_-5px_rgba(0,0,0,0.1),0_8px_24px_-12px_rgba(147,51,234,0.2)] [animation:dc-pop-in_0.4s_ease_both] sm:p-8">
+        <h1 className="mb-1 bg-gradient-to-br from-purple-600 to-pink-500 bg-clip-text text-center text-[1.75rem] font-extrabold text-transparent">DevConnect</h1>
+        <p className="mb-6 text-center text-sm text-gray-500">Create your developer profile</p>
 
         <Banner variant="error" className="text-center mb-3">{error}</Banner>
 
@@ -70,9 +69,9 @@ export default function SignupContainer() {
           {isLoading ? 'Creating account...' : 'Sign Up'}
         </Button>
 
-        <p className="dc-auth-footer">
+        <p className="mt-4 text-center text-sm text-gray-500">
           Already have an account?{' '}
-          <Link to="/login" className="dc-auth-link">
+          <Link to="/login" className="font-medium text-purple-600">
             Log in
           </Link>
         </p>

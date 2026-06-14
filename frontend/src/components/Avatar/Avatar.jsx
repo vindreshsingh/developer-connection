@@ -1,5 +1,4 @@
 import { classNames } from '@/commonUtils/classNames';
-import './Avatar.scss';
 
 const SIZE_CLASSES = {
   sm: 'w-12 h-12 text-base',
@@ -16,13 +15,19 @@ export default function Avatar({ user, photoUrl, initials, size = 'sm', classNam
       <img
         src={resolvedPhotoUrl}
         alt={user?.firstName || resolvedInitials || 'avatar'}
-        className={classNames('dc-avatar', sizeClass, className)}
+        className={classNames('flex-shrink-0 rounded-full object-cover', sizeClass, className)}
       />
     );
   }
 
   return (
-    <div className={classNames('dc-avatar dc-avatar--placeholder', sizeClass, className)}>
+    <div
+      className={classNames(
+        'flex flex-shrink-0 items-center justify-center rounded-full bg-violet-100 font-bold text-purple-600',
+        sizeClass,
+        className,
+      )}
+    >
       {resolvedInitials}
     </div>
   );

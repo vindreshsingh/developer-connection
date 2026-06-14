@@ -24,7 +24,6 @@ import {
   parseUpdateError,
   parseImageUploadError,
 } from './parser';
-import './Profile.scss';
 
 export default function ProfileContainer() {
   useInjectReducer('profile', reducer);
@@ -81,13 +80,13 @@ export default function ProfileContainer() {
   };
 
   return (
-    <div className="dc-profile">
-      <h1 className="dc-profile-heading">Your Profile</h1>
-      <p className="dc-profile-subheading">This is how other developers will see you</p>
+    <div className="mx-auto max-w-[36rem] px-3 py-5 sm:px-4 sm:py-8">
+      <h1 className="mb-1 text-2xl font-bold text-gray-900 opacity-0 [animation:dc-fade-in-up_0.45s_ease_forwards]">Your Profile</h1>
+      <p className="mb-6 text-sm text-gray-500">This is how other developers will see you</p>
 
-      {message && <p className="dc-profile-message">{message}</p>}
-      {error && <p className="dc-profile-error">{error}</p>}
-      {imageError && <p className="dc-profile-error">{imageError}</p>}
+      {message && <p className="mb-3 text-sm text-green-600">{message}</p>}
+      {error && <p className="mb-3 text-sm text-red-500">{error}</p>}
+      {imageError && <p className="mb-3 text-sm text-red-500">{imageError}</p>}
 
       <ImageUploadPanel
         photoUrl={form.photoUrl}

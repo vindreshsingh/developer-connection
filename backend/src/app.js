@@ -15,6 +15,8 @@ import groupsRouter from './routes/groups.js';
 import callsRouter from './routes/calls.js';
 import billingRouter from './routes/billing.js';
 import aiRouter from './routes/ai.js';
+import postsRouter from './routes/posts.js';
+import notificationsRouter from './routes/notifications.js';
 import { configurePassport } from './middlewares/passport.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { globalRateLimiter } from './middlewares/rateLimiter.js';
@@ -91,6 +93,8 @@ app.use('/groups', groupsRouter);
 app.use('/calls', callsRouter);
 app.use('/billing', billingRouter);
 app.use('/ai', aiRouter);
+app.use('/posts', postsRouter);
+app.use('/notifications', notificationsRouter);
 
 app.use(errorHandler);
 

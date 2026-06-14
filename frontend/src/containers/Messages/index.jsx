@@ -8,11 +8,11 @@ import { useSocket } from '@/hooks/chat/useSocket';
 import { useCall } from '@/context/CallContext';
 import { useInitiateCallMutation } from '@/hooks/call/callApi';
 import { getApiErrorMessage } from '@/commonUtils/apiError';
+import { classNames } from '@/commonUtils/classNames';
 import ConversationList from '@/widgets/ConversationList/ConversationList';
 import MessageBubble from '@/widgets/MessageBubble/MessageBubble';
 import MessageComposer from '@/widgets/MessageComposer/MessageComposer';
 import { parseConversations, parseConversationsError } from './parser';
-import './Messages.scss';
 
 export default function MessagesContainer() {
   const { user } = useCurrentUser();
@@ -78,15 +78,20 @@ export default function MessagesContainer() {
       : otherUserSeenAt || restSeenAt;
 
   return (
-    <div className="dc-messages">
-      <h1 className="dc-messages-heading">Messages</h1>
+    <div className="mx-auto max-w-[56rem] px-2 py-4 sm:px-4 sm:py-8">
+      <h1 className="mb-4 text-2xl font-bold text-gray-900 opacity-0 [animation:dc-fade-in-up_0.45s_ease_forwards]">Messages</h1>
 
-      {conversationsError && <p className="dc-messages-error">{conversationsError}</p>}
+      {conversationsError && <p className="my-2 text-sm text-red-500">{conversationsError}</p>}
 
-      <div className={`dc-messages-layout ${activeConversationId ? 'dc-messages-layout--thread-active' : ''}`}>
-        <aside className="dc-messages-sidebar">
+      <div className="relative flex h-[calc(100svh-9rem)] gap-0 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-[0_12px_32px_-20px_rgba(17,24,39,0.25)] opacity-0 [animation:dc-fade-in-up_0.45s_ease_forwards] [animation-delay:0.05s] sm:static sm:h-[32rem] sm:gap-4 sm:rounded-xl">
+        <aside
+          className={classNames(
+            'w-full overflow-y-auto p-2 sm:w-64 sm:shrink-0 sm:border-r sm:border-gray-200',
+            activeConversationId ? 'hidden sm:block' : 'block sm:block',
+          )}
+        >
           {isFetching ? (
-            <p className="dc-messages-loading">Loading conversations…</p>
+            <p className="m-auto p-4 text-sm text-gray-500">Loading conversations…</p>
           ) : (
             <ConversationList
               conversations={conversations}
@@ -97,16 +102,21 @@ export default function MessagesContainer() {
           )}
         </aside>
 
-        <section className="dc-messages-thread">
+        <section
+          className={classNames(
+            'w-full min-w-0 flex-1 flex-col',
+            activeConversationId ? 'flex sm:flex' : 'hidden sm:flex',
+          )}
+        >
           {!activeConversationId ? (
-            <p className="dc-messages-placeholder">Select a conversation to start chatting.</p>
+            <p className="m-auto p-4 text-sm text-gray-500">Select a conversation to start chatting.</p>
           ) : (
             <>
               {activeConversation && (
-                <header className="dc-messages-thread-header">
+                <header className="flex items-center gap-2 border-b border-gray-200 px-4 py-3.5 font-semibold text-gray-900">
                   <button
                     type="button"
-                    className="dc-messages-back-btn"
+                    className="-mt-1 -mb-1 -ml-1.5 mr-1 inline-flex items-center rounded-md border-none bg-transparent px-1.5 py-1 text-lg leading-none text-gray-600 transition-colors duration-150 hover:bg-gray-100 sm:hidden"
                     aria-label="Back to conversations"
                     onClick={() => setActiveConversationId(null)}
                   >
@@ -114,11 +124,11 @@ export default function MessagesContainer() {
                   </button>
                   <span>{activeConversation.otherUser?.firstName} {activeConversation.otherUser?.lastName}</span>
                   {isOnline(activeConversation.otherUser?._id) && (
-                    <span className="dc-messages-thread-online">● Online</span>
+                    <span className="text-xs font-normal text-green-500">● Online</span>
                   )}
                   <button
                     type="button"
-                    className="dc-messages-call-btn"
+                    className="ml-auto cursor-pointer rounded-lg border border-gray-200 bg-transparent px-[0.6rem] py-[0.35rem] text-base transition-colors duration-150 hover:not-disabled:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40"
                     disabled={!!activeCall || isCallInitiating}
                     title="Start video call"
                     aria-label="Start video call"
@@ -142,14 +152,14 @@ export default function MessagesContainer() {
                 </header>
               )}
 
-              <div className="dc-messages-thread-body">
+              <div className="flex flex-1 flex-col overflow-y-auto p-4">
                 {isThreadFetching && messages.length === 0 && (
-                  <p className="dc-messages-loading">Loading messages…</p>
+                  <p className="m-auto p-4 text-sm text-gray-500">Loading messages…</p>
                 )}
                 {threadError && (
-                  <p className="dc-messages-error">{getApiErrorMessage(threadError, 'Could not load messages')}</p>
+                  <p className="my-2 text-sm text-red-500">{getApiErrorMessage(threadError, 'Could not load messages')}</p>
                 )}
-                {chatError && <p className="dc-messages-error">{chatError}</p>}
+                {chatError && <p className="my-2 text-sm text-red-500">{chatError}</p>}
 
                 {messages.map((message) => {
                   const isOwn = message.senderId === user?._id || message.senderId?._id === user?._id;
@@ -168,7 +178,7 @@ export default function MessagesContainer() {
                   );
                 })}
                 {typingUserId && (
-                  <p className="dc-messages-typing">
+                  <p className="py-1 text-[0.8rem] text-gray-500 italic [animation:dc-blink_1.2s_ease-in-out_infinite]">
                     {activeConversation?.otherUser?.firstName ?? 'Someone'} is typing…
                   </p>
                 )}
