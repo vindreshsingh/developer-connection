@@ -1,4 +1,7 @@
 import { Server } from 'socket.io';
+import { createAdapter } from '@socket.io/redis-adapter';
+import { createRedisClient, isRedisEnabled } from '../config/redis.js';
+import { logger } from '../utils/logger.js';
 import socketAuthMiddleware from './authMiddleware.js';
 import PresenceService from './presenceService.js';
 import { registerChatHandlers } from './chatHandlers.js';
@@ -19,6 +22,18 @@ export const initSockets = (httpServer) => {
       credentials: true,
     },
   });
+
+  // With Redis, attach the pub/sub adapter so room emits (e.g.
+  // io.to(`user:<id>`).emit(...) from a REST route) reach sockets connected to
+  // a DIFFERENT ECS task. Without it, a multi-task deployment silently drops
+  // cross-task events (a message/notification only reaches recipients who
+  // happen to share the sender's task). No-op when Redis is disabled.
+  if (isRedisEnabled) {
+    const pubClient = createRedisClient();
+    const subClient = pubClient.duplicate();
+    io.adapter(createAdapter(pubClient, subClient));
+    logger.info('Socket.IO Redis adapter enabled');
+  }
 
   io.use(socketAuthMiddleware);
 

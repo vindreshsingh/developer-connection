@@ -106,6 +106,38 @@ describe('GET /ai/recommendations', () => {
   });
 });
 
+describe('ai-recommendations queue handler (worker path)', () => {
+  it('generates and caches recommendations for the given userId', async () => {
+    const { handlers } = await import('../jobs/handlers.js');
+    const { QUEUE } = await import('../queues/names.js');
+
+    const { user } = await createUser();
+    const { user: candidate } = await createUser({ skills: ['React'], techStack: [] });
+
+    mockCreate.mockResolvedValue(
+      textResponse(JSON.stringify([{ index: 0, reason: 'Strong React overlap' }])),
+    );
+
+    await handlers[QUEUE.AI_RECOMMENDATIONS]({ userId: user._id.toString() });
+
+    const cache = await RecommendationCache.findOne({ userId: user._id });
+    expect(cache.recommendations).toHaveLength(1);
+    expect(cache.recommendations[0].userId.toString()).toBe(candidate._id.toString());
+    expect(mockCreate).toHaveBeenCalledTimes(1);
+    expect(await AIUsageLog.countDocuments({ endpoint: 'recommendations' })).toBe(1);
+  });
+
+  it('no-ops when the user no longer exists', async () => {
+    const { handlers } = await import('../jobs/handlers.js');
+    const { QUEUE } = await import('../queues/names.js');
+    const { default: mongoose } = await import('mongoose');
+
+    await handlers[QUEUE.AI_RECOMMENDATIONS]({ userId: new mongoose.Types.ObjectId().toString() });
+
+    expect(mockCreate).not.toHaveBeenCalled();
+  });
+});
+
 describe('POST /ai/recommendations/:userId/dismiss', () => {
   it('removes the user from cached recommendations and records the dismissal', async () => {
     const { user, cookie } = await createUser();

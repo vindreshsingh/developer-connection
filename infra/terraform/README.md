@@ -12,6 +12,11 @@ GitHub Actions workflow needs:
 - Application Load Balancer + target group + listener, health check on
   `/health` (`alb.tf`)
 - ECS Fargate cluster, task definition, and service (`ecs.tf`)
+- ElastiCache Redis (cache, queues, pub/sub, presence) with a security group
+  scoped to the ECS tasks; its endpoint is injected into the tasks as
+  `REDIS_URL` (`elasticache.tf`)
+- A second ECS Fargate service running the BullMQ worker on the same image
+  with `command = ["node","src/worker.js"]` (`ecs_worker.tf`)
 - S3 bucket + CloudFront distribution (with OAC) for the frontend
   (`s3_cloudfront.tf`)
 
@@ -82,6 +87,8 @@ the `gh` CLI, using the corresponding Terraform outputs:
 | Variable `ECS_SERVICE`                            | `ecs_service_name`             |
 | Variable `ECS_TASK_DEFINITION_FAMILY`             | `ecs_task_definition_family`   |
 | Variable `ECS_CONTAINER_NAME`                     | `ecs_container_name`           |
+| Variable `ECS_WORKER_SERVICE`                     | `worker_service_name`          |
+| Variable `ECS_WORKER_TASK_DEFINITION_FAMILY`      | `worker_task_definition_family`|
 | Variable `S3_BUCKET_FRONTEND`                     | `s3_bucket_frontend`           |
 | Variable `CLOUDFRONT_DISTRIBUTION_ID`             | `cloudfront_distribution_id`   |
 
@@ -96,6 +103,8 @@ gh variable set ECS_CLUSTER --body "$(terraform output -raw ecs_cluster_name)"
 gh variable set ECS_SERVICE --body "$(terraform output -raw ecs_service_name)"
 gh variable set ECS_TASK_DEFINITION_FAMILY --body "$(terraform output -raw ecs_task_definition_family)"
 gh variable set ECS_CONTAINER_NAME --body "$(terraform output -raw ecs_container_name)"
+gh variable set ECS_WORKER_SERVICE --body "$(terraform output -raw worker_service_name)"
+gh variable set ECS_WORKER_TASK_DEFINITION_FAMILY --body "$(terraform output -raw worker_task_definition_family)"
 gh variable set S3_BUCKET_FRONTEND --body "$(terraform output -raw s3_bucket_frontend)"
 gh variable set CLOUDFRONT_DISTRIBUTION_ID --body "$(terraform output -raw cloudfront_distribution_id)"
 ```

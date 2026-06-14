@@ -16,25 +16,28 @@ import userAuth from '../middlewares/auth.js';
 import { requirePremium } from '../middlewares/premium.js';
 import { checkAIRateLimit, isAIRateLimited } from '../middlewares/aiRateLimit.js';
 import { AI } from '../constants/apiEndpoints.js';
-import User from '../models/user.js';
-import ConnectionRequest from '../models/connectionRequest.js';
 import RecommendationCache from '../models/recommendationCache.js';
 import ResumeFeedback from '../models/resumeFeedback.js';
 import InterviewSession from '../models/interviewSession.js';
 import AIUsageLog from '../models/aiUsageLog.js';
 import { AIService, AIServiceError } from '../services/AIService.js';
+import {
+  RECOMMENDATION_FIELDS,
+  recsCacheKey,
+  buildRecommendationsResponse,
+  generateAndCacheRecommendations,
+} from '../services/RecommendationService.js';
 import { uploadRawBuffer } from '../utils/cloudinary.js';
+import * as cache from '../utils/cache.js';
+import { enqueue } from '../queues/index.js';
+import { QUEUE } from '../queues/names.js';
+import { isRedisEnabled } from '../config/redis.js';
 
 const router = express.Router();
 
-const RECOMMENDATION_CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24h
-const DISMISS_EXCLUSION_MS = 14 * 24 * 60 * 60 * 1000; // 14 days
-const MAX_CANDIDATES = 15;
 const MAX_RESUME_SIZE = 5 * 1024 * 1024; // 5MB
 const INTERVIEW_TURN_CAP = 10;
 const PAGE_SIZE = 10;
-
-const RECOMMENDATION_FIELDS = 'firstName lastName photoUrl bio skills techStack githubUrl linkedinUrl';
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -51,92 +54,47 @@ const profileContext = (user) => ({
   experience: user.experience,
 });
 
-const buildRecommendationsResponse = (cache) =>
-  (cache?.recommendations || [])
-    .filter((r) => r.userId)
-    .map((r) => ({ user: r.userId, reason: r.reason }));
-
-// Excludes self, accepted/pending connection-request partners (either
-// direction), blocked users (either direction), and anyone dismissed within
-// the last 14 days — same shape as the profile feed exclusion set.
-const buildShortlist = async (me) => {
-  const loggedInUserId = me._id;
-
-  const interactions = await ConnectionRequest.find({
-    $or: [{ fromUserId: loggedInUserId }, { toUserId: loggedInUserId }],
-  }).select('fromUserId toUserId');
-
-  const excludedIds = new Set([loggedInUserId.toString()]);
-  for (const r of interactions) {
-    excludedIds.add(r.fromUserId.toString());
-    excludedIds.add(r.toUserId.toString());
-  }
-
-  for (const id of me.blockedUsers) excludedIds.add(id.toString());
-  const blockedByOthers = await User.find({ blockedUsers: loggedInUserId }).select('_id');
-  for (const u of blockedByOthers) excludedIds.add(u._id.toString());
-
-  const cache = await RecommendationCache.findOne({ userId: loggedInUserId });
-  const dismissCutoff = Date.now() - DISMISS_EXCLUSION_MS;
-  for (const d of cache?.dismissed || []) {
-    if (d.dismissedAt.getTime() > dismissCutoff) excludedIds.add(d.userId.toString());
-  }
-
-  const candidates = await User.find({ _id: { $nin: [...excludedIds] } }).select(
-    `${RECOMMENDATION_FIELDS} experience`,
-  );
-
-  const mySkills = new Set((me.skills || []).map((s) => s.toLowerCase()));
-  const myTech = new Set((me.techStack || []).map((s) => s.toLowerCase()));
-
-  return candidates
-    .map((c) => {
-      const score =
-        (c.skills || []).filter((s) => mySkills.has(s.toLowerCase())).length +
-        (c.techStack || []).filter((s) => myTech.has(s.toLowerCase())).length;
-      return { user: c, score };
-    })
-    .sort((a, b) => b.score - a.score)
-    .slice(0, MAX_CANDIDATES)
-    .map((s) => s.user);
-};
-
 router.use(userAuth, requirePremium('aiAssistant'));
 
 // ── GET /ai/recommendations ──────────────────────────────────────────────────
 router.get(AI.RECOMMENDATIONS, async (req, res) => {
   try {
     const userId = req.user._id;
+
+    // Tier 1: Redis. A hit avoids both the Mongo read and the populate below.
+    const fast = await cache.get(recsCacheKey(userId));
+    if (fast) return res.status(200).json({ data: fast });
+
     const existing = await RecommendationCache.findOne({ userId });
 
     if (existing && existing.expiresAt.getTime() > Date.now()) {
       const populated = await existing.populate({ path: 'recommendations.userId', select: RECOMMENDATION_FIELDS });
-      return res.status(200).json({ data: buildRecommendationsResponse(populated) });
+      const data = buildRecommendationsResponse(populated);
+      const ttlSeconds = Math.floor((existing.expiresAt.getTime() - Date.now()) / 1000);
+      await cache.set(recsCacheKey(userId), data, ttlSeconds);
+      return res.status(200).json({ data });
     }
 
     if (await isAIRateLimited(userId)) {
       return res.status(429).json({ error: 'AI_RATE_LIMIT_EXCEEDED' });
     }
 
-    const candidates = await buildShortlist(req.user);
-    let recommendations = [];
-
-    if (candidates.length > 0) {
-      const aiResult = await AIService.generateRecommendationReasons(req.user, candidates);
-      recommendations = aiResult
-        .filter((r) => candidates[r.index])
-        .map((r) => ({ userId: candidates[r.index]._id, reason: r.reason }));
-
-      await AIUsageLog.create({ userId, endpoint: 'recommendations' });
+    // Cache miss. The generation is an expensive LLM call, so when Redis is
+    // available we offload it to the worker via the `ai-recommendations` queue
+    // and return 202 "generating" — the client polls until the cache is warm.
+    // A stable jobId dedupes concurrent requests for the same user. Without
+    // Redis there's no worker, so we generate inline (original behavior).
+    if (isRedisEnabled) {
+      await enqueue(
+        QUEUE.AI_RECOMMENDATIONS,
+        { userId: userId.toString() },
+        { jobId: `recs:${userId}` },
+      );
+      return res.status(202).json({ status: 'generating', data: [] });
     }
 
-    const cache = await RecommendationCache.findOneAndUpdate(
-      { userId },
-      { recommendations, expiresAt: new Date(Date.now() + RECOMMENDATION_CACHE_TTL_MS) },
-      { upsert: true, new: true },
-    ).populate({ path: 'recommendations.userId', select: RECOMMENDATION_FIELDS });
-
-    res.status(200).json({ data: buildRecommendationsResponse(cache) });
+    const data = await generateAndCacheRecommendations(req.user);
+    res.status(200).json({ data });
   } catch (err) {
     if (err instanceof AIServiceError) return res.status(502).json({ error: 'AI_SERVICE_ERROR' });
     res.status(500).json({ error: err.message });
@@ -151,13 +109,17 @@ router.post(AI.RECOMMENDATIONS_DISMISS, async (req, res) => {
       return res.status(400).json({ error: 'Invalid user id' });
     }
 
-    const cache = await RecommendationCache.findOne({ userId: req.user._id });
-    if (!cache) return res.status(404).json({ error: 'No recommendations found' });
+    const recCache = await RecommendationCache.findOne({ userId: req.user._id });
+    if (!recCache) return res.status(404).json({ error: 'No recommendations found' });
 
-    cache.recommendations = cache.recommendations.filter((r) => r.userId.toString() !== targetUserId);
-    cache.dismissed = cache.dismissed.filter((d) => d.userId.toString() !== targetUserId);
-    cache.dismissed.push({ userId: targetUserId, dismissedAt: new Date() });
-    await cache.save();
+    recCache.recommendations = recCache.recommendations.filter((r) => r.userId.toString() !== targetUserId);
+    recCache.dismissed = recCache.dismissed.filter((d) => d.userId.toString() !== targetUserId);
+    recCache.dismissed.push({ userId: targetUserId, dismissedAt: new Date() });
+    await recCache.save();
+
+    // Stale now that the shortlist changed — drop the Redis tier so the next
+    // read re-populates (or regenerates) from the durable Mongo cache.
+    await cache.del(recsCacheKey(req.user._id));
 
     res.status(200).json({ message: 'Recommendation dismissed' });
   } catch (err) {

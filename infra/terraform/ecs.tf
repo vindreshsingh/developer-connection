@@ -42,6 +42,10 @@ resource "aws_ecs_task_definition" "backend" {
         {
           name  = "PORT"
           value = tostring(var.backend_container_port)
+        },
+        {
+          name  = "REDIS_URL"
+          value = local.redis_url
         }
       ]
 

@@ -13,3 +13,11 @@ backend_container_port = 3008
 backend_cpu            = 256
 backend_memory         = 512
 backend_desired_count  = 1
+
+# Phase 10 — Redis (ElastiCache) + BullMQ worker service
+redis_node_type      = "cache.t4g.micro"
+redis_engine_version = "7.1"
+worker_cpu           = 256
+worker_memory        = 512
+worker_desired_count = 1
+worker_concurrency   = 5

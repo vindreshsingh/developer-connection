@@ -1,11 +1,12 @@
 import crypto from 'crypto';
 import express from 'express';
-import nodemailer from 'nodemailer';
 import validator from 'validator';
 import User from '../models/user.js';
 import { validateSignupData, sanitizeSignupData, hashPassword } from '../utils/sanitization.js';
 import { AUTH } from '../constants/apiEndpoints.js';
 import { authRateLimiter } from '../middlewares/rateLimiter.js';
+import { enqueue } from '../queues/index.js';
+import { QUEUE } from '../queues/names.js';
 
 const router = express.Router();
 
@@ -21,16 +22,10 @@ const sendVerificationEmail = async (user) => {
 
   const verifyUrl = `${process.env.FRONTEND_URL}/verify-email/${plainToken}`;
 
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS, // use Gmail App Password, not your actual password
-    },
-  });
-
-  await transporter.sendMail({
-    from: `"Developer Connection" <${process.env.EMAIL_USER}>`,
+  // Hand off delivery to the email queue (worker) — or run inline when Redis
+  // is disabled. The token is already persisted above, so the link is valid
+  // regardless of when the worker picks the job up.
+  await enqueue(QUEUE.EMAIL, {
     to: user.email,
     subject: 'Verify your email',
     html: `
@@ -173,17 +168,8 @@ router.post(AUTH.FORGOT_PASSWORD, authRateLimiter, async (req, res) => {
     // 5. Build reset URL with plain token (frontend will call reset-password with this)
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${plainToken}`;
 
-    // 6. Send email with reset link using nodemailer
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS, // use Gmail App Password, not your actual password
-      },
-    });
-
-    await transporter.sendMail({
-      from: `"Developer Connection" <${process.env.EMAIL_USER}>`,
+    // 6. Hand off delivery to the email queue (worker), or inline without Redis.
+    await enqueue(QUEUE.EMAIL, {
       to: user.email,
       subject: 'Password Reset Request',
       html: `

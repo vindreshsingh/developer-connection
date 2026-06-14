@@ -89,6 +89,29 @@ jobs:
           service: ${{ vars.ECS_SERVICE }}
           wait-for-service-stability: true
 
+      # ── Phase 10: roll the BullMQ worker on the SAME image ──────────────────
+      - name: Download current worker task definition
+        run: |
+          aws ecs describe-task-definition \
+            --task-definition "${{ vars.ECS_WORKER_TASK_DEFINITION_FAMILY }}" \
+            --query taskDefinition > worker-task-definition.json
+
+      - name: Render new worker task definition
+        id: render-worker-task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: worker-task-definition.json
+          container-name: worker
+          image: ${{ steps.ecr-login.outputs.registry }}/${{ vars.ECR_REPOSITORY }}:${{ github.sha }}
+
+      - name: Deploy worker to ECS
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ steps.render-worker-task-def.outputs.task-definition }}
+          cluster: ${{ vars.ECS_CLUSTER }}
+          service: ${{ vars.ECS_WORKER_SERVICE }}
+          wait-for-service-stability: true
+
   deploy-frontend:
     name: Deploy frontend (S3 + CloudFront)
     runs-on: ubuntu-latest

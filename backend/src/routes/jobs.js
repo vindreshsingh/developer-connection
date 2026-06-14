@@ -19,6 +19,7 @@ import userAuth from '../middlewares/auth.js';
 import { JOBS } from '../constants/apiEndpoints.js';
 import { getExcludedUserIds } from '../utils/blocking.js';
 import { emitNotification } from '../utils/notifications.js';
+import * as cache from '../utils/cache.js';
 import JobPosting from '../models/jobPosting.js';
 import JobApplication from '../models/jobApplication.js';
 import Notification from '../models/notification.js';
@@ -27,6 +28,13 @@ const router = express.Router();
 
 const PAGE_SIZE             = 20;
 const APPLICATION_PAGE_SIZE = 20;
+
+// Short TTL for the browse listing: it's read-heavy (pagination/refresh
+// bursts) but new postings should still surface quickly. The cache is keyed
+// per-user because the result set depends on the caller's block list and
+// per-job skill-match score, and short enough that we skip explicit
+// invalidation on create/update/delete.
+const JOBS_LIST_CACHE_TTL = 30; // seconds
 
 const JOB_TYPES          = ['full-time', 'part-time', 'contract', 'internship', 'freelance', 'collaboration'];
 const LOCATION_MODES      = ['remote', 'onsite', 'hybrid'];
@@ -101,14 +109,17 @@ router.get(JOBS.LIST, userAuth, async (req, res) => {
   try {
     const page = Math.max(1, parseInt(req.query.page) || 1);
 
+    if (req.query.type && !JOB_TYPES.includes(req.query.type))
+      return res.status(400).json({ error: 'Invalid job type.' });
+
+    const cacheKey = `jobs:list:${req.user._id}:${req.query.type || 'all'}:${req.query.skills || ''}:${page}`;
+    const cached = await cache.get(cacheKey);
+    if (cached) return res.status(200).json(cached);
+
     const excludedIds = await getExcludedUserIds(req.user);
     const filter = { status: 'open', deletedAt: null, postedBy: { $nin: excludedIds } };
 
-    if (req.query.type) {
-      if (!JOB_TYPES.includes(req.query.type))
-        return res.status(400).json({ error: 'Invalid job type.' });
-      filter.type = req.query.type;
-    }
+    if (req.query.type) filter.type = req.query.type;
 
     if (req.query.skills) {
       const skills = normalizeSkills(req.query.skills.split(','));
@@ -122,7 +133,7 @@ router.get(JOBS.LIST, userAuth, async (req, res) => {
       .limit(PAGE_SIZE)
       .populate('postedBy', 'firstName lastName photoUrl');
 
-    res.status(200).json({
+    const payload = {
       data: jobs.map((job) => ({
         ...job.toObject(),
         skillMatchScore: computeSkillMatchScore(job.requiredSkills, req.user),
@@ -134,7 +145,10 @@ router.get(JOBS.LIST, userAuth, async (req, res) => {
         totalPages: Math.ceil(total / PAGE_SIZE),
         hasNextPage: page * PAGE_SIZE < total,
       },
-    });
+    };
+
+    await cache.set(cacheKey, payload, JOBS_LIST_CACHE_TTL);
+    res.status(200).json(payload);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
