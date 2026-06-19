@@ -1,0 +1,38 @@
+README.md
+  5e80a9dda1a25352 16-19
+.claude/settings.json
+  5e80a9dda1a25352 1-13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.5",
+  "base_commit_sha": "da47bd0cdec1e92617801a8a985d871f07fcf20d",
+  "prompts": {
+    "2b43fa88c86ef96c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4573e0ab-b2b8-47cb-9448-1029249efd4e",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Vindresh Kumar <vksingh5198@gmail.com>",
+      "messages": [],
+      "total_additions": 43,
+      "total_deletions": 364,
+      "accepted_lines": 39,
+      "overriden_lines": 0
+    },
+    "5e80a9dda1a25352": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2d85211c-504d-401c-9573-d69eac67ab77",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Vindresh Kumar <vksingh5198@gmail.com>",
+      "messages": [],
+      "total_additions": 18,
+      "total_deletions": 1,
+      "accepted_lines": 18,
+      "overriden_lines": 0
+    }
+  }
+}
