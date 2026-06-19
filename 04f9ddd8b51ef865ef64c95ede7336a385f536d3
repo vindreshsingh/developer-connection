@@ -1,0 +1,25 @@
+.claude/settings.json
+  5e80a9dda1a25352 1-13
+README.md
+  5e80a9dda1a25352 16-19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.5",
+  "base_commit_sha": "04f9ddd8b51ef865ef64c95ede7336a385f536d3",
+  "prompts": {
+    "5e80a9dda1a25352": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2d85211c-504d-401c-9573-d69eac67ab77",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Vindresh Kumar <vksingh5198@gmail.com>",
+      "messages": [],
+      "total_additions": 18,
+      "total_deletions": 1,
+      "accepted_lines": 18,
+      "overriden_lines": 0
+    }
+  }
+}
