@@ -10,9 +10,13 @@ A platform for developers to connect with each other — sign up, manage profile
 ## Project structure
 
 - [`frontend/`](frontend) — React + Vite single-page app (RTK Query, Tailwind)
-- [`ai-agents/`](ai-agents) — AI agent configs, skills, and references used during development
 - [`docs/`](docs) — specs, RFCs, and the [monolith → microservices migration](docs/migration/monolith-to-microservices.md)
 - [`infra/`](infra) — Terraform for AWS infrastructure
+
+The AI agent skills previously in `ai-agents/` now live in their own reusable
+repo — [engineering-skills](https://github.com/vindreshsingh/engineering-skills) —
+and are wired into this project as a Claude Code plugin (see
+[`.claude/settings.json`](.claude/settings.json)).
 
 ## Frontend
 
