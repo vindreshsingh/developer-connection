@@ -1,0 +1,36 @@
+.gitignore
+  4e7f7c1738b216f3 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.5",
+  "base_commit_sha": "c0a917fd4e8560e661e9687e6af84e6699feccbb",
+  "prompts": {
+    "4e7f7c1738b216f3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d34b336f-402b-413a-b7fd-1e3219da48b1",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "vindreshsingh <52521987+vindreshsingh@users.noreply.github.com>",
+      "messages": [],
+      "total_additions": 1,
+      "total_deletions": 0,
+      "accepted_lines": 1,
+      "overriden_lines": 0
+    },
+    "c835dddfb35243ff": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6a6def19-b656-4a78-90c9-b9ccd7b50b2f",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "vindreshsingh <52521987+vindreshsingh@users.noreply.github.com>",
+      "messages": [],
+      "total_additions": 6,
+      "total_deletions": 0,
+      "accepted_lines": 6,
+      "overriden_lines": 0
+    }
+  }
+}
