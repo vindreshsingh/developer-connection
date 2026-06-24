@@ -1,0 +1,13 @@
+{
+  "extraKnownMarketplaces": {
+    "engineering-skills": {
+      "source": {
+        "source": "github",
+        "repo": "vindreshsingh/engineering-skills"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "engineering-skills@engineering-skills": true
+  }
+}
