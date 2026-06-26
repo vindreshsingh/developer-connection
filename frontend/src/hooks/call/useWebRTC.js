@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { getMediaErrorMessage } from '@/commonUtils/mediaError';
+
 /**
  * ICE servers used for STUN/TURN.
  * STUN (Google free) handles most NAT traversal cases.
@@ -117,7 +119,7 @@ export const useWebRTC = (socket, callId) => {
 
       socket.emit('call_offer', { callId, sdp: offer });
     } catch (err) {
-      setWebRTCError(err.message);
+      setWebRTCError(getMediaErrorMessage(err));
       teardown();
     }
   }, [socket, callId, acquireLocalMedia, createPeerConnection, teardown]);
@@ -141,7 +143,7 @@ export const useWebRTC = (socket, callId) => {
 
       socket.emit('call_answer', { callId, sdp: answer });
     } catch (err) {
-      setWebRTCError(err.message);
+      setWebRTCError(getMediaErrorMessage(err));
       teardown();
     }
   }, [socket, callId, acquireLocalMedia, createPeerConnection, teardown]);
