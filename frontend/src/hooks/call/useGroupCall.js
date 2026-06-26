@@ -22,6 +22,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Room, RoomEvent, Track } from 'livekit-client';
 
+import { getMediaErrorMessage } from '@/commonUtils/mediaError';
+
 const LIVEKIT_URL = import.meta.env.VITE_LIVEKIT_URL ?? 'ws://localhost:7880';
 
 // ── Participant snapshot ──────────────────────────────────────────────────────
@@ -110,8 +112,10 @@ export const useGroupCall = ({ socket, callId, token }) => {
           room.localParticipant.setCameraEnabled(true),
           room.localParticipant.setMicrophoneEnabled(true),
         ]);
-      } catch {
-        // Camera/mic might be denied — continue without them
+      } catch (err) {
+        // Stay in the room (audio/view still works), but surface why the
+        // camera/mic didn't turn on so the user can fix permissions.
+        setGroupCallError(getMediaErrorMessage(err));
       }
 
       // Notify backend to update DB participant list
