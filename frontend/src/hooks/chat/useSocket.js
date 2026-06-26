@@ -2,7 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import { io } from 'socket.io-client';
 import { useCurrentUser } from '@/hooks/auth/useCurrentUser';
 
-const SOCKET_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+// REST calls go through VITE_API_URL (which may include an `/api` path prefix
+// behind nginx). Socket.IO, however, treats a URL path as a *namespace*, so we
+// strip a trailing `/api` and connect to the host root — the realtime gateway
+// serves Socket.IO at the default `/socket.io` path on the root origin.
+const SOCKET_URL = (import.meta.env.VITE_API_URL || 'http://localhost:4000').replace(/\/api\/?$/, '');
 
 /**
  * Low-level Socket.IO connection hook. Connects once per mount while the user
